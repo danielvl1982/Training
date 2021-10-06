@@ -2,20 +2,12 @@
 {
     public class TriggerType
     {
-        public TriggerType()
-        {
-        }
+        public TriggerType() { }
 
-        public string Name
-        {
-            get;
-            internal set;
-        }
+        public bool IsRecurring { get; internal set; }
 
-        public TriggerOccur Occurs
-        {
-            get;
-            internal set;
-        }
+        public string Name { get; internal set; }
+
+        public TriggerOccur Occurs { get; internal set; }
     }
 }

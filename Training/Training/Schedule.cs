@@ -4,16 +4,9 @@ namespace Training
 {
     public class Schedule
     {
-        public Schedule(Trigger trigger)
-        {
-            this.Trigger = trigger;
-        }
+        public Schedule(Trigger trigger) { this.Trigger = trigger; }
 
-        public Trigger Trigger
-        {
-            get;
-            private set;
-        }
+        public Trigger Trigger { get; private set; }
 
         public void CalculateNextDate(DateTime currentDate)
         {
