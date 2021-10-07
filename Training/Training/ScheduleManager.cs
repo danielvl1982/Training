@@ -46,41 +46,32 @@ namespace Training
         public TriggerOccur GetTriggerOccur(string name)
         {
             return (TriggerOccur)(from occur in this.TriggerOccurs
-                                 where occur.Name == name
+                                 where occur.Name.ToUpper() == name.ToUpper()
                                  select occur);
         }
         public TriggerType GetTriggerType(string name)
         {
             return (TriggerType)(from type in this.TriggerTypes
-                                 where type.Name == name
+                                 where type.Name.ToUpper() == name.ToUpper()
                                  select type);
         }
 
-        private void AddTriggerOccur(string name, int recurrinEvery)
+        private void AddTriggerOccur(string name, RecurringType type)
         {
-            TriggerOccur myTriggerOccur = new TriggerOccur();
-            myTriggerOccur.Name = name;
-            myTriggerOccur.RecurringEvery = recurrinEvery;
-
-            this.triggerOccurs.Add(myTriggerOccur);
+            this.triggerOccurs.Add(new TriggerOccur(name, type));
         }
-        private void AddTriggerType(string name, bool isRecurring, TriggerOccur occur)
+        private void AddTriggerType(string name, bool isRecurring)
         {
-            TriggerType myTriggerType = new TriggerType();
-            myTriggerType.IsRecurring = isRecurring;
-            myTriggerType.Name = name;
-            myTriggerType.Occurs = occur;
-
-            this.triggerTypes.Add(myTriggerType);
+            this.triggerTypes.Add(new TriggerType(name, isRecurring));
         }
         private void LoadTriggerOccurs()
         {
-            this.AddTriggerOccur("Dayly", 24);
+            this.AddTriggerOccur("Dayly", RecurringType.day);
         }
         private void LoadTriggerTypes()
         {
-            this.AddTriggerType("Once", false, this.GetTriggerOccur("Daily"));
-            this.AddTriggerType("Recurring", true, this.GetTriggerOccur("Daily"));
+            this.AddTriggerType("Once", false);
+            this.AddTriggerType("Recurring", true);
         }
     }
 }

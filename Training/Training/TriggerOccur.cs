@@ -1,11 +1,39 @@
-﻿namespace Training
+﻿using System;
+
+namespace Training
 {
+    public enum RecurringType
+    {
+        day = 0
+    }
+
     public class TriggerOccur
     {
-        public TriggerOccur() { }
+        public TriggerOccur(string name, RecurringType type)
+        {
+            this.Name = name;
+            this.Type = type;
+        }
 
-        public int RecurringEvery { get; internal set; }
+        public RecurringType Type { get; private set; }
 
-        public string Name { get; internal set; }
+        public string Description
+        {
+            get
+            {
+                string message = string.Empty;
+
+                switch (this.Type)
+                {
+                    case RecurringType.day:
+                        message = "day";
+                        break;
+                }
+
+                return message;
+            }
+        }
+
+        public string Name { get; private set; }
     }
 }

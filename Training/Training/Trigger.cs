@@ -6,16 +6,18 @@ namespace Training
     {
         public Trigger() { }
 
-        public bool Enabled { get; set; }
+        public DateTime? DateTime { get; set; }
 
-        public DateTime EndDate { get; set; }
-        public DateTime DateTime { get; set; }
-        public DateTime StartDate { get; set; }
+        public int Every { get; set; }
 
-        public int Every
+        public string Description
         {
-            get;
-            internal set;
+            get
+            {
+                string message = "Occurs " + this.Type.Description + ".";
+
+                return message;
+            }
         }
 
         public TriggerType Type { get; set; }
