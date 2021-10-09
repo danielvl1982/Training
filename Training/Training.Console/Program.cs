@@ -6,69 +6,43 @@ namespace Training.Console
     {
         static void Main(string[] args)
         {
-            //Case 1
-            ScheduleManager myManager = new ScheduleManager();
-
             Schedule mySchedule = new Schedule();
             mySchedule.CurrentDate = new DateTime(2020, 1, 04);
-            mySchedule.Enabled = true;
             mySchedule.StartDate = new DateTime(2020, 1, 1);
 
-            Trigger myTrigger = new Trigger();
-            myTrigger.DateTime = new DateTime(2020, 1, 8);
-            myTrigger.Type = myManager.GetTriggerType("Once");
+            Trigger myTriggerOnce = new Trigger();
+            myTriggerOnce.DateTime = new DateTime(2020, 1, 8);
+            myTriggerOnce.Type = TriggerType.GetByName("Once");
+            myTriggerOnce.Type.Occurs = TriggerOccur.GetByName("Daily");
 
-            myTrigger.Type.Occurs = myManager.GetTriggerOccur("Daily");
+            Trigger myTriggerRecurring = new Trigger();
+            myTriggerRecurring.Every = 1;
+            myTriggerRecurring.Type = TriggerType.GetByName("Recurring");
+            myTriggerRecurring.Type.Occurs = TriggerOccur.GetByName("Daily");
 
-            mySchedule.Trigger = myTrigger;
+            mySchedule.AddTrigger(myTriggerOnce);
+            mySchedule.AddTrigger(myTriggerRecurring);
 
             try
             {
-                Execution myExecution = mySchedule.GetNextExecution();
+                for (int index = 0; index < 5; index++)
+                {
+                    Execution myExecution = mySchedule.GetNextExecution();
 
-                System.Console.WriteLine("Next execution time: {0}", myExecution.DateTime.ToString("dd/MM/yyyy HH:mm:ss"));
-                System.Console.WriteLine("Descripción: {0}", myExecution.Description);
+                    System.Console.WriteLine("Current date: {0}", myExecution.DateTime.ToString("dd/MM/yyyy HH:mm:ss"));
+                    System.Console.WriteLine("Next execution time: {0}", myExecution.DateTime.ToString("dd/MM/yyyy HH:mm:ss"));
+                    System.Console.WriteLine("Descripción: {0}", myExecution.Description);
+                    System.Console.WriteLine();
+
+                    mySchedule.CurrentDate = myExecution.DateTime;
+                }
             }
             catch(Exception exc)
             {                
                 System.Console.WriteLine(exc.Message);
             }
 
-            //Case 2
-            mySchedule.CurrentDate = new DateTime(2020, 1, 04);
-            mySchedule.Enabled = true;
-            mySchedule.StartDate = new DateTime(2020, 1, 1);
-
-            mySchedule.Trigger.DateTime = null;
-            mySchedule.Trigger.Every = 1;
-            mySchedule.Trigger.Type = myManager.GetTriggerType("Recurring");
-
-            try
-            {
-                Execution myExecution = mySchedule.GetNextExecution();
-
-                System.Console.WriteLine("Next execution time: {0}", myExecution.DateTime.ToString("dd/MM/yyyy HH:mm:ss"));
-                System.Console.WriteLine("Descripción: {0}", myExecution.Description);
-
-                myExecution = mySchedule.GetNextExecution();
-
-                System.Console.WriteLine("Next execution time: {0}", myExecution.DateTime.ToString("dd/MM/yyyy HH:mm:ss"));
-                System.Console.WriteLine("Descripción: {0}", myExecution.Description);
-
-                myExecution = mySchedule.GetNextExecution();
-
-                System.Console.WriteLine("Next execution time: {0}", myExecution.DateTime.ToString("dd/MM/yyyy HH:mm:ss"));
-                System.Console.WriteLine("Descripción: {0}", myExecution.Description);
-
-                myExecution = mySchedule.GetNextExecution();
-
-                System.Console.WriteLine("Next execution time: {0}", myExecution.DateTime.ToString("dd/MM/yyyy HH:mm:ss"));
-                System.Console.WriteLine("Descripción: {0}", myExecution.Description);
-            }
-            catch (Exception exc)
-            {
-                System.Console.WriteLine(exc.Message);
-            }
+            System.Console.ReadLine();
         }
     }
 }

@@ -15,49 +15,44 @@ namespace Training
             this.schedule = schedule;
         }
 
-        public DateTime DateTime
+        public DateTime DateTime { get; private set; }
+
+        public string Description { get; private set; }
+
+        private void CalculateNextExecution()
         {
-            get
-            {
-                DateTime nextDate = this.date;
+            //DateTime nextDate = this.date;
 
-                switch (schedule.Trigger.Type.Occurs.Type)
-                {
-                    case RecurringType.day:
-                        nextDate.AddDays(schedule.Trigger.Every);
-                        break;
-                }
+            //switch (schedule.Triggers.Type.Occurs.Type)
+            //{
+            //    case RecurringType.day:
+            //        nextDate.AddDays(schedule.Triggers.Every);
+            //        break;
+            //}
 
-                if (schedule.Trigger.DateTime.HasValue == true && nextDate < schedule.Trigger.DateTime.Value)
-                {
-                    nextDate = schedule.Trigger.DateTime.Value;
-                }
+            //if (schedule.Triggers.DateTime.HasValue == true && nextDate < schedule.Triggers.DateTime.Value)
+            //{
+            //    nextDate = schedule.Triggers.DateTime.Value;
+            //}
 
-                if (schedule.StartDate.HasValue == true && nextDate < schedule.StartDate.Value)
-                {
-                    nextDate = schedule.StartDate.Value;
-                }
+            //if (schedule.StartDate.HasValue == true && nextDate < schedule.StartDate.Value)
+            //{
+            //    nextDate = schedule.StartDate.Value;
+            //}
 
-                if (schedule.EndDate.HasValue == true && nextDate > schedule.EndDate.Value)
-                {
-                    nextDate = schedule.EndDate.Value;
-                }
+            //if (schedule.EndDate.HasValue == true && nextDate > schedule.EndDate.Value)
+            //{
+            //    nextDate = schedule.EndDate.Value;
+            //}
 
-                return nextDate;
-            }
-        }
+            //this.DateTime = nextDate;
 
-        public string Description
-        {
-            get
-            {
-                string message = this.schedule.Trigger.Description;
-                message += "Schedule will be used on " + this.DateTime.ToString("dd/MM/yyyy");
-                message += this.schedule.StartDate.HasValue == true ? " starting on " + this.schedule.StartDate.Value.ToString("dd/MM/yyy") : string.Empty;
-                message += this.schedule.EndDate.HasValue == true ? " until " + this.schedule.EndDate.Value.ToString("dd/MM/yyy") : string.Empty;
+            //string message = this.schedule.Triggers.Description;
+            //message += "Schedule will be used on " + this.DateTime.ToString("dd/MM/yyyy");
+            //message += this.schedule.StartDate.HasValue == true ? " starting on " + this.schedule.StartDate.Value.ToString("dd/MM/yyy") : string.Empty;
+            //message += this.schedule.EndDate.HasValue == true ? " until " + this.schedule.EndDate.Value.ToString("dd/MM/yyy") : string.Empty;
 
-                return message;
-            }
+            //this.Description = message;
         }
     }
 }

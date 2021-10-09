@@ -4,7 +4,9 @@ namespace Training
 {
     public class Trigger
     {
-        public Trigger() { }
+        public Trigger() { this.Enabled = true; }
+
+        public bool Enabled { get; set; }
 
         public DateTime? DateTime { get; set; }
 
