@@ -1,58 +1,71 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Training
 {
     public class Execution
     {
-        private DateTime date;
+        private bool isCalculateNextExecution;
 
-        private Schedule schedule;
+        private readonly DateTime inputDate;
 
-        internal Execution(Schedule schedule, DateTime date)
+        private DateTime? dateTime;
+
+        private readonly Schedule schedule;
+
+        private string description;
+
+        internal Execution(Schedule schedule, DateTime inputDate)
         {
-            this.date = date;
+            this.inputDate = inputDate;
 
             this.schedule = schedule;
         }
 
-        public DateTime DateTime { get; private set; }
+        public DateTime? DateTime
+        {
+            get
+            {
+                if (this.isCalculateNextExecution == false) { this.CalculateNextExecution(); }
 
-        public string Description { get; private set; }
+                return this.dateTime;
+            }
+            private set { this.dateTime = value; }
+        }
+
+        public string Description
+        {
+            get
+            {
+                if (this.isCalculateNextExecution == false) { this.CalculateNextExecution(); }
+
+                return this.description;
+            }
+            private set { this.description = value; }
+        }
 
         private void CalculateNextExecution()
         {
-            //DateTime nextDate = this.date;
+            this.isCalculateNextExecution = true;
 
-            //switch (schedule.Triggers.Type.Occurs.Type)
-            //{
-            //    case RecurringType.day:
-            //        nextDate.AddDays(schedule.Triggers.Every);
-            //        break;
-            //}
+            DateTime nextExecution = this.inputDate;
 
-            //if (schedule.Triggers.DateTime.HasValue == true && nextDate < schedule.Triggers.DateTime.Value)
-            //{
-            //    nextDate = schedule.Triggers.DateTime.Value;
-            //}
+            if (this.schedule.StartDate.HasValue == true && inputDate.CompareTo(this.schedule.StartDate.Value) < 0) { nextExecution = schedule.StartDate.Value; }
+            if (this.schedule.EndDate.HasValue == true && inputDate.CompareTo(this.schedule.EndDate.Value) > 0) { return; }
 
-            //if (schedule.StartDate.HasValue == true && nextDate < schedule.StartDate.Value)
-            //{
-            //    nextDate = schedule.StartDate.Value;
-            //}
+            //I must optimize the iterations query. How wich linq?.
+            List<Trigger> triggers = (from trigger in this.schedule.GetTriggersEnabled()
+                                      where trigger.GetNextExecution(nextExecution).HasValue == true
+                                      select trigger).OrderByDescending(t => t.GetNextExecution(nextExecution).Value).ToList();
 
-            //if (schedule.EndDate.HasValue == true && nextDate > schedule.EndDate.Value)
-            //{
-            //    nextDate = schedule.EndDate.Value;
-            //}
+            if (triggers.Count == 0) { return; }
 
-            //this.DateTime = nextDate;
+            this.DateTime = triggers[0].GetNextExecution(nextExecution).Value;
 
-            //string message = this.schedule.Triggers.Description;
-            //message += "Schedule will be used on " + this.DateTime.ToString("dd/MM/yyyy");
-            //message += this.schedule.StartDate.HasValue == true ? " starting on " + this.schedule.StartDate.Value.ToString("dd/MM/yyy") : string.Empty;
-            //message += this.schedule.EndDate.HasValue == true ? " until " + this.schedule.EndDate.Value.ToString("dd/MM/yyy") : string.Empty;
-
-            //this.Description = message;
+            this.Description = triggers[0].Description + "Schedule will be used on " + this.DateTime.Value.ToString("dd/MM/yyyy HH:mm:ss");
+            this.Description += this.schedule.StartDate.HasValue == true ? " starting on " + this.schedule.StartDate.Value.ToString("dd/MM/yyy HH:mm:ss") : string.Empty;
+            this.Description += this.schedule.EndDate.HasValue == true ? " until " + this.schedule.EndDate.Value.ToString("dd/MM/yyy HH:mm:ss") : string.Empty;
         }
     }
 }

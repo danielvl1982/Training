@@ -25,15 +25,12 @@ namespace Training
         {
             get
             {
-                switch (this.Type)
+                return this.Type switch
                 {
-                    case RecurringType.day:
-                        return "day";
-                    case RecurringType.week:
-                        return "week";
-                    default:
-                        return string.Empty;
-                }
+                    RecurringType.day => "day",
+                    RecurringType.week => "week",
+                    _ => string.Empty,
+                };
             }
         }
 

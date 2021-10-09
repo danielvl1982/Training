@@ -15,7 +15,7 @@ namespace Training
 
         public bool IsRecurring { get; internal set; }
 
-        public string Description { get { return this.IsRecurring == true ? "once" : "every " + this.Occurs.Description; } }
+        public string Description { get { return this.IsRecurring == true ? "every " + this.Occurs.Description : "once"; } }
         public string Name { get; internal set; }
 
         public TriggerOccur Occurs { get; set; }

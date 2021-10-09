@@ -6,7 +6,7 @@ namespace Training
 {
     public class Schedule
     {
-        private DateTime? currentDate;
+        private DateTime? inputDate;
         private DateTime? executionTime;
 
         public Schedule()
@@ -17,20 +17,20 @@ namespace Training
 
         public bool Enabled { get; set; }
 
-        public DateTime? CurrentDate
+        public DateTime? EndDate { get; set; }
+        public DateTime? InputDate
         {
             get
             {
-                return this.currentDate;
+                return this.inputDate;
             }
             set
             {
-                this.currentDate = value;
+                this.inputDate = value;
 
                 this.executionTime = null;
             }
         }
-        public DateTime? EndDate { get; set; }
         public DateTime? StartDate { get; set; }
 
         public List<Trigger> Triggers { get; set; }
@@ -40,15 +40,17 @@ namespace Training
             this.Validate();
 
             if (this.Enabled == false) { throw new Exception("El planificador está deshabilitado."); }
-            if (this.CurrentDate.HasValue == false) { throw new Exception("Debe indicar la fecha actual."); }
+            if (this.InputDate.HasValue == false) { throw new Exception("Debe indicar la fecha actual."); }
 
-            if (GetTriggersEnabled().Count == 0) { throw new Exception("El planificador tiene sus desecadenadores deshabilitados."); }
+            if (this.GetTriggersEnabled().Count == 0) { throw new Exception("El planificador tiene sus desecadenadores deshabilitados."); }
 
-            return new Execution(this, this.executionTime.HasValue == true ? this.executionTime.Value : this.CurrentDate.Value);
+            return new Execution(this, this.executionTime.HasValue == true ? this.executionTime.Value : this.InputDate.Value);
         }
 
         public void AddTrigger(Trigger trigger)
         {
+            trigger.Validate();
+
             this.Triggers.Add(trigger);
         }
         public void RemoveTrigger(Trigger trigger)
