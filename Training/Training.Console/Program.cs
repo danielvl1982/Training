@@ -8,7 +8,6 @@ namespace Training.Console
         {
             Program.ExampleOnce();
             Program.ExampleRecurring();
-            Program.ExampleTwoTriggers();
 
             System.Console.ReadLine();
         }
@@ -17,7 +16,6 @@ namespace Training.Console
         {
             Schedule mySchedule = new Schedule
             {
-                InputDate = new DateTime(2020, 1, 04),
                 StartDate = new DateTime(2020, 1, 1)
             };
 
@@ -28,13 +26,15 @@ namespace Training.Console
             };
             myTriggerOnce.Type.Occurs = TriggerOccur.GetByName("Daily");
 
-            mySchedule.AddTrigger(myTriggerOnce);
+            mySchedule.Trigger = myTriggerOnce;
+
+            DateTime currentDate = new DateTime(2020, 01, 04);
 
             try
             {
-                Execution myExecution = mySchedule.GetNextExecution();
+                ScheduleExecution myExecution = new ScheduleExecution(mySchedule, currentDate);
 
-                System.Console.WriteLine("Current date: {0}", mySchedule.InputDate.Value.ToString("dd/MM/yyyy HH:mm:ss"));
+                System.Console.WriteLine("Current date: {0}", currentDate.ToString("dd/MM/yyyy HH:mm:ss"));
                 System.Console.WriteLine(
                     "Next execution time: {0}",
                     myExecution.DateTime.HasValue == true ? myExecution.DateTime.Value.ToString("dd/MM/yyyy HH:mm:ss") : string.Empty);
@@ -47,7 +47,6 @@ namespace Training.Console
         {
             Schedule mySchedule = new Schedule
             {
-                InputDate = new DateTime(2020, 1, 04),
                 StartDate = new DateTime(2020, 1, 1)
             };
 
@@ -58,15 +57,17 @@ namespace Training.Console
             };
             myTriggerRecurring.Type.Occurs = TriggerOccur.GetByName("Daily");
 
-            mySchedule.AddTrigger(myTriggerRecurring);
+            mySchedule.Trigger = myTriggerRecurring;
+
+            DateTime currentDate = new DateTime(2020, 01, 04);
 
             try
             {
                 for (int index = 0; index < 5; index++)
                 {
-                    Execution myExecution = mySchedule.GetNextExecution();
+                    ScheduleExecution myExecution = new ScheduleExecution(mySchedule, currentDate);
 
-                    System.Console.WriteLine("Current date: {0}", mySchedule.InputDate.Value.ToString("dd/MM/yyyy HH:mm:ss"));
+                    System.Console.WriteLine("Current date: {0}", currentDate.ToString("dd/MM/yyyy HH:mm:ss"));
                     System.Console.WriteLine(
                         "Next execution time: {0}",
                         myExecution.DateTime.HasValue == true ? myExecution.DateTime.Value.ToString("dd/MM/yyyy HH:mm:ss") : string.Empty);
@@ -75,52 +76,7 @@ namespace Training.Console
 
                     if (myExecution.DateTime.HasValue == false) { break; }
 
-                    mySchedule.InputDate = myExecution.DateTime.Value.AddMilliseconds(1);
-                }
-            }
-            catch (Exception exc) { System.Console.WriteLine(exc.Message); }
-        }
-        private static void ExampleTwoTriggers()
-        {
-            Schedule mySchedule = new Schedule
-            {
-                InputDate = new DateTime(2020, 1, 04),
-                StartDate = new DateTime(2020, 1, 1)
-            };
-
-            Trigger myTriggerOnce = new Trigger
-            {
-                DateTime = new DateTime(2020, 1, 8),
-                Type = TriggerType.GetByName("Once")
-            };
-            myTriggerOnce.Type.Occurs = TriggerOccur.GetByName("Daily");
-
-            Trigger myTriggerRecurring = new Trigger
-            {
-                Every = 1,
-                Type = TriggerType.GetByName("Recurring")
-            };
-            myTriggerRecurring.Type.Occurs = TriggerOccur.GetByName("Daily");
-
-            mySchedule.AddTrigger(myTriggerOnce);
-            mySchedule.AddTrigger(myTriggerRecurring);
-
-            try
-            {
-                for (int index = 0; index < 6; index++)
-                {
-                    Execution myExecution = mySchedule.GetNextExecution();
-
-                    System.Console.WriteLine("Current date: {0}", mySchedule.InputDate.Value.ToString("dd/MM/yyyy HH:mm:ss"));
-                    System.Console.WriteLine(
-                        "Next execution time: {0}",
-                        myExecution.DateTime.HasValue == true ? myExecution.DateTime.Value.ToString("dd/MM/yyyy HH:mm:ss") : string.Empty);
-                    System.Console.WriteLine("Descripción: {0}", myExecution.Description);
-                    System.Console.WriteLine();
-
-                    if (myExecution.DateTime.HasValue == false) { break; }
-
-                    mySchedule.InputDate = myExecution.DateTime.Value.AddMilliseconds(1);
+                    currentDate = myExecution.DateTime.Value.AddMilliseconds(1);
                 }
             }
             catch (Exception exc) { System.Console.WriteLine(exc.Message); }

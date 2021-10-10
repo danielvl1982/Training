@@ -5,8 +5,7 @@ namespace Training
 {
     public enum RecurringType
     {
-        day = 0,
-        week = 1
+        day = 0
     }
 
     public class TriggerOccur
@@ -28,7 +27,6 @@ namespace Training
                 return this.Type switch
                 {
                     RecurringType.day => "day",
-                    RecurringType.week => "week",
                     _ => string.Empty,
                 };
             }
