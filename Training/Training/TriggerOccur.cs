@@ -1,24 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Training
 {
-    public enum RecurringType
+    public enum TriggerOccurType
     {
-        day = 0
+        Day = 0,
+        Week = 1
     }
 
     public class TriggerOccur
     {
         private static List<TriggerOccur> items;
 
-        private TriggerOccur(string name, RecurringType type)
+        private TriggerOccur(string name, TriggerOccurType type)
         {
             this.Name = name;
             this.Type = type;
         }
 
-        public RecurringType Type { get; private set; }
+        public TriggerOccurType Type { get; private set; }
 
         public string Description
         {
@@ -26,7 +28,8 @@ namespace Training
             {
                 return this.Type switch
                 {
-                    RecurringType.day => "day",
+                    TriggerOccurType.Day => "day",
+                    TriggerOccurType.Week => "week",
                     _ => string.Empty,
                 };
             }
@@ -55,15 +58,17 @@ namespace Training
                                                 where occur.Name.ToUpper() == name.ToUpper()
                                                 select occur);
 
-            return result.Count() == 0 ? throw new System.Exception("No existe el elemento de configuración " + name) : result.First();
+            return result.Count() == 0 ? throw new Exception("No existe el elemento de configuración " + name) : result.First();
         }
-        private static void AddItem(string name, RecurringType type)
+
+        private static void AddItem(string name, TriggerOccurType type)
         {
             TriggerOccur.items.Add(new TriggerOccur(name, type));
         }
         private static void LoadItems()
         {
-            TriggerOccur.AddItem("Daily", RecurringType.day);
+            TriggerOccur.AddItem("Daily", TriggerOccurType.Day);
+            TriggerOccur.AddItem("Weekly", TriggerOccurType.Week);
         }
     }
 }

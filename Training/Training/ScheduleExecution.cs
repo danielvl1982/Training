@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Training
 {
@@ -46,23 +48,19 @@ namespace Training
                 if (string.IsNullOrEmpty(this.description) == true)
                 {
                     this.description = this.schedule.Trigger.Description + "Schedule will be used on " + this.DateTime.Value.ToString("dd/MM/yyyy HH:mm:ss");
-                    this.description += this.schedule.StartDate.HasValue == true ? " starting on " + this.schedule.StartDate.Value.ToString("dd/MM/yyy HH:mm:ss") : string.Empty;
-                    this.description += this.schedule.EndDate.HasValue == true ? " until " + this.schedule.EndDate.Value.ToString("dd/MM/yyy HH:mm:ss") : string.Empty;
+                    this.description += this.schedule.StartDate.HasValue == true
+                        ? " starting on " + this.schedule.StartDate.Value.ToString("dd/MM/yyy HH:mm:ss")
+                        : string.Empty;
+                    this.description += this.schedule.EndDate.HasValue == true
+                        ? " until " + this.schedule.EndDate.Value.ToString("dd/MM/yyy HH:mm:ss")
+                        : string.Empty;
                 }
 
                 return this.description;
             }
         }
 
-        private void CalculateNextExecution()
-        {
-            this.isCalculateNextExecution = true;
-
-            this.Validate();
-
-            this.dateTime = this.GetExecutionDateTime();
-        }
-        internal DateTime GetExecutionDateTime()
+        private DateTime GetExecution()
         {
             DateTime nextExecution = this.currentDate.Add(this.schedule.Trigger.Time);
 
@@ -74,19 +72,43 @@ namespace Training
 
             if (this.schedule.Trigger.Type.IsRecurring == true)
             {
-                switch (this.schedule.Trigger.Type.Occurs.Type)
-                {
-                    case RecurringType.day:
-                        nextExecution = nextExecution.AddDays(this.schedule.Trigger.Every);
-                        break;
-                }
+                nextExecution = this.GetExecutionRecurring(nextExecution);
             }
 
             return nextExecution;
         }
-        private void Validate()
+        private DateTime GetExecutionRecurring(DateTime nextExecution)
         {
-            if (this.schedule.Trigger == null) { throw new Exception("Must indicate trigger."); }
+            if (this.schedule.Trigger.Type.IsRecurring == false) { return nextExecution; }
+
+            switch (this.schedule.Trigger.Type.Occurs.Type)
+            {
+                case TriggerOccurType.Day:
+                    nextExecution = nextExecution.AddDays(this.schedule.Trigger.Every);
+                    break;
+                case TriggerOccurType.Week:
+                    nextExecution = this.GetExecutionWeek(nextExecution);
+                    break;
+            }
+
+            return nextExecution;
+        }
+        private DateTime GetExecutionWeek(DateTime nextExecution)
+        {
+            DayOfWeek? nextDayOfWeek = nextExecution.NextDayOfWeek(this.schedule.Trigger.Days);
+
+            return nextDayOfWeek.HasValue == false
+                ? this.GetExecutionWeek(nextExecution.AddDays(this.schedule.Trigger.Every * 7))
+                : nextExecution.DateTimeDayOfWeek(nextDayOfWeek.Value);
+        }
+
+        private void CalculateNextExecution()
+        {
+            this.isCalculateNextExecution = true;
+
+            ScheduleManager.Validate(this.schedule);
+
+            this.dateTime = this.GetExecution();
         }
     }
 }

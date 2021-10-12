@@ -33,7 +33,7 @@ namespace Training.Test
         }
 
         [TestMethod]
-        public void Schedule_Recurring_NextExecute()
+        public void Schedule_Recurring_Dayly_NextExecute()
         {
             Schedule mySchedule = new Schedule
             {
@@ -54,6 +54,34 @@ namespace Training.Test
             ScheduleExecution myExecution = new ScheduleExecution(mySchedule, currentDate);
 
             DateTime result = new DateTime(2020, 01, 05);
+
+            Assert.AreEqual(result, myExecution.DateTime.Value);
+        }
+        [TestMethod]
+        public void Schedule_Recurring_Weekly_NextExecute()
+        {
+            Schedule mySchedule = new Schedule
+            {
+                StartDate = new DateTime(2020, 1, 1)
+            };
+
+            Trigger myTriggerRecurring = new Trigger
+            {
+                Every = 2,
+                Type = TriggerType.GetByName("Recurring")
+            };
+            myTriggerRecurring.Type.Occurs = TriggerOccur.GetByName("Weekly");
+            myTriggerRecurring.AddDay(DayOfWeek.Monday);
+            myTriggerRecurring.AddDay(DayOfWeek.Thursday);
+            myTriggerRecurring.AddDay(DayOfWeek.Friday);
+
+            mySchedule.Trigger = myTriggerRecurring;
+
+            DateTime currentDate = new DateTime(2020, 01, 01);
+
+            ScheduleExecution myExecution = new ScheduleExecution(mySchedule, currentDate);
+
+            DateTime result = new DateTime(2020, 01, 02);
 
             Assert.AreEqual(result, myExecution.DateTime.Value);
         }

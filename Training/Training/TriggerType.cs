@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Training
@@ -41,7 +42,7 @@ namespace Training
                                                where type.Name.ToUpper() == name.ToUpper()
                                                select type);
 
-            return result.Count() == 0 ? throw new System.Exception("No existe el elemento de configuración " + name) : result.First();
+            return result.Count() == 0 ? throw new Exception("No existe el elemento de configuración " + name) : result.First();
         }
 
         private static void AddItem(string name, bool isRecurring)
