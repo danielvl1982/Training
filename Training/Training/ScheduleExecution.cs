@@ -6,11 +6,11 @@ namespace Training
 {
     public class ScheduleExecution
     {
-        private bool isCalculateNextExecution;
-
-        private readonly DateTime currentDate;
+        private bool isLoadFields;
 
         private DateTime dateTime;
+
+        private readonly DateTime currentDate;
 
         private readonly Schedule schedule;
 
@@ -27,7 +27,7 @@ namespace Training
         {
             get
             {
-                if (this.isCalculateNextExecution == false) { this.CalculateNextExecution(); }
+                if (this.isLoadFields == false) { this.LoadFields(); }
 
                 if (this.schedule.Trigger.Enabled == false ||
                    (this.schedule.EndDate.HasValue == true &&
@@ -41,7 +41,7 @@ namespace Training
         {
             get
             {
-                if (this.isCalculateNextExecution == false) { this.CalculateNextExecution(); }
+                if (this.isLoadFields == false) { this.LoadFields(); }
 
                 if (this.DateTime.HasValue == false) { return string.Empty; }
 
@@ -70,14 +70,9 @@ namespace Training
             if (this.schedule.StartDate.HasValue == true &&
                 nextExecution.CompareTo(this.schedule.StartDate.Value) < 0) { nextExecution = this.schedule.StartDate.Value.Add(this.schedule.Trigger.Time); }
 
-            if (this.schedule.Trigger.Type.IsRecurring == true)
-            {
-                nextExecution = this.GetExecutionRecurring(nextExecution);
-            }
-
-            return nextExecution;
+            return this.GetNextExecution(nextExecution);
         }
-        private DateTime GetExecutionRecurring(DateTime nextExecution)
+        private DateTime GetNextExecution(DateTime nextExecution)
         {
             if (this.schedule.Trigger.Type.IsRecurring == false) { return nextExecution; }
 
@@ -87,24 +82,41 @@ namespace Training
                     nextExecution = nextExecution.AddDays(this.schedule.Trigger.Every);
                     break;
                 case TriggerOccurType.Week:
-                    nextExecution = this.GetExecutionWeek(nextExecution);
+                    nextExecution = this.GetNextExecutionByWeek(nextExecution);
                     break;
+            }
+
+            return this.GetNextExecutionByFrecuency(nextExecution);
+        }
+        private DateTime GetNextExecutionByFrecuency(DateTime nextExecution)
+        {
+            if (this.schedule.Trigger.Frecuency == null) { return nextExecution; }
+
+            if (this.schedule.Trigger.Frecuency.Type.IsRecurring == true)
+            {
+
+            }
+            else
+            {
+                nextExecution = nextExecution.TimeOfDay > this.schedule.Trigger.Frecuency.Time.Value.TimeOfDay
+                    ? this.GetNextExecution(nextExecution)
+                    : nextExecution.Date.Add(this.schedule.Trigger.Frecuency.Time.Value.TimeOfDay);
             }
 
             return nextExecution;
         }
-        private DateTime GetExecutionWeek(DateTime nextExecution)
+        private DateTime GetNextExecutionByWeek(DateTime nextExecution)
         {
             DayOfWeek? nextDayOfWeek = nextExecution.NextDayOfWeek(this.schedule.Trigger.Days);
 
             return nextDayOfWeek.HasValue == false
-                ? this.GetExecutionWeek(nextExecution.AddDays(this.schedule.Trigger.Every * 7))
+                ? this.GetNextExecutionByWeek(nextExecution.AddDays(this.schedule.Trigger.Every * 7))
                 : nextExecution.DateTimeDayOfWeek(nextDayOfWeek.Value);
         }
 
-        private void CalculateNextExecution()
+        private void LoadFields()
         {
-            this.isCalculateNextExecution = true;
+            this.isLoadFields = true;
 
             ScheduleManager.Validate(this.schedule);
 

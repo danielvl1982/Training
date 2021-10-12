@@ -34,12 +34,17 @@ namespace Training
             if (trigger.Frecuency == null) { return; }
             if (trigger.Frecuency.Type == null) { throw new Exception("Must instantiate frecuency type."); }
 
-            if (trigger.Frecuency.StartTime.HasValue == true &&
-                trigger.Frecuency.EndTime.HasValue == true &&
-                trigger.Frecuency.StartTime.Value.CompareTo(trigger.Frecuency.EndTime.Value) > 0) { throw new Exception("End at must be greater to stating at."); }
-
-            if (trigger.Frecuency.Type.IsRecurring == true &&
-                trigger.Frecuency.Every <= 0) { throw new Exception("Occurs every must be greater to 0."); }
+            if (trigger.Frecuency.Type.IsRecurring == true)
+            {
+                if (trigger.Frecuency.StartTime.HasValue == false) { throw new Exception("Must indicate starting at."); }
+                if (trigger.Frecuency.EndTime.HasValue == false) { throw new Exception("Must indicate end at."); }
+                if (trigger.Frecuency.StartTime.Value.CompareTo(trigger.Frecuency.EndTime.Value) > 0) { throw new Exception("End at must be greater to stating at."); }
+                if (trigger.Frecuency.Every <= 0) { throw new Exception("Occurs every must be greater to 0."); }
+            }
+            else
+            {
+                if (trigger.Frecuency.Time.HasValue == false) { throw new Exception("Must indicate Occurs once at time."); }
+            }
         }
     }
 }
