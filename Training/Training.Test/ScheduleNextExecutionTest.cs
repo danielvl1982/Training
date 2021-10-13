@@ -29,7 +29,7 @@ namespace Training.Test
 
             DateTime result = new DateTime(2020, 01, 08, 14, 0, 0);
 
-            Assert.AreEqual(result, myExecution.DateTime.Value);
+            Assert.AreEqual(result, myExecution.DateTimes[0]);
         }
 
         [TestMethod]
@@ -55,7 +55,7 @@ namespace Training.Test
 
             DateTime result = new DateTime(2020, 01, 05);
 
-            Assert.AreEqual(result, myExecution.DateTime.Value);
+            Assert.AreEqual(result, myExecution.DateTimes[0]);
         }
         [TestMethod]
         public void Schedule_Recurring_Weekly_NextExecute()
@@ -83,7 +83,7 @@ namespace Training.Test
 
             DateTime result = new DateTime(2020, 01, 02);
 
-            Assert.AreEqual(result, myExecution.DateTime.Value);
+            Assert.AreEqual(result, myExecution.DateTimes[0]);
         }
     }
 }

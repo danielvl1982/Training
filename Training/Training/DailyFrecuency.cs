@@ -10,9 +10,9 @@ namespace Training
 
         public DailyFrecuencyType Type { get; set; }
 
-        public DateTime? Time { get; set; }
-        public DateTime? EndTime { get; set; }
-        public DateTime? StartTime { get; set; }
+        public TimeSpan? Time { get; set; }
+        public TimeSpan? EndTime { get; set; }
+        public TimeSpan? StartTime { get; set; }
 
         public int Every { get; set; }
     }
