@@ -51,10 +51,8 @@ namespace Training
         }
         private static void LoadItems()
         {
-            DailyFrecuencyType.AddItem("None", false);
-            DailyFrecuencyType.AddItem("Hours", true);
-            DailyFrecuencyType.AddItem("Minutes", true);
-            DailyFrecuencyType.AddItem("Seconds", true);
+            DailyFrecuencyType.AddItem("Once", false);
+            DailyFrecuencyType.AddItem("Recurring", true);
         }
     }
 }

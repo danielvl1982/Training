@@ -20,11 +20,22 @@ namespace Training
             if (schedule.Trigger == null) { throw new Exception("Must instantiate trigger."); }
             if (schedule.Trigger.Type == null) { throw new Exception("Must instantiate trigger type."); }
 
+            if (schedule.StartDate.HasValue == true)
+            {
+                if (schedule.Trigger.DateTime.HasValue == true &&
+                    schedule.Trigger.DateTime.Value.CompareTo(schedule.StartDate.Value) < 0) { throw new Exception("DateTime must be greater to start date."); }
+
+                if (schedule.Trigger.DateTime.HasValue == true &&
+                    schedule.Trigger.DateTime.Value.CompareTo(schedule.StartDate.Value) < 0) { throw new Exception("DateTime must be lower to end date."); }
+            }
+
             if (schedule.Trigger.Type.IsRecurring == true &&
                 schedule.Trigger.Every <= 0) { throw new Exception("Every must be greater to 0."); }
 
             if (schedule.Trigger.Type.Occurs.Type == TriggerOccurType.Week &&
-                schedule.Trigger.Days.Count == 0) { throw new Exception("Occurs weekly must indicate the days of the week."); }
+                schedule.Trigger.DaysOfWeek.Count == 0) { throw new Exception("Occurs weekly must indicate the days of the week."); }
+
+            if (schedule.Trigger.Type.Occurs == null) { throw new Exception("Must indicate occurs."); }
 
             ScheduleManager.ValidateTriggerDailyFrecuency(schedule.Trigger);
         }
@@ -45,6 +56,8 @@ namespace Training
             {
                 if (trigger.Frecuency.Time.HasValue == false) { throw new Exception("Must indicate Occurs once at time."); }
             }
+
+            if (trigger.Frecuency.Type.Occurs == null) { throw new Exception("Must indicate frecuency occurs."); }
         }
     }
 }

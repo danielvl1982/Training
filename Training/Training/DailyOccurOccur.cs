@@ -69,9 +69,9 @@ namespace Training
         }
         private static void LoadItems()
         {
-            DailyOccur.AddItem("Daily", DailyOccurType.Hour);
-            DailyOccur.AddItem("Weekly", DailyOccurType.Minute);
-            DailyOccur.AddItem("Weekly", DailyOccurType.Second);
+            DailyOccur.AddItem("Hours", DailyOccurType.Hour);
+            DailyOccur.AddItem("Minutes", DailyOccurType.Minute);
+            DailyOccur.AddItem("Seconds", DailyOccurType.Second);
         }
     }
 }

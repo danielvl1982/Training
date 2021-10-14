@@ -5,6 +5,8 @@ namespace Training
 {
     public class Trigger
     {
+        private DailyFrecuency frecuency;
+
         private readonly List<DayOfWeek> days = new List<DayOfWeek>();
 
         public Trigger() { this.Enabled = true; }
@@ -13,9 +15,18 @@ namespace Training
 
         public DateTime? DateTime { get; set; }
 
-        public List<DayOfWeek> Days { get => this.days; }
+        public List<DayOfWeek> DaysOfWeek { get => this.days; }
 
-        public DailyFrecuency Frecuency { get; set; }
+        public DailyFrecuency Frecuency
+        {
+            get
+            {
+                if (this.Type != null && this.Type.IsRecurring == false) { return null; }
+
+                return this.frecuency;
+            }
+            set { this.frecuency = value; }
+        }
 
         public int Every { get; set; }
 
