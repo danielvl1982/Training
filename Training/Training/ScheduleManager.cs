@@ -32,10 +32,12 @@ namespace Training
             if (schedule.Trigger.Type.IsRecurring == true &&
                 schedule.Trigger.Every <= 0) { throw new Exception("Every must be greater to 0."); }
 
-            if (schedule.Trigger.Type.Occurs.Type == TriggerOccurType.Week &&
+            if (schedule.Trigger.Type.Occurs.Type == FrecuencyOccurType.Week &&
                 schedule.Trigger.DaysOfWeek.Count == 0) { throw new Exception("Occurs weekly must indicate the days of the week."); }
 
             if (schedule.Trigger.Type.Occurs == null) { throw new Exception("Must indicate occurs."); }
+
+            if (FrecuencyOccur.TriggerItems.Exists(o => o.Name == schedule.Trigger.Type.Occurs.Name) == false) { throw new Exception("Must indicate to correct trigger occurs."); }
 
             ScheduleManager.ValidateTriggerDailyFrecuency(schedule.Trigger);
         }
@@ -58,6 +60,8 @@ namespace Training
             }
 
             if (trigger.Frecuency.Type.Occurs == null) { throw new Exception("Must indicate frecuency occurs."); }
+
+            if (FrecuencyOccur.DailyItems.Exists(o => o.Name == trigger.Frecuency.Type.Occurs.Name) == false) { throw new Exception("Must indicate to correct daily occurs."); }
         }
     }
 }

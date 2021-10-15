@@ -83,10 +83,10 @@ namespace Training
         {
             switch (this.schedule.Trigger.Type.Occurs.Type)
             {
-                case TriggerOccurType.Day:
+                case FrecuencyOccurType.Day:
                     dateTime = dateTime.AddDays(this.schedule.Trigger.Every);
                     break;
-                case TriggerOccurType.Week:
+                case FrecuencyOccurType.Week:
                     dateTime = this.GetNextExecutionByWeek(dateTime);
                     break;
             }
@@ -116,7 +116,7 @@ namespace Training
 
             return nextDayOfWeek.HasValue == false
                 ? this.GetNextExecutionByWeek(nextExecution.AddDays(this.schedule.Trigger.Every * 7))
-                : nextExecution.DateTimeDayOfWeek(nextDayOfWeek.Value);
+                : nextExecution.GetDateTimeDayOfWeek(nextDayOfWeek.Value);
         }
 
         private DateTime? GetNextExecutionDayOnce(DateTime dateTime)
@@ -127,13 +127,24 @@ namespace Training
         }
         private DateTime? GetNextExecutionDayRecurring(DateTime dateTime)
         {
-            if (dateTime.TimeOfDay > this.schedule.Trigger.Frecuency.EndTime.Value) { return null; }
+            if (this.schedule.Trigger.DaysOfWeek.Exists(d => d == dateTime.DayOfWeek) == false ||
+                dateTime.TimeOfDay > this.schedule.Trigger.Frecuency.EndTime.Value) { return null; }
 
-            IEnumerable<TimeSpan> nextTime = (from time in this.schedule.Trigger.Frecuency.Gap
-                                                    where time > dateTime.TimeOfDay
-                                                    select time).OrderBy(t => t.Ticks);
+            IEnumerable<TimeSpan> nextTime = GetNextExecutionTimeOfDay(dateTime);
 
             return nextTime.Count() == 0 ? null : (DateTime?)dateTime.Date.Add(nextTime.First());
+        }
+
+        private IEnumerable<TimeSpan> GetNextExecutionTimeOfDay(DateTime dateTime)
+        {
+            List<TimeSpan> timesGap = this.schedule.Trigger.Frecuency.StartTime.Value.GetTimesGap(
+                    this.schedule.Trigger.Frecuency.EndTime.Value,
+                    this.schedule.Trigger.Frecuency.Every,
+                    this.schedule.Trigger.Frecuency.Type.Occurs);
+
+            return (from time in timesGap
+                    where time > dateTime.TimeOfDay
+                    select time).OrderBy(t => t.Ticks);
         }
 
         private void LoadDateTime()

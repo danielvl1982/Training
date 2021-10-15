@@ -42,7 +42,7 @@ namespace Training
 
         public TimeSpan Time { get { return this.DateTime.HasValue == true ? this.DateTime.Value.TimeOfDay : new TimeSpan(); } }
 
-        public TriggerType Type { get; set; }
+        public FrecuencyType Type { get; set; }
 
         public void AddDay(DayOfWeek day)
         {
