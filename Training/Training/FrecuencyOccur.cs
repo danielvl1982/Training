@@ -42,43 +42,18 @@ namespace Training
 
         public string Name { get; private set; }
 
-        public static List<FrecuencyOccur> DailyItems
-        {
-            get
-            {
-                if (FrecuencyOccur.dailyItems == null)
-                {
-                    FrecuencyOccur.LoadDailyItems();
-                }
-
-                return FrecuencyOccur.dailyItems;
-            }
-        }
-        public static List<FrecuencyOccur> TriggerItems
-        {
-            get
-            {
-                if (FrecuencyOccur.triggerItems == null)
-                {
-                    FrecuencyOccur.LoadTriggerItems();
-                }
-
-                return FrecuencyOccur.triggerItems;
-            }
-        }
-
         public static FrecuencyOccur NewByName(string name)
         {
             FrecuencyOccur occur = null;
 
-            if (FrecuencyOccur.DailyItems.Exists(o => o.Name.ToUpper() == name.ToUpper()) == true)
+            if (FrecuencyOccur.GetDailyItems().Exists(o => o.Name.ToUpper() == name.ToUpper()) == true)
             {
-                occur = FrecuencyOccur.DailyItems.Find(o => o.Name.ToUpper() == name.ToUpper());
+                occur = FrecuencyOccur.GetDailyItems().Find(o => o.Name.ToUpper() == name.ToUpper());
             }
 
-            if (FrecuencyOccur.TriggerItems.Exists(o => o.Name.ToUpper() == name.ToUpper()) == true)
+            if (FrecuencyOccur.GetTriggerItems().Exists(o => o.Name.ToUpper() == name.ToUpper()) == true)
             {
-                occur = FrecuencyOccur.TriggerItems.Find(o => o.Name.ToUpper() == name.ToUpper());
+                occur = FrecuencyOccur.GetTriggerItems().Find(o => o.Name.ToUpper() == name.ToUpper());
             }
 
             return occur == null
@@ -86,18 +61,41 @@ namespace Training
                 : (FrecuencyOccur)occur.MemberwiseClone();
         }
 
+        public static List<FrecuencyOccur> GetDailyItems()
+        {
+            if (FrecuencyOccur.dailyItems == null)
+            {
+                FrecuencyOccur.LoadDailyItems();
+            }
+
+            return FrecuencyOccur.dailyItems;
+        }
+        public static List<FrecuencyOccur> GetTriggerItems()
+        {
+            if (FrecuencyOccur.triggerItems == null)
+            {
+                FrecuencyOccur.LoadTriggerItems();
+            }
+
+            return FrecuencyOccur.triggerItems;
+        }
+
         private static void LoadDailyItems()
         {
-            FrecuencyOccur.dailyItems = new List<FrecuencyOccur>();
-            FrecuencyOccur.dailyItems.Add(new FrecuencyOccur("Hours", FrecuencyOccurType.Hour));
-            FrecuencyOccur.dailyItems.Add(new FrecuencyOccur("Minutes", FrecuencyOccurType.Minute));
-            FrecuencyOccur.dailyItems.Add(new FrecuencyOccur("Seconds", FrecuencyOccurType.Second));
+            FrecuencyOccur.dailyItems = new List<FrecuencyOccur>
+            {
+                new FrecuencyOccur("Hours", FrecuencyOccurType.Hour),
+                new FrecuencyOccur("Minutes", FrecuencyOccurType.Minute),
+                new FrecuencyOccur("Seconds", FrecuencyOccurType.Second)
+            };
         }
         private static void LoadTriggerItems()
         {
-            FrecuencyOccur.triggerItems = new List<FrecuencyOccur>();
-            FrecuencyOccur.triggerItems.Add(new FrecuencyOccur("Daily", FrecuencyOccurType.Day));
-            FrecuencyOccur.triggerItems.Add(new FrecuencyOccur("Weekly", FrecuencyOccurType.Week));
+            FrecuencyOccur.triggerItems = new List<FrecuencyOccur>
+            {
+                new FrecuencyOccur("Daily", FrecuencyOccurType.Day),
+                new FrecuencyOccur("Weekly", FrecuencyOccurType.Week)
+            };
         }
     }
 }

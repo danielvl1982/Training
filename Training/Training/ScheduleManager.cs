@@ -37,7 +37,7 @@ namespace Training
 
             if (schedule.Trigger.Type.Occurs == null) { throw new Exception("Must indicate occurs."); }
 
-            if (FrecuencyOccur.TriggerItems.Exists(o => o.Name == schedule.Trigger.Type.Occurs.Name) == false) { throw new Exception("Must indicate to correct trigger occurs."); }
+            if (FrecuencyOccur.GetTriggerItems().Exists(o => o.Name == schedule.Trigger.Type.Occurs.Name) == false) { throw new Exception("Must indicate to correct trigger occurs."); }
 
             ScheduleManager.ValidateTriggerDailyFrecuency(schedule.Trigger);
         }
@@ -61,7 +61,7 @@ namespace Training
 
             if (trigger.Frecuency.Type.Occurs == null) { throw new Exception("Must indicate frecuency occurs."); }
 
-            if (FrecuencyOccur.DailyItems.Exists(o => o.Name == trigger.Frecuency.Type.Occurs.Name) == false) { throw new Exception("Must indicate to correct daily occurs."); }
+            if (FrecuencyOccur.GetDailyItems().Exists(o => o.Name == trigger.Frecuency.Type.Occurs.Name) == false) { throw new Exception("Must indicate to correct daily occurs."); }
         }
     }
 }

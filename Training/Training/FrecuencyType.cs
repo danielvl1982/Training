@@ -21,22 +21,19 @@ namespace Training
 
         public FrecuencyOccur Occurs { get; set; }
 
-        public static List<FrecuencyType> Items
+        public static List<FrecuencyType> GetItems()
         {
-            get
-            {
                 if (FrecuencyType.items == null)
                 {
                     FrecuencyType.LoadItems();
                 }
 
                 return FrecuencyType.items;
-            }
-        }
+          }
 
         public static FrecuencyType NewByName(string name)
         {
-            IEnumerable<FrecuencyType> result = (from frecuency in FrecuencyType.Items
+            IEnumerable<FrecuencyType> result = (from frecuency in FrecuencyType.GetItems()
                                                  where frecuency.Name.ToUpper() == name.ToUpper()
                                                  select frecuency);
 
@@ -47,9 +44,11 @@ namespace Training
 
         private static void LoadItems()
         {
-            FrecuencyType.items = new List<FrecuencyType>();
-            FrecuencyType.items.Add(new FrecuencyType("Once", false));
-            FrecuencyType.items.Add(new FrecuencyType("Recurring", true));
+            FrecuencyType.items = new List<FrecuencyType>
+            {
+                new FrecuencyType("Once", false),
+                new FrecuencyType("Recurring", true)
+            };
         }
     }
 }
