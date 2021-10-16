@@ -26,7 +26,7 @@ namespace Training
             if (schedule.Type.IsRecurring == true &&
                 schedule.Every <= 0) { throw new Exception("Every must be greater to 0."); }
 
-            if (schedule.Type.Occurs.Type == FrecuencyOccurType.Week &&
+            if (schedule.Type.Occurs.InitialType == FrecuencyType.Week &&
                 schedule.DaysOfWeek.Count == 0) { throw new Exception("Occurs weekly must indicate the days of the week."); }
 
             if (schedule.Type.Occurs == null) { throw new Exception("Must indicate occurs."); }

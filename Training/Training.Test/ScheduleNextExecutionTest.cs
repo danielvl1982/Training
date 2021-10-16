@@ -13,7 +13,7 @@ namespace Training.Test
             {
                 StartDate = new DateTime(2020, 1, 1),
                 DateTime = new DateTime(2020, 1, 8, 14, 0, 0),
-                Type = FrecuencyType.NewByName("Once")
+                Type = FrecuencyToDeleteType.NewByName("Once")
             };
             mySchedule.Type.Occurs = FrecuencyOccur.NewByName("Daily");
 
@@ -23,7 +23,7 @@ namespace Training.Test
 
             DateTime result = new DateTime(2020, 01, 08, 14, 0, 0);
 
-            Assert.AreEqual(result, myExecution.DateTime);
+            Assert.AreEqual(result, myExecution.GetDateTime());
         }
 
         [TestMethod]
@@ -33,7 +33,7 @@ namespace Training.Test
             {
                 StartDate = new DateTime(2020, 1, 1),
                 Every = 1,
-                Type = FrecuencyType.NewByName("Recurring")
+                Type = FrecuencyToDeleteType.NewByName("Recurring")
             };
             mySchedule.Type.Occurs = FrecuencyOccur.NewByName("Daily");
 
@@ -43,7 +43,7 @@ namespace Training.Test
 
             DateTime result = new DateTime(2020, 01, 05);
 
-            Assert.AreEqual(result, myExecution.DateTime);
+            Assert.AreEqual(result, myExecution.GetDateTime());
         }
         [TestMethod]
         public void Schedule_Recurring_Weekly_NextExecute()
@@ -52,7 +52,7 @@ namespace Training.Test
             {
                 StartDate = new DateTime(2020, 1, 1),
                 Every = 2,
-                Type = FrecuencyType.NewByName("Recurring")
+                Type = FrecuencyToDeleteType.NewByName("Recurring")
             };
             mySchedule.Type.Occurs = FrecuencyOccur.NewByName("Weekly");
             mySchedule.AddDay(DayOfWeek.Monday);
@@ -65,7 +65,7 @@ namespace Training.Test
 
             DateTime result = new DateTime(2020, 01, 02);
 
-            Assert.AreEqual(result, myExecution.DateTime);
+            Assert.AreEqual(result, myExecution.GetDateTime());
         }
         [TestMethod]
         public void Schedule_Recurring_Weekly_Frecuency_NextExecute()
@@ -74,7 +74,7 @@ namespace Training.Test
             {
                 StartDate = new DateTime(2020, 1, 1),
                 Every = 2,
-                Type = FrecuencyType.NewByName("Recurring")
+                Type = FrecuencyToDeleteType.NewByName("Recurring")
             };
             mySchedule.Type.Occurs = FrecuencyOccur.NewByName("Weekly");
             mySchedule.AddDay(DayOfWeek.Monday);
@@ -86,7 +86,7 @@ namespace Training.Test
                 EndTime = new TimeSpan(8, 0, 0),
                 Every = 2,
                 StartTime = new TimeSpan(4, 0, 0),
-                Type = FrecuencyType.NewByName("Recurring")
+                Type = FrecuencyToDeleteType.NewByName("Recurring")
             };
             myFrecuency.Type.Occurs = FrecuencyOccur.NewByName("Hours");
 
@@ -98,15 +98,15 @@ namespace Training.Test
 
             DateTime result = new DateTime(2020, 01, 2, 4, 0, 0);
 
-            Assert.AreEqual(result, myExecution.DateTime);
+            Assert.AreEqual(result, myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.DateTime.Value);
+            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
 
-            Assert.AreEqual(result.AddHours(2), myExecution.DateTime);
+            Assert.AreEqual(result.AddHours(2), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.DateTime.Value);
+            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
 
-            Assert.AreEqual(result.AddHours(4), myExecution.DateTime);
+            Assert.AreEqual(result.AddHours(4), myExecution.GetDateTime());
         }
     }
 }

@@ -4,13 +4,17 @@ using System.Linq;
 
 namespace Training
 {
-    public enum FrecuencyOccurType
+    public enum FrecuencyDailyType
+    {
+        Hour = 0,
+        Minute = 1,
+        Second = 2
+    }
+
+    public enum FrecuencyType
     {
         Day = 0,
-        Week = 1,
-        Hour = 2,
-        Minute = 3,
-        Second = 4
+        Week = 1
     }
 
     public class FrecuencyOccur
@@ -18,23 +22,30 @@ namespace Training
         private static List<FrecuencyOccur> dailyItems;
         private static List<FrecuencyOccur> triggerItems;
 
-        private FrecuencyOccur(string name, FrecuencyOccurType type)
+        private FrecuencyOccur(string name, FrecuencyDailyType type)
         {
             this.Name = name;
-            this.Type = type;
+            this.DailyType = type;
+        }
+        private FrecuencyOccur(string name, FrecuencyType type)
+        {
+            this.Name = name;
+            this.InitialType = type;
         }
 
-        public FrecuencyOccurType Type { get; private set; }
+        public FrecuencyDailyType DailyType { get; private set; }
+
+        public FrecuencyType InitialType { get; private set; }
 
         public string Description
         {
             get
             {
-                return this.Type switch
+                return this.DailyType switch
                 {
-                    FrecuencyOccurType.Hour => "hour",
-                    FrecuencyOccurType.Minute => "minute",
-                    FrecuencyOccurType.Second => "second",
+                    FrecuencyDailyType.Hour => "hour",
+                    FrecuencyDailyType.Minute => "minute",
+                    FrecuencyDailyType.Second => "second",
                     _ => string.Empty,
                 };
             }
@@ -85,17 +96,17 @@ namespace Training
         {
             FrecuencyOccur.dailyItems = new List<FrecuencyOccur>
             {
-                new FrecuencyOccur("Hours", FrecuencyOccurType.Hour),
-                new FrecuencyOccur("Minutes", FrecuencyOccurType.Minute),
-                new FrecuencyOccur("Seconds", FrecuencyOccurType.Second)
+                new FrecuencyOccur("Hours", FrecuencyDailyType.Hour),
+                new FrecuencyOccur("Minutes", FrecuencyDailyType.Minute),
+                new FrecuencyOccur("Seconds", FrecuencyDailyType.Second)
             };
         }
         private static void LoadTriggerItems()
         {
             FrecuencyOccur.triggerItems = new List<FrecuencyOccur>
             {
-                new FrecuencyOccur("Daily", FrecuencyOccurType.Day),
-                new FrecuencyOccur("Weekly", FrecuencyOccurType.Week)
+                new FrecuencyOccur("Daily", FrecuencyType.Day),
+                new FrecuencyOccur("Weekly", FrecuencyType.Week)
             };
         }
     }

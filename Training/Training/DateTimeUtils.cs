@@ -33,15 +33,15 @@ namespace Training
             int minutes = 0;
             int seconds = 0;
 
-            switch (occur.Type)
+            switch (occur.DailyType)
             {
-                case FrecuencyOccurType.Hour:
+                case FrecuencyDailyType.Hour:
                     hours = gap;
                     break;
-                case FrecuencyOccurType.Minute:
+                case FrecuencyDailyType.Minute:
                     minutes = gap;
                     break;
-                case FrecuencyOccurType.Second:
+                case FrecuencyDailyType.Second:
                     seconds = gap;
                     break;
             }

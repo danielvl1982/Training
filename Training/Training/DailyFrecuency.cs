@@ -8,7 +8,7 @@ namespace Training
         {
         }
 
-        public FrecuencyType Type { get; set; }
+        public FrecuencyToDeleteType Type { get; set; }
 
         public TimeSpan? Time { get; set; }
         public TimeSpan? EndTime { get; set; }

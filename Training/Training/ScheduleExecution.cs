@@ -21,35 +21,29 @@ namespace Training
             this.schedule = schedule;
         }
 
-        public DateTime? DateTime
+        public DateTime? GetDateTime()
         {
-            get
-            {
-                if (this.dateTime.HasValue == false) { this.LoadDateTime(); }
+            if (this.dateTime.HasValue == false) { this.LoadDateTime(); }
 
-                return this.dateTime;
-            }
+            return this.dateTime;
         }
 
-        public string Description
+        public string GetDescription()
         {
-            get
+            if (this.GetDateTime().HasValue == false) { return string.Empty; }
+
+            if (string.IsNullOrEmpty(this.description) == true)
             {
-                if (this.DateTime.HasValue == false) { return string.Empty; }
-
-                if (string.IsNullOrEmpty(this.description) == true)
-                {
-                    this.description = this.schedule.Description + "Schedule will be used on " + this.DateTime.Value.ToString("dd/MM/yyyy HH:mm:ss");
-                    this.description += this.schedule.StartDate.HasValue == true
-                        ? " starting on " + this.schedule.StartDate.Value.ToString("dd/MM/yyy HH:mm:ss")
-                        : string.Empty;
-                    this.description += this.schedule.EndDate.HasValue == true
-                        ? " until " + this.schedule.EndDate.Value.ToString("dd/MM/yyy HH:mm:ss")
-                        : string.Empty;
-                }
-
-                return this.description;
+                this.description = this.schedule.Description + "Schedule will be used on " + this.GetDateTime().Value.ToString("dd/MM/yyyy HH:mm:ss");
+                this.description += this.schedule.StartDate.HasValue == true
+                    ? " starting on " + this.schedule.StartDate.Value.ToString("dd/MM/yyy HH:mm:ss")
+                    : string.Empty;
+                this.description += this.schedule.EndDate.HasValue == true
+                    ? " until " + this.schedule.EndDate.Value.ToString("dd/MM/yyy HH:mm:ss")
+                    : string.Empty;
             }
+
+            return this.description;
         }
 
         public void SetCurrentDate(DateTime dateTime)
@@ -57,6 +51,8 @@ namespace Training
             this.currentDate = dateTime;
 
             this.dateTime = null;
+
+            this.description = null;
         }
 
         private DateTime GetDateTimeExecution()
@@ -70,7 +66,7 @@ namespace Training
                 nextExecution.CompareTo(this.schedule.DateTime.Value) < 0) { nextExecution = this.schedule.DateTime.Value; }
 
             if (this.schedule.Frecuency == null &&
-                this.schedule.Time.Ticks > 0) { nextExecution = nextExecution.Date.Add(this.schedule.Time); }            
+                this.schedule.GetTime().Ticks > 0) { nextExecution = nextExecution.Date.Add(this.schedule.GetTime()); }            
 
             if (this.schedule.Type.IsRecurring == true)
             {
@@ -81,12 +77,12 @@ namespace Training
         }
         private DateTime GetDateTimeIncremented(DateTime dateTime)
         {
-            switch (this.schedule.Type.Occurs.Type)
+            switch (this.schedule.Type.Occurs.InitialType)
             {
-                case FrecuencyOccurType.Day:
+                case FrecuencyType.Day:
                     dateTime = dateTime.AddDays(this.schedule.Every);
                     break;
-                case FrecuencyOccurType.Week:
+                case FrecuencyType.Week:
                     dateTime = this.GetNextExecutionByWeek(dateTime);
                     break;
             }

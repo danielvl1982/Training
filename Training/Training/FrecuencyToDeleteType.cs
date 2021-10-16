@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace Training
 {
-    public class FrecuencyType
+    public class FrecuencyToDeleteType
     {
-        private static List<FrecuencyType> items;
+        private static List<FrecuencyToDeleteType> items;
 
-        private FrecuencyType(string name, bool isRecurring)
+        private FrecuencyToDeleteType(string name, bool isRecurring)
         {
             this.IsRecurring = isRecurring;
             this.Name = name;
@@ -21,33 +21,33 @@ namespace Training
 
         public FrecuencyOccur Occurs { get; set; }
 
-        public static List<FrecuencyType> GetItems()
+        public static List<FrecuencyToDeleteType> GetItems()
         {
-                if (FrecuencyType.items == null)
+                if (FrecuencyToDeleteType.items == null)
                 {
-                    FrecuencyType.LoadItems();
+                    FrecuencyToDeleteType.LoadItems();
                 }
 
-                return FrecuencyType.items;
+                return FrecuencyToDeleteType.items;
           }
 
-        public static FrecuencyType NewByName(string name)
+        public static FrecuencyToDeleteType NewByName(string name)
         {
-            IEnumerable<FrecuencyType> result = (from frecuency in FrecuencyType.GetItems()
+            IEnumerable<FrecuencyToDeleteType> result = (from frecuency in FrecuencyToDeleteType.GetItems()
                                                  where frecuency.Name.ToUpper() == name.ToUpper()
                                                  select frecuency);
 
             return result.Count() == 0
                 ? throw new Exception("No existe el elemento de configuración " + name)
-                : (FrecuencyType)result.First().MemberwiseClone();
+                : (FrecuencyToDeleteType)result.First().MemberwiseClone();
         }
 
         private static void LoadItems()
         {
-            FrecuencyType.items = new List<FrecuencyType>
+            FrecuencyToDeleteType.items = new List<FrecuencyToDeleteType>
             {
-                new FrecuencyType("Once", false),
-                new FrecuencyType("Recurring", true)
+                new FrecuencyToDeleteType("Once", false),
+                new FrecuencyToDeleteType("Recurring", true)
             };
         }
     }
