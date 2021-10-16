@@ -39,7 +39,7 @@ namespace Training
 
                 if (string.IsNullOrEmpty(this.description) == true)
                 {
-                    this.description = this.schedule.Trigger.Description + "Schedule will be used on " + this.DateTime.Value.ToString("dd/MM/yyyy HH:mm:ss");
+                    this.description = this.schedule.Description + "Schedule will be used on " + this.DateTime.Value.ToString("dd/MM/yyyy HH:mm:ss");
                     this.description += this.schedule.StartDate.HasValue == true
                         ? " starting on " + this.schedule.StartDate.Value.ToString("dd/MM/yyy HH:mm:ss")
                         : string.Empty;
@@ -66,13 +66,13 @@ namespace Training
             if (this.schedule.StartDate.HasValue == true &&
                 nextExecution.CompareTo(this.schedule.StartDate.Value) < 0) { nextExecution = this.schedule.StartDate.Value; }
 
-            if (this.schedule.Trigger.DateTime.HasValue == true &&
-                nextExecution.CompareTo(this.schedule.Trigger.DateTime.Value) < 0) { nextExecution = this.schedule.Trigger.DateTime.Value; }
+            if (this.schedule.DateTime.HasValue == true &&
+                nextExecution.CompareTo(this.schedule.DateTime.Value) < 0) { nextExecution = this.schedule.DateTime.Value; }
 
-            if (this.schedule.Trigger.Frecuency == null &&
-                this.schedule.Trigger.Time.Ticks > 0) { nextExecution = nextExecution.Date.Add(this.schedule.Trigger.Time); }            
+            if (this.schedule.Frecuency == null &&
+                this.schedule.Time.Ticks > 0) { nextExecution = nextExecution.Date.Add(this.schedule.Time); }            
 
-            if (this.schedule.Trigger.Type.IsRecurring == true)
+            if (this.schedule.Type.IsRecurring == true)
             {
                 nextExecution = this.GetNextExecutionRecurring(nextExecution);
             }
@@ -81,10 +81,10 @@ namespace Training
         }
         private DateTime GetDateTimeIncremented(DateTime dateTime)
         {
-            switch (this.schedule.Trigger.Type.Occurs.Type)
+            switch (this.schedule.Type.Occurs.Type)
             {
                 case FrecuencyOccurType.Day:
-                    dateTime = dateTime.AddDays(this.schedule.Trigger.Every);
+                    dateTime = dateTime.AddDays(this.schedule.Every);
                     break;
                 case FrecuencyOccurType.Week:
                     dateTime = this.GetNextExecutionByWeek(dateTime);
@@ -95,13 +95,13 @@ namespace Training
         }
         private DateTime GetNextExecutionRecurring(DateTime nextExecution)
         {
-            if (this.schedule.Trigger.Frecuency == null)
+            if (this.schedule.Frecuency == null)
             {
                 return this.GetDateTimeIncremented(nextExecution);
             }
             else
             {
-                DateTime? nextExecutionDay = this.schedule.Trigger.Frecuency.Type.IsRecurring == true
+                DateTime? nextExecutionDay = this.schedule.Frecuency.Type.IsRecurring == true
                     ? this.GetNextExecutionDayRecurring(nextExecution)
                     : this.GetNextExecutionDayOnce(nextExecution);
 
@@ -112,23 +112,23 @@ namespace Training
         }
         private DateTime GetNextExecutionByWeek(DateTime nextExecution)
         {
-            DayOfWeek? nextDayOfWeek = nextExecution.NextDayOfWeek(this.schedule.Trigger.DaysOfWeek);
+            DayOfWeek? nextDayOfWeek = nextExecution.NextDayOfWeek(this.schedule.DaysOfWeek);
 
             return nextDayOfWeek.HasValue == false
-                ? this.GetNextExecutionByWeek(nextExecution.AddDays(this.schedule.Trigger.Every * 7))
+                ? this.GetNextExecutionByWeek(nextExecution.AddDays(this.schedule.Every * 7))
                 : nextExecution.GetDateTimeDayOfWeek(nextDayOfWeek.Value);
         }
 
         private DateTime? GetNextExecutionDayOnce(DateTime dateTime)
         {
-            return dateTime.TimeOfDay < this.schedule.Trigger.Frecuency.Time.Value
-                ? (DateTime?)dateTime.Date.Add(this.schedule.Trigger.Frecuency.Time.Value)
+            return dateTime.TimeOfDay < this.schedule.Frecuency.Time.Value
+                ? (DateTime?)dateTime.Date.Add(this.schedule.Frecuency.Time.Value)
                 : null;
         }
         private DateTime? GetNextExecutionDayRecurring(DateTime dateTime)
         {
-            if (this.schedule.Trigger.DaysOfWeek.Exists(d => d == dateTime.DayOfWeek) == false ||
-                dateTime.TimeOfDay > this.schedule.Trigger.Frecuency.EndTime.Value) { return null; }
+            if (this.schedule.DaysOfWeek.Exists(d => d == dateTime.DayOfWeek) == false ||
+                dateTime.TimeOfDay > this.schedule.Frecuency.EndTime.Value) { return null; }
 
             IEnumerable<TimeSpan> nextTime = GetNextExecutionTimeOfDay(dateTime);
 
@@ -137,10 +137,10 @@ namespace Training
 
         private IEnumerable<TimeSpan> GetNextExecutionTimeOfDay(DateTime dateTime)
         {
-            List<TimeSpan> timesGap = this.schedule.Trigger.Frecuency.StartTime.Value.GetTimesGap(
-                    this.schedule.Trigger.Frecuency.EndTime.Value,
-                    this.schedule.Trigger.Frecuency.Every,
-                    this.schedule.Trigger.Frecuency.Type.Occurs);
+            List<TimeSpan> timesGap = this.schedule.Frecuency.StartTime.Value.GetTimesGap(
+                    this.schedule.Frecuency.EndTime.Value,
+                    this.schedule.Frecuency.Every,
+                    this.schedule.Frecuency.Type.Occurs);
 
             return (from time in timesGap
                     where time > dateTime.TimeOfDay

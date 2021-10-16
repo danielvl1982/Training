@@ -11,17 +11,11 @@ namespace Training.Test
         {
             Schedule mySchedule = new Schedule
             {
-                StartDate = new DateTime(2020, 1, 1)
-            };
-
-            Trigger myTriggerOnce = new Trigger
-            {
+                StartDate = new DateTime(2020, 1, 1),
                 DateTime = new DateTime(2020, 1, 8, 14, 0, 0),
                 Type = FrecuencyType.NewByName("Once")
             };
-            myTriggerOnce.Type.Occurs = FrecuencyOccur.NewByName("Daily");
-
-            mySchedule.Trigger = myTriggerOnce;
+            mySchedule.Type.Occurs = FrecuencyOccur.NewByName("Daily");
 
             DateTime currentDate = new DateTime(2020, 01, 04);
 
@@ -37,17 +31,11 @@ namespace Training.Test
         {
             Schedule mySchedule = new Schedule
             {
-                StartDate = new DateTime(2020, 1, 1)
-            };
-
-            Trigger myTriggerRecurring = new Trigger
-            {
+                StartDate = new DateTime(2020, 1, 1),
                 Every = 1,
                 Type = FrecuencyType.NewByName("Recurring")
             };
-            myTriggerRecurring.Type.Occurs = FrecuencyOccur.NewByName("Daily");
-
-            mySchedule.Trigger = myTriggerRecurring;
+            mySchedule.Type.Occurs = FrecuencyOccur.NewByName("Daily");
 
             DateTime currentDate = new DateTime(2020, 01, 04);
 
@@ -62,20 +50,14 @@ namespace Training.Test
         {
             Schedule mySchedule = new Schedule
             {
-                StartDate = new DateTime(2020, 1, 1)
-            };
-
-            Trigger myTriggerRecurring = new Trigger
-            {
+                StartDate = new DateTime(2020, 1, 1),
                 Every = 2,
                 Type = FrecuencyType.NewByName("Recurring")
             };
-            myTriggerRecurring.Type.Occurs = FrecuencyOccur.NewByName("Weekly");
-            myTriggerRecurring.AddDay(DayOfWeek.Monday);
-            myTriggerRecurring.AddDay(DayOfWeek.Thursday);
-            myTriggerRecurring.AddDay(DayOfWeek.Friday);
-
-            mySchedule.Trigger = myTriggerRecurring;
+            mySchedule.Type.Occurs = FrecuencyOccur.NewByName("Weekly");
+            mySchedule.AddDay(DayOfWeek.Monday);
+            mySchedule.AddDay(DayOfWeek.Thursday);
+            mySchedule.AddDay(DayOfWeek.Friday);
 
             DateTime currentDate = new DateTime(2020, 01, 01);
 
@@ -90,18 +72,14 @@ namespace Training.Test
         {
             Schedule mySchedule = new Schedule
             {
-                StartDate = new DateTime(2020, 1, 1)
-            };
-
-            Trigger myTriggerRecurring = new Trigger
-            {
+                StartDate = new DateTime(2020, 1, 1),
                 Every = 2,
                 Type = FrecuencyType.NewByName("Recurring")
             };
-            myTriggerRecurring.Type.Occurs = FrecuencyOccur.NewByName("Weekly");
-            myTriggerRecurring.AddDay(DayOfWeek.Monday);
-            myTriggerRecurring.AddDay(DayOfWeek.Thursday);
-            myTriggerRecurring.AddDay(DayOfWeek.Friday);
+            mySchedule.Type.Occurs = FrecuencyOccur.NewByName("Weekly");
+            mySchedule.AddDay(DayOfWeek.Monday);
+            mySchedule.AddDay(DayOfWeek.Thursday);
+            mySchedule.AddDay(DayOfWeek.Friday);
 
             DailyFrecuency myFrecuency = new DailyFrecuency
             {
@@ -112,9 +90,7 @@ namespace Training.Test
             };
             myFrecuency.Type.Occurs = FrecuencyOccur.NewByName("Hours");
 
-            myTriggerRecurring.Frecuency = myFrecuency;
-
-            mySchedule.Trigger = myTriggerRecurring;
+            mySchedule.Frecuency = myFrecuency;
 
             DateTime currentDate = new DateTime(2020, 01, 02);
 
