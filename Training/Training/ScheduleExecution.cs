@@ -77,7 +77,7 @@ namespace Training
         }
         private DateTime GetDateTimeIncremented(DateTime dateTime)
         {
-            switch (this.schedule.Type.Occurs.InitialType)
+            switch (this.schedule.Type.Type)
             {
                 case FrecuencyType.Day:
                     dateTime = dateTime.AddDays(this.schedule.Every);
@@ -97,7 +97,7 @@ namespace Training
             }
             else
             {
-                DateTime? nextExecutionDay = this.schedule.Frecuency.Type.IsRecurring == true
+                DateTime? nextExecutionDay = this.schedule.Frecuency.DailyFrecuencyIsRecurring == true
                     ? this.GetNextExecutionDayRecurring(nextExecution)
                     : this.GetNextExecutionDayOnce(nextExecution);
 
@@ -117,14 +117,14 @@ namespace Training
 
         private DateTime? GetNextExecutionDayOnce(DateTime dateTime)
         {
-            return dateTime.TimeOfDay < this.schedule.Frecuency.Time.Value
-                ? (DateTime?)dateTime.Date.Add(this.schedule.Frecuency.Time.Value)
+            return dateTime.TimeOfDay < this.schedule.Frecuency.DailyFrecuencyTime.Value
+                ? (DateTime?)dateTime.Date.Add(this.schedule.Frecuency.DailyFrecuencyTime.Value)
                 : null;
         }
         private DateTime? GetNextExecutionDayRecurring(DateTime dateTime)
         {
             if (this.schedule.DaysOfWeek.Exists(d => d == dateTime.DayOfWeek) == false ||
-                dateTime.TimeOfDay > this.schedule.Frecuency.EndTime.Value) { return null; }
+                dateTime.TimeOfDay > this.schedule.Frecuency.DailyFrecuencyEndTime.Value) { return null; }
 
             IEnumerable<TimeSpan> nextTime = GetNextExecutionTimeOfDay(dateTime);
 
@@ -133,10 +133,10 @@ namespace Training
 
         private IEnumerable<TimeSpan> GetNextExecutionTimeOfDay(DateTime dateTime)
         {
-            List<TimeSpan> timesGap = this.schedule.Frecuency.StartTime.Value.GetTimesGap(
-                    this.schedule.Frecuency.EndTime.Value,
-                    this.schedule.Frecuency.Every,
-                    this.schedule.Frecuency.Type.Occurs);
+            List<TimeSpan> timesGap = this.schedule.Frecuency.DailyFrecuencyStartTime.Value.GetTimesGap(
+                    this.schedule.Frecuency.DailyFrecuencyEndTime.Value,
+                    this.schedule.Frecuency.DailyFrecuencyEvery,
+                    this.schedule.Frecuency);
 
             return (from time in timesGap
                     where time > dateTime.TimeOfDay

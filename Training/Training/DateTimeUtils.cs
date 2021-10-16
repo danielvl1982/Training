@@ -25,7 +25,7 @@ namespace Training
             return nextDaysOfWeek.Count() == 0 ? null : (DayOfWeek?)nextDaysOfWeek.First();
         }
 
-        public static List<TimeSpan> GetTimesGap(this TimeSpan startTime, TimeSpan endTime, int gap, FrecuencyOccur occur)
+        public static List<TimeSpan> GetTimesGap(this TimeSpan startTime, TimeSpan endTime, int gap, DailyFrecuency frecuency)
         {
             List<TimeSpan> times = new List<TimeSpan>();
 
@@ -33,15 +33,15 @@ namespace Training
             int minutes = 0;
             int seconds = 0;
 
-            switch (occur.DailyType)
+            switch (frecuency.DailyFrecuencyType)
             {
-                case FrecuencyDailyType.Hour:
+                case DailyType.Hour:
                     hours = gap;
                     break;
-                case FrecuencyDailyType.Minute:
+                case DailyType.Minute:
                     minutes = gap;
                     break;
-                case FrecuencyDailyType.Second:
+                case DailyType.Second:
                     seconds = gap;
                     break;
             }

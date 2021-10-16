@@ -34,7 +34,7 @@ namespace Training
 
         public string Description { get { return "Occurs " + this.Type.Description + "."; } }
 
-        public FrecuencyToDeleteType Type { get; set; }
+        public Frecuency Type { get; set; }
 
         public TimeSpan GetTime() { return this.DateTime.HasValue == true ? this.DateTime.Value.TimeOfDay : new TimeSpan(); }
 

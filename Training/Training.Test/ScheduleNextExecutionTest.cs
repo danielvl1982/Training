@@ -13,9 +13,8 @@ namespace Training.Test
             {
                 StartDate = new DateTime(2020, 1, 1),
                 DateTime = new DateTime(2020, 1, 8, 14, 0, 0),
-                Type = FrecuencyToDeleteType.NewByName("Once")
+                Type = Frecuency.NewByName("Once")
             };
-            mySchedule.Type.Occurs = FrecuencyOccur.NewByName("Daily");
 
             DateTime currentDate = new DateTime(2020, 01, 04);
 
@@ -33,9 +32,8 @@ namespace Training.Test
             {
                 StartDate = new DateTime(2020, 1, 1),
                 Every = 1,
-                Type = FrecuencyToDeleteType.NewByName("Recurring")
+                Type = Frecuency.NewByName("Recurring_Day")
             };
-            mySchedule.Type.Occurs = FrecuencyOccur.NewByName("Daily");
 
             DateTime currentDate = new DateTime(2020, 01, 04);
 
@@ -52,9 +50,8 @@ namespace Training.Test
             {
                 StartDate = new DateTime(2020, 1, 1),
                 Every = 2,
-                Type = FrecuencyToDeleteType.NewByName("Recurring")
+                Type = Frecuency.NewByName("Recurring_Week")
             };
-            mySchedule.Type.Occurs = FrecuencyOccur.NewByName("Weekly");
             mySchedule.AddDay(DayOfWeek.Monday);
             mySchedule.AddDay(DayOfWeek.Thursday);
             mySchedule.AddDay(DayOfWeek.Friday);
@@ -74,21 +71,16 @@ namespace Training.Test
             {
                 StartDate = new DateTime(2020, 1, 1),
                 Every = 2,
-                Type = FrecuencyToDeleteType.NewByName("Recurring")
+                Type = Frecuency.NewByName("Recurring_Week")
             };
-            mySchedule.Type.Occurs = FrecuencyOccur.NewByName("Weekly");
             mySchedule.AddDay(DayOfWeek.Monday);
             mySchedule.AddDay(DayOfWeek.Thursday);
             mySchedule.AddDay(DayOfWeek.Friday);
 
-            DailyFrecuency myFrecuency = new DailyFrecuency
-            {
-                EndTime = new TimeSpan(8, 0, 0),
-                Every = 2,
-                StartTime = new TimeSpan(4, 0, 0),
-                Type = FrecuencyToDeleteType.NewByName("Recurring")
-            };
-            myFrecuency.Type.Occurs = FrecuencyOccur.NewByName("Hours");
+            DailyFrecuency myFrecuency = DailyFrecuency.NewByName("Recurring_Hour");
+            myFrecuency.DailyFrecuencyEndTime = new TimeSpan(8, 0, 0);
+            myFrecuency.DailyFrecuencyEvery = 2;
+            myFrecuency.DailyFrecuencyStartTime = new TimeSpan(4, 0, 0);
 
             mySchedule.Frecuency = myFrecuency;
 
