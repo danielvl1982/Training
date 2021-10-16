@@ -51,7 +51,8 @@ namespace Training
                 occur = FrecuencyOccur.GetDailyItems().Find(o => o.Name.ToUpper() == name.ToUpper());
             }
 
-            if (FrecuencyOccur.GetTriggerItems().Exists(o => o.Name.ToUpper() == name.ToUpper()) == true)
+            if (occur == null &&
+                FrecuencyOccur.GetTriggerItems().Exists(o => o.Name.ToUpper() == name.ToUpper()) == true)
             {
                 occur = FrecuencyOccur.GetTriggerItems().Find(o => o.Name.ToUpper() == name.ToUpper());
             }
