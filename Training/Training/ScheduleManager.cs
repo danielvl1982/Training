@@ -4,9 +4,10 @@ namespace Training
 {
     public enum DailyType
     {
-        Hour = 0,
-        Minute = 1,
-        Second = 2
+        Once = 0,
+        Hour = 1,
+        Minute = 2,
+        Second = 3
     }
 
     public enum FrecuencyType
@@ -25,8 +26,6 @@ namespace Training
                 schedule.EndDate.HasValue == true &&
                 schedule.StartDate.Value.CompareTo(schedule.EndDate.Value) > 0) { throw new Exception("End date must be greater to start date."); }
 
-            if (schedule.Type == null) { throw new Exception("Must instantiate trigger type."); }
-
             if (schedule.StartDate.HasValue == true)
             {
                 if (schedule.DateTime.HasValue == true &&
@@ -36,29 +35,30 @@ namespace Training
                     schedule.DateTime.Value.CompareTo(schedule.StartDate.Value) < 0) { throw new Exception("DateTime must be lower to end date."); }
             }
 
-            if (schedule.Type.IsRecurring == true &&
+            if (schedule.IsRecurring == true &&
                 schedule.Every <= 0) { throw new Exception("Every must be greater to 0."); }
 
-            if (schedule.Type.Type == FrecuencyType.Week &&
+            if (schedule.IsRecurring == false &&
+                schedule.FrecuencyType != FrecuencyType.Day) { throw new Exception("Occurs must be Day."); }
+
+            if (schedule.FrecuencyType == FrecuencyType.Week &&
                 schedule.DaysOfWeek.Count == 0) { throw new Exception("Occurs weekly must indicate the days of the week."); }
 
-            if (Frecuency.GetItems().Exists(o => o.Name == schedule.Type.Name) == false) { throw new Exception("Must indicate to correct trigger occurs."); }
-
-            if (schedule.Frecuency == null) { return; }
-
-            if (schedule.Frecuency.DailyFrecuencyIsRecurring == true)
+            if (schedule.DailyFrecuencyType.HasValue == true)
             {
-                if (schedule.Frecuency.DailyFrecuencyStartTime.HasValue == false) { throw new Exception("Must indicate starting at."); }
-                if (schedule.Frecuency.DailyFrecuencyEndTime.HasValue == false) { throw new Exception("Must indicate end at."); }
-                if (schedule.Frecuency.DailyFrecuencyStartTime.Value.CompareTo(schedule.Frecuency.DailyFrecuencyEndTime.Value) > 0) { throw new Exception("End at must be greater to stating at."); }
-                if (schedule.Frecuency.DailyFrecuencyEvery <= 0) { throw new Exception("Occurs every must be greater to 0."); }
+                switch (schedule.DailyFrecuencyType)
+                {
+                    case DailyType.Once:
+                        if (schedule.DailyFrecuencyTime.HasValue == false) { throw new Exception("Must indicate Occurs once at time."); }
+                        break;
+                    default:
+                        if (schedule.DailyFrecuencyStartTime.HasValue == false) { throw new Exception("Must indicate starting at."); }
+                        if (schedule.DailyFrecuencyEndTime.HasValue == false) { throw new Exception("Must indicate end at."); }
+                        if (schedule.DailyFrecuencyStartTime.Value.CompareTo(schedule.DailyFrecuencyEndTime.Value) > 0) { throw new Exception("End at must be greater to stating at."); }
+                        if (schedule.DailyFrecuencyEvery <= 0) { throw new Exception("Occurs every must be greater to 0."); }
+                        break;
+                }
             }
-            else
-            {
-                if (schedule.Frecuency.DailyFrecuencyTime.HasValue == false) { throw new Exception("Must indicate Occurs once at time."); }
-            }
-
-            if (DailyFrecuency.GetItems().Exists(o => o.DailyFrecuencyName == schedule.Frecuency.DailyFrecuencyName) == false) { throw new Exception("Must indicate to correct daily occurs."); }
         }
     }
 }

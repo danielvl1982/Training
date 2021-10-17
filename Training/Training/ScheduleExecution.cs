@@ -34,7 +34,21 @@ namespace Training
 
             if (string.IsNullOrEmpty(this.description) == true)
             {
-                this.description = this.schedule.Description + "Schedule will be used on " + this.GetDateTime().Value.ToString("dd/MM/yyyy HH:mm:ss");
+                if (this.schedule.IsRecurring == true)
+                {
+                    this.description = "Occurs every" + this.schedule.FrecuencyType switch
+                    {
+                        FrecuencyType.Day => " day.",
+                        FrecuencyType.Week => " week.",
+                        _ => string.Empty,
+                    };
+                }
+                else
+                {
+                    this.description += "Occurs once.";
+                }
+
+                this.description += " Schedule will be used on " + this.GetDateTime().Value.ToString("dd/MM/yyyy HH:mm:ss");
                 this.description += this.schedule.StartDate.HasValue == true
                     ? " starting on " + this.schedule.StartDate.Value.ToString("dd/MM/yyy HH:mm:ss")
                     : string.Empty;
@@ -65,10 +79,10 @@ namespace Training
             if (this.schedule.DateTime.HasValue == true &&
                 nextExecution.CompareTo(this.schedule.DateTime.Value) < 0) { nextExecution = this.schedule.DateTime.Value; }
 
-            if (this.schedule.Frecuency == null &&
-                this.schedule.GetTime().Ticks > 0) { nextExecution = nextExecution.Date.Add(this.schedule.GetTime()); }            
+            if (this.schedule.DailyFrecuencyType.HasValue == false &&
+                this.schedule.DateTime.GetTime().Ticks > 0) { nextExecution = nextExecution.Date.Add(this.schedule.DateTime.GetTime()); }            
 
-            if (this.schedule.Type.IsRecurring == true)
+            if (this.schedule.IsRecurring == true)
             {
                 nextExecution = this.GetNextExecutionRecurring(nextExecution);
             }
@@ -77,7 +91,7 @@ namespace Training
         }
         private DateTime GetDateTimeIncremented(DateTime dateTime)
         {
-            switch (this.schedule.Type.Type)
+            switch (this.schedule.FrecuencyType)
             {
                 case FrecuencyType.Day:
                     dateTime = dateTime.AddDays(this.schedule.Every);
@@ -91,19 +105,19 @@ namespace Training
         }
         private DateTime GetNextExecutionRecurring(DateTime nextExecution)
         {
-            if (this.schedule.Frecuency == null)
+            if (this.schedule.DailyFrecuencyType.HasValue == true)
             {
-                return this.GetDateTimeIncremented(nextExecution);
-            }
-            else
-            {
-                DateTime? nextExecutionDay = this.schedule.Frecuency.DailyFrecuencyIsRecurring == true
-                    ? this.GetNextExecutionDayRecurring(nextExecution)
-                    : this.GetNextExecutionDayOnce(nextExecution);
+                DateTime? nextExecutionDay = this.schedule.DailyFrecuencyType == DailyType.Once
+                    ? this.GetNextExecutionDayOnce(nextExecution)
+                    : this.GetNextExecutionDayRecurring(nextExecution);
 
                 if (nextExecutionDay.HasValue == true) { return nextExecutionDay.Value; }
 
                 return this.GetNextExecutionRecurring(this.GetDateTimeIncremented(nextExecution).Date);
+            }
+            else
+            {
+                return this.GetDateTimeIncremented(nextExecution);
             }
         }
         private DateTime GetNextExecutionByWeek(DateTime nextExecution)
@@ -117,14 +131,14 @@ namespace Training
 
         private DateTime? GetNextExecutionDayOnce(DateTime dateTime)
         {
-            return dateTime.TimeOfDay < this.schedule.Frecuency.DailyFrecuencyTime.Value
-                ? (DateTime?)dateTime.Date.Add(this.schedule.Frecuency.DailyFrecuencyTime.Value)
+            return dateTime.TimeOfDay < this.schedule.DailyFrecuencyTime.Value
+                ? (DateTime?)dateTime.Date.Add(this.schedule.DailyFrecuencyTime.Value)
                 : null;
         }
         private DateTime? GetNextExecutionDayRecurring(DateTime dateTime)
         {
             if (this.schedule.DaysOfWeek.Exists(d => d == dateTime.DayOfWeek) == false ||
-                dateTime.TimeOfDay > this.schedule.Frecuency.DailyFrecuencyEndTime.Value) { return null; }
+                dateTime.TimeOfDay > this.schedule.DailyFrecuencyEndTime.Value) { return null; }
 
             IEnumerable<TimeSpan> nextTime = GetNextExecutionTimeOfDay(dateTime);
 
@@ -133,10 +147,10 @@ namespace Training
 
         private IEnumerable<TimeSpan> GetNextExecutionTimeOfDay(DateTime dateTime)
         {
-            List<TimeSpan> timesGap = this.schedule.Frecuency.DailyFrecuencyStartTime.Value.GetTimesGap(
-                    this.schedule.Frecuency.DailyFrecuencyEndTime.Value,
-                    this.schedule.Frecuency.DailyFrecuencyEvery,
-                    this.schedule.Frecuency);
+            List<TimeSpan> timesGap = this.schedule.DailyFrecuencyStartTime.Value.GetTimesGap(
+                    this.schedule.DailyFrecuencyEndTime.Value,
+                    this.schedule.DailyFrecuencyEvery,
+                    this.schedule.DailyFrecuencyType.Value);
 
             return (from time in timesGap
                     where time > dateTime.TimeOfDay
