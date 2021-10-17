@@ -6,6 +6,10 @@ namespace Training
 {
     public static class DateTimeUtils
     {
+        public static DateTime AddWeeks(this DateTime dateTime, int incrementWeeks)
+        {
+            return dateTime.AddDays(incrementWeeks * 7).GetDateTimeDayOfWeek(DayOfWeek.Monday).Date;
+        }
         public static DateTime GetDateTimeDayOfWeek(this DateTime dateTime, DayOfWeek dayOfWeek)
         {
             while (dateTime.DayOfWeek != dayOfWeek)

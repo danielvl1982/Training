@@ -124,9 +124,9 @@ namespace Training
         {
             DayOfWeek? nextDayOfWeek = nextExecution.NextDayOfWeek(this.schedule.DaysOfWeek);
 
-            return nextDayOfWeek.HasValue == false
-                ? this.GetNextExecutionByWeek(nextExecution.AddDays(this.schedule.Every * 7))
-                : nextExecution.GetDateTimeDayOfWeek(nextDayOfWeek.Value);
+            return nextDayOfWeek.HasValue == true
+                ? nextExecution.GetDateTimeDayOfWeek(nextDayOfWeek.Value)
+                : this.GetNextExecutionRecurring(nextExecution.AddWeeks(this.schedule.Every).Date);
         }
 
         private DateTime? GetNextExecutionDayOnce(DateTime dateTime)
