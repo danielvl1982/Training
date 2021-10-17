@@ -30,9 +30,12 @@ namespace Training
             {
                 if (schedule.DateTime.HasValue == true &&
                     schedule.DateTime.Value.CompareTo(schedule.StartDate.Value) < 0) { throw new Exception("DateTime must be greater to start date."); }
+            }
 
+            if (schedule.EndDate.HasValue == true)
+            {
                 if (schedule.DateTime.HasValue == true &&
-                    schedule.DateTime.Value.CompareTo(schedule.StartDate.Value) < 0) { throw new Exception("DateTime must be lower to end date."); }
+                    schedule.DateTime.Value.CompareTo(schedule.EndDate.Value) > 0) { throw new Exception("End date must be greater to dateTime."); }
             }
 
             if (schedule.IsRecurring == true &&
