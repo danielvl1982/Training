@@ -118,10 +118,10 @@ namespace Training.Test
             {
                 StartDate = new DateTime(2020, 1, 1),
                 Every = 2
-            };
-            schedule.AddDay(DayOfWeek.Monday);
-            schedule.AddDay(DayOfWeek.Thursday);
-            schedule.AddDay(DayOfWeek.Friday);
+        };
+            schedule.DaysOfWeek.Add(DayOfWeek.Monday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Thursday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Friday);
 
             DateTime currentDate = new DateTime(2020, 01, 01);
             DateTime result = new DateTime(2020, 01, 02);
@@ -153,9 +153,9 @@ namespace Training.Test
                 DailyFrecuencyTime = new TimeSpan(4, 0, 0),
                 DailyFrecuencyType = DailyType.Once,
             };
-            schedule.AddDay(DayOfWeek.Monday);
-            schedule.AddDay(DayOfWeek.Thursday);
-            schedule.AddDay(DayOfWeek.Friday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Monday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Thursday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Friday);
 
             DateTime currentDate = new DateTime(2020, 01, 02);
 
@@ -177,9 +177,9 @@ namespace Training.Test
                 DailyFrecuencyTime = new TimeSpan(4, 0, 0),
                 DailyFrecuencyType = DailyType.Once,
             };
-            schedule.AddDay(DayOfWeek.Monday);
-            schedule.AddDay(DayOfWeek.Thursday);
-            schedule.AddDay(DayOfWeek.Friday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Monday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Thursday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Friday);
 
             DateTime currentDate = new DateTime(2020, 01, 02);
 
@@ -205,9 +205,9 @@ namespace Training.Test
                 DailyFrecuencyTime = new TimeSpan(4, 0, 0),
                 DailyFrecuencyType = DailyType.Once,
             };
-            schedule.AddDay(DayOfWeek.Monday);
-            schedule.AddDay(DayOfWeek.Thursday);
-            schedule.AddDay(DayOfWeek.Friday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Monday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Thursday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Friday);
 
             DateTime currentDate = new DateTime(2020, 01, 02);
 
@@ -237,9 +237,9 @@ namespace Training.Test
                 DailyFrecuencyTime = new TimeSpan(4, 0, 0),
                 DailyFrecuencyType = DailyType.Once,
             };
-            schedule.AddDay(DayOfWeek.Monday);
-            schedule.AddDay(DayOfWeek.Thursday);
-            schedule.AddDay(DayOfWeek.Friday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Monday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Thursday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Friday);
 
             DateTime currentDate = new DateTime(2020, 01, 02);
 
@@ -268,9 +268,9 @@ namespace Training.Test
                 DailyFrecuencyEvery = 2,
                 DailyFrecuencyType = DailyType.Once,
             };
-            schedule.AddDay(DayOfWeek.Monday);
-            schedule.AddDay(DayOfWeek.Thursday);
-            schedule.AddDay(DayOfWeek.Friday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Monday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Thursday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Friday);
 
             DateTime currentDate = new DateTime(2020, 01, 02);
 
@@ -294,9 +294,9 @@ namespace Training.Test
                 DailyFrecuencyStartTime = new TimeSpan(4, 0, 0),
                 DailyFrecuencyType = DailyType.Hour,
             };
-            schedule.AddDay(DayOfWeek.Monday);
-            schedule.AddDay(DayOfWeek.Thursday);
-            schedule.AddDay(DayOfWeek.Friday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Monday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Thursday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Friday);
 
             DateTime currentDate = new DateTime(2020, 01, 02);
 
@@ -317,9 +317,9 @@ namespace Training.Test
                 DailyFrecuencyStartTime = new TimeSpan(4, 0, 0),
                 DailyFrecuencyType = DailyType.Hour,
             };
-            schedule.AddDay(DayOfWeek.Monday);
-            schedule.AddDay(DayOfWeek.Thursday);
-            schedule.AddDay(DayOfWeek.Friday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Monday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Thursday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Friday);
 
             DateTime currentDate = new DateTime(2020, 01, 02);
 
@@ -341,9 +341,9 @@ namespace Training.Test
                 DailyFrecuencyStartTime = new TimeSpan(8, 0, 0),
                 DailyFrecuencyType = DailyType.Hour,
             };
-            schedule.AddDay(DayOfWeek.Monday);
-            schedule.AddDay(DayOfWeek.Thursday);
-            schedule.AddDay(DayOfWeek.Friday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Monday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Thursday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Friday);
 
             DateTime currentDate = new DateTime(2020, 01, 02);
 
@@ -364,9 +364,9 @@ namespace Training.Test
                 DailyFrecuencyStartTime = new TimeSpan(4, 0, 0),
                 DailyFrecuencyType = DailyType.Hour,
             };
-            schedule.AddDay(DayOfWeek.Monday);
-            schedule.AddDay(DayOfWeek.Thursday);
-            schedule.AddDay(DayOfWeek.Friday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Monday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Thursday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Friday);
 
             DateTime currentDate = new DateTime(2020, 01, 02);
 
@@ -387,9 +387,9 @@ namespace Training.Test
                 DailyFrecuencyEvery = 2,
                 DailyFrecuencyType = DailyType.Hour,
             };
-            schedule.AddDay(DayOfWeek.Monday);
-            schedule.AddDay(DayOfWeek.Thursday);
-            schedule.AddDay(DayOfWeek.Friday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Monday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Thursday);
+            schedule.DaysOfWeek.Add(DayOfWeek.Friday);
 
             DateTime currentDate = new DateTime(2020, 01, 02);
 

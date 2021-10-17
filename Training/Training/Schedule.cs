@@ -34,20 +34,5 @@ namespace Training
         public TimeSpan? DailyFrecuencyTime { get; set; }
         public TimeSpan? DailyFrecuencyEndTime { get; set; }
         public TimeSpan? DailyFrecuencyStartTime { get; set; }
-
-        public void AddDay(DayOfWeek day)
-        {
-            if (this.days.Exists(d => d == day) == false)
-            {
-                this.days.Add(day);
-            }
-        }
-        public void RemoveDay(DayOfWeek day)
-        {
-            if (this.days.Exists(d => d == day) == true)
-            {
-                this.days.Remove(day);
-            }
-        }
     }
 }
