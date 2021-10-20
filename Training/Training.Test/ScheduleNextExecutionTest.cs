@@ -9,7 +9,7 @@ namespace Training.Test
         [TestMethod]
         public void Schedule_Once_NextExecute()
         {
-            Schedule schedule = new Schedule(false, FrecuencyType.Day)
+            Schedule schedule = new Schedule(FrecuencyType.Once)
             {
                 DateTime = new DateTime(2020, 1, 2)
             };
@@ -21,7 +21,7 @@ namespace Training.Test
         [TestMethod]
         public void Schedule_Once_NextExecute_DatetimeStarDate_Error()
         {
-            Schedule schedule = new Schedule(false, FrecuencyType.Day)
+            Schedule schedule = new Schedule(FrecuencyType.Once)
             {
                 StartDate = new DateTime(2020, 1, 2),
                 DateTime = new DateTime(2000, 1, 1),
@@ -34,7 +34,7 @@ namespace Training.Test
         [TestMethod]
         public void Schedule_Once_NextExecute_EndDateDateTime_Error()
         {
-            Schedule schedule = new Schedule(false, FrecuencyType.Day)
+            Schedule schedule = new Schedule(FrecuencyType.Once)
             {
                 EndDate = new DateTime(2020, 1, 1),
                 DateTime = new DateTime(2020, 1, 1, 0, 0, 1),
@@ -47,7 +47,7 @@ namespace Training.Test
         [TestMethod]
         public void Schedule_Once_NextExecute_EndDateStartDate_Error()
         {
-            Schedule schedule = new Schedule(false, FrecuencyType.Day)
+            Schedule schedule = new Schedule(FrecuencyType.Once)
             {
                 EndDate = new DateTime(2020, 1, 1),
                 StartDate = new DateTime(2020, 1, 2),
@@ -61,7 +61,7 @@ namespace Training.Test
         [TestMethod]
         public void Schedule_Once_NextExecute_Every_No_Effect()
         {
-            Schedule schedule = new Schedule(false, FrecuencyType.Day)
+            Schedule schedule = new Schedule(FrecuencyType.Once)
             {
                 DateTime = new DateTime(2020, 1, 2),
                 Every = 2,
@@ -72,21 +72,9 @@ namespace Training.Test
             Assert.AreEqual(schedule.DateTime, new ScheduleExecution(schedule, currentDate).GetDateTime());
         }
         [TestMethod]
-        public void Schedule_Once_NextExecute_Frecuency_Error()
-        {
-            Schedule schedule = new Schedule(false, FrecuencyType.Week)
-            {
-                DateTime = new DateTime(2020, 1, 2)
-            };
-
-            DateTime currentDate = new DateTime(2020, 1, 1);
-
-            Assert.AreEqual(schedule.DateTime, new ScheduleExecution(schedule, currentDate).GetDateTime());
-        }
-        [TestMethod]
         public void Schedule_Recurring_Dayly_NextExecute()
         {
-            Schedule schedule = new Schedule(true, FrecuencyType.Day)
+            Schedule schedule = new Schedule(FrecuencyType.Day)
             {
                 StartDate = new DateTime(2020, 1, 1),
                 Every = 1
@@ -100,7 +88,7 @@ namespace Training.Test
         [TestMethod]
         public void Schedule_Recurring_Dayly_NextExecute_Every_Error()
         {
-            Schedule schedule = new Schedule(true, FrecuencyType.Day)
+            Schedule schedule = new Schedule(FrecuencyType.Day)
             {
                 StartDate = new DateTime(2020, 1, 1),
                 Every = 0
@@ -114,11 +102,11 @@ namespace Training.Test
         [TestMethod]
         public void Schedule_Recurring_Weekly_NextExecute()
         {
-            Schedule schedule = new Schedule(true, FrecuencyType.Week)
+            Schedule schedule = new Schedule(FrecuencyType.Week)
             {
                 StartDate = new DateTime(2020, 1, 1),
                 Every = 2
-        };
+            };
             schedule.DaysOfWeek.Add(DayOfWeek.Monday);
             schedule.DaysOfWeek.Add(DayOfWeek.Thursday);
             schedule.DaysOfWeek.Add(DayOfWeek.Friday);
@@ -131,7 +119,7 @@ namespace Training.Test
         [TestMethod]
         public void Schedule_Recurring_Weekly_NextExecute_Days_Error()
         {
-            Schedule schedule = new Schedule(true, FrecuencyType.Week)
+            Schedule schedule = new Schedule(FrecuencyType.Week)
             {
                 StartDate = new DateTime(2020, 1, 1),
                 Every = 2
@@ -145,7 +133,7 @@ namespace Training.Test
         [TestMethod]
         public void Schedule_Recurring_Weekly_NextExecute_Frecuency_Once()
         {
-            Schedule schedule = new Schedule(true, FrecuencyType.Week)
+            Schedule schedule = new Schedule(FrecuencyType.Week)
             {
                 StartDate = new DateTime(2020, 1, 1),
                 Every = 2,
@@ -170,7 +158,7 @@ namespace Training.Test
         [TestMethod]
         public void Schedule_Recurring_Weekly_NextExecute_Frecuency_Once_Change_Day()
         {
-            Schedule schedule = new Schedule(true, FrecuencyType.Week)
+            Schedule schedule = new Schedule(FrecuencyType.Week)
             {
                 StartDate = new DateTime(2020, 1, 1),
                 Every = 2,
@@ -198,7 +186,7 @@ namespace Training.Test
         [TestMethod]
         public void Schedule_Recurring_Weekly_NextExecute_Frecuency_Once_Change_Week()
         {
-            Schedule schedule = new Schedule(true, FrecuencyType.Week)
+            Schedule schedule = new Schedule(FrecuencyType.Week)
             {
                 StartDate = new DateTime(2020, 1, 1),
                 Every = 2,
@@ -229,7 +217,7 @@ namespace Training.Test
         [TestMethod]
         public void Schedule_Recurring_Weekly_NextExecute_Frecuency_Once_Change_Week_DailyFrecuencyEvery_No_Effect()
         {
-            Schedule schedule = new Schedule(true, FrecuencyType.Week)
+            Schedule schedule = new Schedule(FrecuencyType.Week)
             {
                 StartDate = new DateTime(2020, 1, 1),
                 Every = 2,
@@ -261,7 +249,7 @@ namespace Training.Test
         [TestMethod]
         public void Schedule_Recurring_Weekly_NextExecute_Frecuency_Once_Time_Error()
         {
-            Schedule schedule = new Schedule(true, FrecuencyType.Week)
+            Schedule schedule = new Schedule(FrecuencyType.Week)
             {
                 StartDate = new DateTime(2020, 1, 1),
                 Every = 2,
@@ -285,7 +273,7 @@ namespace Training.Test
         [TestMethod]
         public void Schedule_Recurring_Weekly_NextExecute_Frecuency_Recurring()
         {
-            Schedule schedule = new Schedule(true, FrecuencyType.Week)
+            Schedule schedule = new Schedule(FrecuencyType.Week)
             {
                 StartDate = new DateTime(2020, 1, 1),
                 Every = 2,
@@ -309,7 +297,7 @@ namespace Training.Test
         [TestMethod]
         public void Schedule_Recurring_Weekly_NextExecute_Frecuency_Recurring_EndTime_Error()
         {
-            Schedule schedule = new Schedule(true, FrecuencyType.Week)
+            Schedule schedule = new Schedule(FrecuencyType.Week)
             {
                 StartDate = new DateTime(2020, 1, 1),
                 Every = 2,
@@ -332,7 +320,7 @@ namespace Training.Test
         [TestMethod]
         public void Schedule_Recurring_Weekly_NextExecute_Frecuency_Recurring_EndTimeStarTime_Error()
         {
-            Schedule schedule = new Schedule(true, FrecuencyType.Week)
+            Schedule schedule = new Schedule(FrecuencyType.Week)
             {
                 StartDate = new DateTime(2020, 1, 1),
                 Every = 2,
@@ -356,7 +344,7 @@ namespace Training.Test
         [TestMethod]
         public void Schedule_Recurring_Weekly_NextExecute_Frecuency_Recurring_DailyFrecuencyEvery_Error()
         {
-            Schedule schedule = new Schedule(true, FrecuencyType.Week)
+            Schedule schedule = new Schedule(FrecuencyType.Week)
             {
                 StartDate = new DateTime(2020, 1, 1),
                 Every = 2,
@@ -379,7 +367,7 @@ namespace Training.Test
         [TestMethod]
         public void Schedule_Recurring_Weekly_NextExecute_Frecuency_Recurring_StartTime_Error()
         {
-            Schedule schedule = new Schedule(true, FrecuencyType.Week)
+            Schedule schedule = new Schedule(FrecuencyType.Week)
             {
                 StartDate = new DateTime(2020, 1, 1),
                 Every = 2,
