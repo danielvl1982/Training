@@ -34,19 +34,14 @@ namespace Training
 
             if (string.IsNullOrEmpty(this.description) == true)
             {
-                if (this.schedule.IsRecurring == true)
+                this.description = this.schedule.FrecuencyType switch
                 {
-                    this.description = "Occurs every" + this.schedule.FrecuencyType switch
-                    {
-                        FrecuencyType.Day => " day.",
-                        FrecuencyType.Week => " week.",
-                        _ => string.Empty,
-                    };
-                }
-                else
-                {
-                    this.description += "Occurs once.";
-                }
+                    FrecuencyType.Day => "Occurs every day.",
+                    FrecuencyType.Month => "Occurs every month.",
+                    FrecuencyType.Once => "Occurs once.",
+                    FrecuencyType.Week => "Occurs every week.",
+                    _ => string.Empty,
+                };
 
                 this.description += " Schedule will be used on " + this.GetDateTime().Value.ToString("dd/MM/yyyy HH:mm:ss");
                 this.description += this.schedule.StartDate.HasValue == true
@@ -82,7 +77,7 @@ namespace Training
             if (this.schedule.DailyFrecuencyType.HasValue == false &&
                 this.schedule.DateTime.GetTime().Ticks > 0) { nextExecution = nextExecution.Date.Add(this.schedule.DateTime.GetTime()); }            
 
-            if (this.schedule.IsRecurring == true)
+            if (this.schedule.FrecuencyType != FrecuencyType.Once)
             {
                 nextExecution = this.GetNextExecutionRecurring(nextExecution);
             }
@@ -95,6 +90,9 @@ namespace Training
             {
                 case FrecuencyType.Day:
                     dateTime = dateTime.AddDays(this.schedule.Every);
+                    break;
+                case FrecuencyType.Month:
+                    dateTime = this.GetNextExecutionByMonth(dateTime);
                     break;
                 case FrecuencyType.Week:
                     dateTime = this.GetNextExecutionByWeek(dateTime);
@@ -119,6 +117,14 @@ namespace Training
             {
                 return this.GetDateTimeIncremented(nextExecution);
             }
+        }
+        private DateTime GetNextExecutionByMonth(DateTime nextExecution)
+        {
+            DayOfWeek? nextDayOfWeek = nextExecution.NextDayOfWeek(this.schedule.DaysOfWeek);
+
+            return nextDayOfWeek.HasValue == true
+                ? nextExecution.GetDateTimeDayOfWeek(nextDayOfWeek.Value)
+                : this.GetNextExecutionRecurring(nextExecution.AddWeeks(this.schedule.Every).Date);
         }
         private DateTime GetNextExecutionByWeek(DateTime nextExecution)
         {

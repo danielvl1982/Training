@@ -10,10 +10,36 @@ namespace Training
         Second = 3
     }
 
-    public enum FrecuencyType
+    public enum DayOfMonth
+    {
+        Monday = 0,
+        Tuesday = 1,
+        Wednesday = 2,
+        Thursday = 3,
+        Friday = 4,
+        Saturday = 5,
+        Sunday = 6,
+        Day = 7,
+        Weekday = 8,
+        Weekenday = 9
+    }
+
+    public enum MonthyType
     {
         Day = 0,
-        Week = 1
+        Fist = 1,
+        Second = 2,
+        Thrid = 3,
+        Fourth = 4,
+        Last = 5
+    }
+
+    public enum FrecuencyType
+    {
+        Once = 0,
+        Day = 1,
+        Week = 2,
+        Month = 3
     }
 
     public class ScheduleManager
@@ -38,14 +64,14 @@ namespace Training
                     schedule.DateTime.Value.CompareTo(schedule.EndDate.Value) > 0) { throw new Exception("End date must be greater to dateTime."); }
             }
 
-            if (schedule.IsRecurring == true &&
-                schedule.Every <= 0) { throw new Exception("Every must be greater to 0."); }
-
-            if (schedule.IsRecurring == false &&
-                schedule.FrecuencyType != FrecuencyType.Day) { throw new Exception("Occurs must be Day."); }
+            if (schedule.FrecuencyType != FrecuencyType.Once &&
+                schedule.Every <= 0) { throw new Exception("Every must be greater to 0."); }            
 
             if (schedule.FrecuencyType == FrecuencyType.Week &&
                 schedule.DaysOfWeek.Count == 0) { throw new Exception("Occurs weekly must indicate the days of the week."); }
+
+            if (schedule.FrecuencyType == FrecuencyType.Month &&
+                schedule.MonthyFrecuencyEvery <= 0) { throw new Exception("Every (Month) must be greater to 0."); }
 
             if (schedule.DailyFrecuencyType.HasValue == true)
             {
