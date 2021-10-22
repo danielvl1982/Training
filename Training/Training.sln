@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Training", "Training\Traini
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Training.Test", "Training.Test\Training.Test.csproj", "{98C91C4F-73A2-43EE-AC7C-5E15C789686D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTest.Scheduler", "XUnitTest.Scheduler\XUnitTest.Scheduler.csproj", "{84D35B7D-E86E-42DC-BC5C-B82CE0D1443C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{98C91C4F-73A2-43EE-AC7C-5E15C789686D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98C91C4F-73A2-43EE-AC7C-5E15C789686D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98C91C4F-73A2-43EE-AC7C-5E15C789686D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84D35B7D-E86E-42DC-BC5C-B82CE0D1443C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84D35B7D-E86E-42DC-BC5C-B82CE0D1443C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84D35B7D-E86E-42DC-BC5C-B82CE0D1443C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84D35B7D-E86E-42DC-BC5C-B82CE0D1443C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

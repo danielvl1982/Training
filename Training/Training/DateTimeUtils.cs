@@ -6,20 +6,39 @@ namespace Training
 {
     public static class DateTimeUtils
     {
+        public static bool IsDayValid(this DateTime dateTime, DaysOfWeekType daysOfWeekType)
+        {
+            return DateTimeUtils.GetDaysOfWeek(daysOfWeekType).Exists(d => d == dateTime.DayOfWeek);
+        }
+        public static bool IsWeekValid(this DateTime dateTime, MonthyType monthyType)
+        {
+            return (int)monthyType == 0 || dateTime.GetDayOfMonth(monthyType, dateTime.DayOfWeek) == dateTime.Date;
+        }
+
         public static DateTime AddWeeks(this DateTime dateTime, int incrementWeeks)
         {
-            return dateTime.AddDays(incrementWeeks * 7).GetDateTimeDayOfWeek(DayOfWeek.Monday).Date;
+            return dateTime.AddDays(incrementWeeks * 7).GetDayOfWeek(DayOfWeek.Monday).Date;
         }
-        public static DateTime GetDateTimeDayOfMonth(this DateTime dateTime, DayOfMonth dayOfMonth)
+        public static DateTime GetDayOfMonth(this DateTime dateTime, MonthyType monthyType, DayOfWeek dayOfWeek)
         {
-            //while (dateTime.DayOfWeek != dayOfMonth)
-            //{
-            //    dateTime = dateTime.DayOfWeek > dayOfMonth && dayOfMonth != DayOfWeek.Sunday ? dateTime.AddDays(-1) : dateTime.AddDays(+1);
-            //}
+            var days = Enumerable.Range(1, DateTime.DaysInMonth(dateTime.Year, dateTime.Month)).Select(day => new DateTime(dateTime.Year, dateTime.Month, day));
 
-            return dateTime;
+            var weekdays = from day in days
+                           where day.DayOfWeek == dayOfWeek
+                           select day;
+
+            return monthyType switch
+            {
+                MonthyType.Last => weekdays.OrderByDescending(d => d.Day).ElementAt(0),
+                _ => weekdays.OrderBy(d => d.Day).ElementAt((int)monthyType - 1),
+            };
         }
-        public static DateTime GetDateTimeDayOfWeek(this DateTime dateTime, DayOfWeek dayOfWeek)
+        public static DateTime GetDayOfMonth(this DateTime dateTime, MonthyType monthyType, DaysOfWeekType daysOfWeek)
+        {
+            ///Cambiar
+            return new DateTime();
+        }
+        public static DateTime GetDayOfWeek(this DateTime dateTime, DayOfWeek dayOfWeek)
         {
             while (dateTime.DayOfWeek != dayOfWeek)
             {
@@ -33,13 +52,29 @@ namespace Training
         {
             IEnumerable<DayOfWeek> nextDaysOfWeek = (from day in daysOfWeek
                                                      where ((int)day + 6) % 7 > ((int)dateTime.DayOfWeek + 6) % 7
-                                                     select day).OrderBy(d => ((int)d + 6) % 7);
+                                                     orderby ((int)day + 6) % 7
+                                                     select day);
 
             return nextDaysOfWeek.Count() == 0 ? null : (DayOfWeek?)nextDaysOfWeek.First();
         }
-        public static DayOfWeek? NextDayOfWeek(this DateTime dateTime, DayOfMonth dayOfMonth)
+        public static DayOfWeek? NextDayOfWeek(this DateTime dateTime, DaysOfWeekType dayOfMonth)
         {
-            return dateTime.NextDayOfWeek(GetDayOfMonthToDaysOfWeek(dayOfMonth));
+            return dateTime.NextDayOfWeek(GetDaysOfWeek(dayOfMonth));
+        }
+
+        public static List<DayOfWeek> GetDaysOfWeek(DaysOfWeekType daysOfWeekType)
+        {
+            List<DayOfWeek> daysOfWeek = new List<DayOfWeek>();
+
+            if (daysOfWeekType.HasFlag(DaysOfWeekType.Monday) == true) { daysOfWeek.Add(DayOfWeek.Monday); }
+            if (daysOfWeekType.HasFlag(DaysOfWeekType.Tuesday) == true) { daysOfWeek.Add(DayOfWeek.Tuesday); }
+            if (daysOfWeekType.HasFlag(DaysOfWeekType.Wednesday) == true) { daysOfWeek.Add(DayOfWeek.Wednesday); }
+            if (daysOfWeekType.HasFlag(DaysOfWeekType.Thursday) == true) { daysOfWeek.Add(DayOfWeek.Thursday); }
+            if (daysOfWeekType.HasFlag(DaysOfWeekType.Friday) == true) { daysOfWeek.Add(DayOfWeek.Friday); }
+            if (daysOfWeekType.HasFlag(DaysOfWeekType.Saturday) == true) { daysOfWeek.Add(DayOfWeek.Saturday); }
+            if (daysOfWeekType.HasFlag(DaysOfWeekType.Sunday) == true) { daysOfWeek.Add(DayOfWeek.Sunday); }
+
+            return daysOfWeek;
         }
 
         public static TimeSpan GetTime(this DateTime? dateTime) { return dateTime.HasValue == true ? dateTime.Value.TimeOfDay : new TimeSpan(); }
@@ -75,21 +110,6 @@ namespace Training
             } while (time.CompareTo(endTime) <= 0);
 
             return times;
-        }
-
-        private static List<DayOfWeek> GetDayOfMonthToDaysOfWeek(DayOfMonth dayOfMonth)
-        {
-            List<DayOfWeek> daysOfWeek = new List<DayOfWeek>();
-
-            if (dayOfMonth == DayOfMonth.Monday) { daysOfWeek.Add(DayOfWeek.Monday); }
-            if (dayOfMonth == DayOfMonth.Tuesday) { daysOfWeek.Add(DayOfWeek.Tuesday); }
-            if (dayOfMonth == DayOfMonth.Wednesday) { daysOfWeek.Add(DayOfWeek.Wednesday); }
-            if (dayOfMonth == DayOfMonth.Thursday) { daysOfWeek.Add(DayOfWeek.Thursday); }
-            if (dayOfMonth == DayOfMonth.Friday) { daysOfWeek.Add(DayOfWeek.Friday); }
-            if (dayOfMonth == DayOfMonth.Saturday) { daysOfWeek.Add(DayOfWeek.Saturday); }
-            if (dayOfMonth == DayOfMonth.Sunday) { daysOfWeek.Add(DayOfWeek.Sunday); }
-
-            return daysOfWeek;
         }
     }
 }

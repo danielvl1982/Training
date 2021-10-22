@@ -120,18 +120,18 @@ namespace Training
         }
         private DateTime GetNextExecutionByMonth(DateTime nextExecution)
         {
-            DayOfWeek? nextDayOfMonth = nextExecution.NextDayOfMonth(this.schedule.DayOfMonth);
+            DayOfWeek? nextDayOfWeek = nextExecution.NextDayOfWeek(this.schedule.DaysOfWeek);
 
-            return nextDayOfMonth.HasValue == true
-                ? nextExecution.GetDateTimeDayMonth(nextDayOfMonth.Value)
-                : this.GetNextExecutionRecurring(nextExecution.AddMonths(this.schedule.MonthyFrecuencyEvery).Date);
+            return nextDayOfWeek.HasValue == true
+                ? nextExecution.GetDayOfWeek(nextDayOfWeek.Value)
+                : this.GetNextExecutionRecurring(nextExecution.AddMonths(this.schedule.MonthyFrecuencyEvery).GetDayOfMonth(schedule.MonthyType, schedule.DaysOfWeek).Date);
         }
         private DateTime GetNextExecutionByWeek(DateTime nextExecution)
         {
             DayOfWeek? nextDayOfWeek = nextExecution.NextDayOfWeek(this.schedule.DaysOfWeek);
 
             return nextDayOfWeek.HasValue == true
-                ? nextExecution.GetDateTimeDayOfWeek(nextDayOfWeek.Value)
+                ? nextExecution.GetDayOfWeek(nextDayOfWeek.Value)
                 : this.GetNextExecutionRecurring(nextExecution.AddWeeks(this.schedule.Every).Date);
         }
 
@@ -143,7 +143,8 @@ namespace Training
         }
         private DateTime? GetNextExecutionDayRecurring(DateTime dateTime)
         {
-            if (this.schedule.DaysOfWeek.Exists(d => d == dateTime.DayOfWeek) == false ||
+            if (dateTime.IsDayValid(this.schedule.DaysOfWeek) == false ||
+                dateTime.IsWeekValid(this.schedule.MonthyType) == false ||
                 dateTime.TimeOfDay > this.schedule.DailyFrecuencyEndTime.Value) { return null; }
 
             IEnumerable<TimeSpan> nextTime = GetNextExecutionTimeOfDay(dateTime);
@@ -160,7 +161,8 @@ namespace Training
 
             return (from time in timesGap
                     where time > dateTime.TimeOfDay
-                    select time).OrderBy(t => t.Ticks);
+                    orderby time.Ticks
+                    select time);
         }
 
         private void LoadDateTime()
