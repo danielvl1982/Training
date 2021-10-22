@@ -120,11 +120,11 @@ namespace Training
         }
         private DateTime GetNextExecutionByMonth(DateTime nextExecution)
         {
-            DayOfWeek? nextDayOfWeek = nextExecution.NextDayOfWeek(this.schedule.DaysOfWeek);
+            DayOfWeek? nextDayOfMonth = nextExecution.NextDayOfMonth(this.schedule.DayOfMonth);
 
-            return nextDayOfWeek.HasValue == true
-                ? nextExecution.GetDateTimeDayOfWeek(nextDayOfWeek.Value)
-                : this.GetNextExecutionRecurring(nextExecution.AddWeeks(this.schedule.Every).Date);
+            return nextDayOfMonth.HasValue == true
+                ? nextExecution.GetDateTimeDayMonth(nextDayOfMonth.Value)
+                : this.GetNextExecutionRecurring(nextExecution.AddMonths(this.schedule.MonthyFrecuencyEvery).Date);
         }
         private DateTime GetNextExecutionByWeek(DateTime nextExecution)
         {
