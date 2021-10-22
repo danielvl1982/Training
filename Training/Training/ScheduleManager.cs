@@ -10,18 +10,20 @@ namespace Training
         Second = 3
     }
 
+    [Flags]
     public enum DayOfMonth
     {
-        Monday = 0,
-        Tuesday = 1,
-        Wednesday = 2,
-        Thursday = 3,
-        Friday = 4,
-        Saturday = 5,
-        Sunday = 6,
-        Day = 7,
-        Weekday = 8,
-        Weekenday = 9
+        None = 0,
+        Monday = 1,
+        Tuesday = 2,
+        Wednesday = 4,
+        Thursday = 8,
+        Friday = 16,
+        Saturday = 32,
+        Sunday = 64,
+        Day = Monday + Tuesday + Wednesday + Thursday + Friday + Saturday + Sunday,
+        Weekday = Monday + Tuesday + Wednesday + Thursday + Friday,
+        Weekenday = Saturday + Sunday
     }
 
     public enum MonthyType
