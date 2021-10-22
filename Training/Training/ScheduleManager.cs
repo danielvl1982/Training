@@ -11,7 +11,7 @@ namespace Training
     }
 
     [Flags]
-    public enum DayOfMonth
+    public enum DaysOfWeekType
     {
         None = 0,
         Monday = 1,
@@ -67,10 +67,16 @@ namespace Training
             }
 
             if (schedule.FrecuencyType != FrecuencyType.Once &&
-                schedule.Every <= 0) { throw new Exception("Every must be greater to 0."); }            
+                schedule.Every <= 0) { throw new Exception("Every must be greater to 0."); }
 
             if (schedule.FrecuencyType == FrecuencyType.Week &&
-                schedule.DaysOfWeek.Count == 0) { throw new Exception("Occurs weekly must indicate the days of the week."); }
+                Convert.ToInt32(schedule.DaysOfWeek) == 0) { throw new Exception("Occurs weekly must indicate the days of the week."); }
+
+            if (schedule.FrecuencyType == FrecuencyType.Month)
+            {
+                if (schedule.MonthyType == MonthyType.Day) { if (Convert.ToInt32(schedule.DaysOfWeek) > 0) { throw new Exception("Occurs monthy mustn’t indicate the days of the week."); } }
+                else { if (Convert.ToInt32(schedule.DaysOfWeek) == 0) { throw new Exception("Occurs monthy must indicate the days of the week."); } }
+            }
 
             if (schedule.FrecuencyType == FrecuencyType.Month &&
                 schedule.MonthyFrecuencyEvery <= 0) { throw new Exception("Every (Month) must be greater to 0."); }

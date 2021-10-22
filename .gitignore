@@ -361,3 +361,14 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Training/Training/Training/Training.csproj
+/Training/Training/Training/ScheduleManager.cs
+/Training/Training/Training/ScheduleExecution.cs
+/Training/Training/Training/Schedule.cs
+/Training/Training/Training/DateTimeUtils.cs
+/Training/Training/Training.Test/Training.Test.csproj
+/Training/Training/Training.Test/ScheduleNextExecutionTest.cs
+/Training/Training/XUnitTest.Scheduler/XUnitTest.Scheduler.csproj
+/Training/Training/XUnitTest.Scheduler/UnitTest1.cs
+/Training/Training/Training.sln
+/Training/Training/.gitignore

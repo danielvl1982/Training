@@ -5,8 +5,6 @@ namespace Training
 {
     public class Schedule
     {
-        private readonly List<DayOfWeek> days = new List<DayOfWeek>();
-
         public Schedule(FrecuencyType frecuencyType)
         {
             this.Enabled = true;
@@ -21,10 +19,8 @@ namespace Training
         public DateTime? EndDate { get; set; }
         public DateTime? StartDate { get; set; }
 
-        public DayOfMonth DayOfMonth { get; set; }
+        public DaysOfWeekType DaysOfWeek { get; set; }
         
-        public List<DayOfWeek> DaysOfWeek { get => this.days; }
-
         public FrecuencyType FrecuencyType { get; set; }
 
         public int DailyFrecuencyEvery { get; set; }
