@@ -6,9 +6,15 @@ namespace Training
 {
     public static class DateTimeUtils
     {
-        public static bool IsDayValid(this DateTime dateTime, DaysOfWeekType daysOfWeekType)
+        public static bool IsDayOfWeekValid(this DateTime dateTime, DaysOfWeekType daysOfWeekType)
         {
-            return DateTimeUtils.GetDaysOfWeek(daysOfWeekType).Exists(d => d == dateTime.DayOfWeek);
+            List<DayOfWeek> daysOfWeeek = DateTimeUtils.GetDaysOfWeek(daysOfWeekType);
+
+            return daysOfWeeek.Count == 0 || daysOfWeeek.Exists(d => d == dateTime.DayOfWeek);
+        }
+        public static bool IsMonthyDayValid(this DateTime dateTime, MonthyType monthyType, int day)
+        {
+            return monthyType != MonthyType.Day || (monthyType == MonthyType.Day && dateTime.GetDayOfMonth(day) == dateTime.Day);
         }
         public static bool IsWeekValid(this DateTime dateTime, MonthyType monthyType)
         {
@@ -42,6 +48,12 @@ namespace Training
 
             return dateTime;
         }
+        public static DateTime AddMonths(this DateTime dateTime, int increment, int dayOfMonth)
+        {
+            DateTime dateTimeIncremented = dateTime.AddMonths(increment);
+
+            return new DateTime(dateTimeIncremented.Year, dateTimeIncremented.Month, dateTimeIncremented.GetDayOfMonth(dayOfMonth));
+        }
         public static DateTime AddMonths(this DateTime dateTime, MonthyType monthyType, DaysOfWeekType daysOfWeek, int increment)
         {
             List<DayOfWeek> days = DateTimeUtils.GetDaysOfWeek(daysOfWeek);
@@ -67,6 +79,13 @@ namespace Training
         public static DayOfWeek? NextDayOfWeek(this DateTime dateTime, DaysOfWeekType daysOfWeekType)
         {
             return dateTime.NextDayOfWeek(DateTimeUtils.GetDaysOfWeek(daysOfWeekType));
+        }
+
+        public static int GetDayOfMonth(this DateTime dateTime, int dayOfMonth)
+        {
+            int daysOfMonth = DateTime.DaysInMonth(dateTime.Year, dateTime.Month);
+
+            return daysOfMonth < dayOfMonth ? dayOfMonth = daysOfMonth : dayOfMonth;
         }
 
         public static TimeSpan GetTime(this DateTime? dateTime) { return dateTime.HasValue == true ? dateTime.Value.TimeOfDay : new TimeSpan(); }

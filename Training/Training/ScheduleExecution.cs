@@ -77,12 +77,9 @@ namespace Training
             if (this.schedule.DailyFrecuencyType.HasValue == false &&
                 this.schedule.DateTime.GetTime().Ticks > 0) { nextExecution = nextExecution.Date.Add(this.schedule.DateTime.GetTime()); }            
 
-            if (this.schedule.FrecuencyType != FrecuencyType.Once)
-            {
-                nextExecution = this.GetNextExecutionRecurring(nextExecution);
-            }
-
-            return nextExecution;
+            return this.schedule.FrecuencyType == FrecuencyType.Once
+                ? nextExecution
+                : this.GetNextExecutionRecurring(nextExecution);
         }
         private DateTime GetDateTimeIncremented(DateTime dateTime)
         {
@@ -101,55 +98,70 @@ namespace Training
 
             return dateTime;
         }
-        private DateTime GetNextExecutionRecurring(DateTime nextExecution)
+        private DateTime GetNextExecutionRecurring(DateTime dateTime)
         {
-            if (this.schedule.DailyFrecuencyType.HasValue == true)
+            if (this.schedule.DailyFrecuencyType.HasValue == true &&
+                dateTime.IsDayOfWeekValid(this.schedule.DaysOfWeek) == true &&
+                dateTime.IsMonthyDayValid(this.schedule.MonthyType, this.schedule.MonthyDay) == true &&
+                dateTime.IsWeekValid(this.schedule.MonthyType) == true)
             {
                 DateTime? nextExecutionDay = this.schedule.DailyFrecuencyType == DailyType.Once
-                    ? this.GetNextExecutionDayOnce(nextExecution)
-                    : this.GetNextExecutionDayRecurring(nextExecution);
+                    ? this.GetNextExecutionDayOnce(dateTime)
+                    : this.GetNextExecutionDayRecurring(dateTime);
 
                 if (nextExecutionDay.HasValue == true) { return nextExecutionDay.Value; }
-
-                return this.GetNextExecutionRecurring(this.GetDateTimeIncremented(nextExecution).Date);
             }
+
+            if (this.schedule.DailyFrecuencyType.HasValue == true) { return this.GetNextExecutionRecurring(this.GetDateTimeIncremented(dateTime).Date); }
+            else { return this.GetDateTimeIncremented(dateTime); }
+        }
+        private DateTime GetNextExecutionByMonth(DateTime dateTime)
+        {
+            DayOfWeek? nextDayOfWeek = dateTime.IsWeekValid(this.schedule.MonthyType) == true
+                ? dateTime.NextDayOfWeek(this.schedule.DaysOfWeek)
+                : null;
+
+            if (nextDayOfWeek.HasValue == true) { return dateTime.GetDayOfWeek(nextDayOfWeek.Value); }
             else
             {
-                return this.GetDateTimeIncremented(nextExecution);
+                if (this.schedule.MonthyType == MonthyType.Day)
+                {
+                    DateTime dateMonth = dateTime.AddMonths(0, this.schedule.MonthyDay);
+
+                    return dateMonth > dateTime
+                        ? dateMonth
+                        : dateTime.AddMonths(this.schedule.Every, this.schedule.MonthyDay);
+                }
+                else
+                {
+                    DateTime dateMonth = dateTime.AddMonths(this.schedule.MonthyType, this.schedule.DaysOfWeek, this.schedule.Every);
+
+                    return dateMonth > dateTime
+                        ? dateMonth
+                        : dateTime.AddMonths(this.schedule.MonthyType, this.schedule.DaysOfWeek, this.schedule.Every);
+                }
             }
         }
-        private DateTime GetNextExecutionByMonth(DateTime nextExecution)
+        private DateTime GetNextExecutionByWeek(DateTime dateTime)
         {
-            DayOfWeek? nextDayOfWeek = nextExecution.NextDayOfWeek(this.schedule.DaysOfWeek);
+            DayOfWeek? nextDayOfWeek = dateTime.NextDayOfWeek(this.schedule.DaysOfWeek);
 
             return nextDayOfWeek.HasValue == true
-                ? nextExecution.GetDayOfWeek(nextDayOfWeek.Value)
-                : this.GetNextExecutionRecurring(nextExecution.AddMonths(schedule.MonthyType, schedule.DaysOfWeek, this.schedule.MonthyFrecuencyEvery));
-        }
-        private DateTime GetNextExecutionByWeek(DateTime nextExecution)
-        {
-            DayOfWeek? nextDayOfWeek = nextExecution.NextDayOfWeek(this.schedule.DaysOfWeek);
-
-            return nextDayOfWeek.HasValue == true
-                ? nextExecution.GetDayOfWeek(nextDayOfWeek.Value)
-                : this.GetNextExecutionRecurring(nextExecution.AddWeeks(this.schedule.Every).Date);
+                ? dateTime.GetDayOfWeek(nextDayOfWeek.Value)
+                : dateTime.AddWeeks(this.schedule.Every);
         }
 
         private DateTime? GetNextExecutionDayOnce(DateTime dateTime)
         {
-            return dateTime.TimeOfDay < this.schedule.DailyFrecuencyTime.Value
-                ? (DateTime?)dateTime.Date.Add(this.schedule.DailyFrecuencyTime.Value)
-                : null;
+            return dateTime.TimeOfDay > this.schedule.DailyFrecuencyTime.Value
+                ? null
+                : (DateTime?)dateTime.Date.Add(this.schedule.DailyFrecuencyTime.Value);
         }
         private DateTime? GetNextExecutionDayRecurring(DateTime dateTime)
         {
-            if (dateTime.IsDayValid(this.schedule.DaysOfWeek) == false ||
-                dateTime.IsWeekValid(this.schedule.MonthyType) == false ||
-                dateTime.TimeOfDay > this.schedule.DailyFrecuencyEndTime.Value) { return null; }
+            IEnumerable<TimeSpan> nextTimes = this.GetNextExecutionTimeOfDay(dateTime);
 
-            IEnumerable<TimeSpan> nextTime = GetNextExecutionTimeOfDay(dateTime);
-
-            return nextTime.Count() == 0 ? null : (DateTime?)dateTime.Date.Add(nextTime.First());
+            return nextTimes.Count() == 0 ? null : (DateTime?)dateTime.Date.Add(nextTimes.First());
         }
 
         private IEnumerable<TimeSpan> GetNextExecutionTimeOfDay(DateTime dateTime)

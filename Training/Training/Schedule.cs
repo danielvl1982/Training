@@ -26,7 +26,6 @@ namespace Training
         public int DailyFrecuencyEvery { get; set; }
         public int Every { get; set; }
         public int MonthyDay { get; set; }
-        public int MonthyFrecuencyEvery { get; set; }
 
         public MonthyType MonthyType { get; set; }
 
