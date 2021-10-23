@@ -18,7 +18,7 @@ namespace Training
         }
         public static bool IsWeekValid(this DateTime dateTime, MonthyType monthyType)
         {
-            return (int)monthyType == 0 || dateTime.GetDayOfMonth(monthyType, dateTime.DayOfWeek) == dateTime.Date;
+            return monthyType == MonthyType.None || monthyType == MonthyType.Day || dateTime.GetDayOfMonth(monthyType, dateTime.DayOfWeek) == dateTime.Date;
         }
 
         public static DateTime AddWeeks(this DateTime dateTime, int incrementWeeks)

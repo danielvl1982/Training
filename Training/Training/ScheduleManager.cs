@@ -28,12 +28,13 @@ namespace Training
 
     public enum MonthyType
     {
-        Day = 0,
+        None = 0,
         First = 1,
         Second = 2,
         Thrid = 3,
         Fourth = 4,
-        Last = 5
+        Last = 5,
+        Day = 6
     }
 
     public enum FrecuencyType

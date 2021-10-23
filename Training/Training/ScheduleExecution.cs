@@ -153,7 +153,7 @@ namespace Training
 
         private DateTime? GetNextExecutionDayOnce(DateTime dateTime)
         {
-            return dateTime.TimeOfDay > this.schedule.DailyFrecuencyTime.Value
+            return dateTime.TimeOfDay >= this.schedule.DailyFrecuencyTime.Value
                 ? null
                 : (DateTime?)dateTime.Date.Add(this.schedule.DailyFrecuencyTime.Value);
         }
