@@ -15,6 +15,8 @@ namespace Training
 
         public DailyType? DailyFrecuencyType { get; set; }
 
+        public DateTime CurrentDate { get; set; }
+
         public DateTime? DateTime { get; set; }
         public DateTime? EndDate { get; set; }
         public DateTime? StartDate { get; set; }

@@ -11,52 +11,48 @@ namespace Training.Test
         {
             Schedule schedule = new Schedule(FrecuencyType.Once)
             {
+                CurrentDate = new DateTime(2020, 1, 1),
                 DateTime = new DateTime(2020, 1, 2)
             };
 
-            DateTime currentDate = new DateTime(2020, 1, 1);
-
-            Assert.AreEqual(schedule.DateTime, new ScheduleExecution(schedule, currentDate).GetDateTime());
+            Assert.AreEqual(schedule.DateTime, new ScheduleExecution(schedule).GetDateTime());
         }
         [TestMethod]
         public void Schedule_Once_NextExecute_DatetimeStarDate_Error()
         {
             Schedule schedule = new Schedule(FrecuencyType.Once)
             {
+                CurrentDate = new DateTime(2020, 1, 1),
                 StartDate = new DateTime(2020, 1, 2),
                 DateTime = new DateTime(2000, 1, 1)
             };
 
-            DateTime currentDate = new DateTime(2020, 1, 1);
-
-            Assert.AreEqual(schedule.DateTime, new ScheduleExecution(schedule, currentDate).GetDateTime());
+            Assert.AreEqual(schedule.DateTime, new ScheduleExecution(schedule).GetDateTime());
         }
         [TestMethod]
         public void Schedule_Once_NextExecute_EndDateDateTime_Error()
         {
             Schedule schedule = new Schedule(FrecuencyType.Once)
             {
+                CurrentDate = new DateTime(2020, 1, 1),
                 EndDate = new DateTime(2020, 1, 1),
                 DateTime = new DateTime(2020, 1, 1, 0, 0, 1)
             };
 
-            DateTime currentDate = new DateTime(2020, 1, 1);
-
-            Assert.AreEqual(schedule.DateTime, new ScheduleExecution(schedule, currentDate).GetDateTime());
+            Assert.AreEqual(schedule.DateTime, new ScheduleExecution(schedule).GetDateTime());
         }
         [TestMethod]
         public void Schedule_Once_NextExecute_EndDateStartDate_Error()
         {
             Schedule schedule = new Schedule(FrecuencyType.Once)
             {
+                CurrentDate = new DateTime(2020, 1, 1),
                 EndDate = new DateTime(2020, 1, 1),
                 StartDate = new DateTime(2020, 1, 2),
                 DateTime = new DateTime(2000, 1, 2, 0, 0, 1)
             };
 
-            DateTime currentDate = new DateTime(2020, 1, 1);
-
-            Assert.AreEqual(schedule.DateTime, new ScheduleExecution(schedule, currentDate).GetDateTime());
+            Assert.AreEqual(schedule.DateTime, new ScheduleExecution(schedule).GetDateTime());
         }
         [TestMethod]
         public void Schedule_Once_NextExecute_Every_Error()
@@ -67,9 +63,9 @@ namespace Training.Test
                 Every = 2
             };
 
-            DateTime currentDate = new DateTime(2020, 1, 1);
+            schedule.CurrentDate = new DateTime(2020, 1, 1);
 
-            Assert.AreEqual(schedule.DateTime, new ScheduleExecution(schedule, currentDate).GetDateTime());
+            Assert.AreEqual(schedule.DateTime, new ScheduleExecution(schedule).GetDateTime());
         }
         [TestMethod]
         public void Schedule_Dayly_NextExecute()
@@ -80,10 +76,10 @@ namespace Training.Test
                 Every = 1
             };
 
-            DateTime currentDate = new DateTime(2020, 01, 04);
+            schedule.CurrentDate = new DateTime(2020, 01, 04);
             DateTime result = new DateTime(2020, 01, 05);
 
-            Assert.AreEqual(result, new ScheduleExecution(schedule, currentDate).GetDateTime());
+            Assert.AreEqual(result, new ScheduleExecution(schedule).GetDateTime());
         }
         [TestMethod]
         public void Schedule_Dayly_NextExecute_Every_Error()
@@ -94,10 +90,10 @@ namespace Training.Test
                 Every = 0
             };
 
-            DateTime currentDate = new DateTime(2020, 01, 04);
+            schedule.CurrentDate = new DateTime(2020, 01, 04);
             DateTime result = new DateTime(2020, 01, 05);
 
-            Assert.AreEqual(result, new ScheduleExecution(schedule, currentDate).GetDateTime());
+            Assert.AreEqual(result, new ScheduleExecution(schedule).GetDateTime());
         }
         [TestMethod]
         public void Schedule_Monthy_NextExecute_Day()
@@ -114,41 +110,41 @@ namespace Training.Test
                 DailyFrecuencyType = DailyType.Hour
             };
 
-            DateTime currentDate = new DateTime(2020, 01, 01);
+            schedule.CurrentDate = new DateTime(2020, 01, 01);
 
-            ScheduleExecution myExecution = new ScheduleExecution(schedule, currentDate);
+            ScheduleExecution myExecution = new ScheduleExecution(schedule);
 
             Assert.AreEqual(new DateTime(2020, 01, 1, 3, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 01, 1, 4, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 01, 1, 5, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 01, 1, 6, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 04, 1, 3, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 04, 1, 4, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 04, 1, 5, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 04, 1, 6, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
         }
         [TestMethod]
         public void Schedule_Monthy_NextExecute_Day15()
@@ -161,13 +157,13 @@ namespace Training.Test
                 MonthyType = MonthyType.Day
             };
 
-            DateTime currentDate = new DateTime(2020, 01, 1);
+            schedule.CurrentDate = new DateTime(2020, 01, 1);
 
-            ScheduleExecution myExecution = new ScheduleExecution(schedule, currentDate);
+            ScheduleExecution myExecution = new ScheduleExecution(schedule);
 
             Assert.AreEqual(new DateTime(2020, 01, 15), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 04, 15), myExecution.GetDateTime());
         }
@@ -182,13 +178,13 @@ namespace Training.Test
                 MonthyType = MonthyType.Day
             };
 
-            DateTime currentDate = new DateTime(2020, 01, 01);
+            schedule.CurrentDate = new DateTime(2020, 01, 01);
 
-            ScheduleExecution myExecution = new ScheduleExecution(schedule, currentDate);
+            ScheduleExecution myExecution = new ScheduleExecution(schedule);
 
             Assert.AreEqual(new DateTime(2020, 01, 31), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 02, 29), myExecution.GetDateTime());
         }
@@ -207,41 +203,41 @@ namespace Training.Test
                 DailyFrecuencyType = DailyType.Hour
             };
 
-            DateTime currentDate = new DateTime(2020, 01, 01);
+            schedule.CurrentDate = new DateTime(2020, 01, 01);
 
-            ScheduleExecution myExecution = new ScheduleExecution(schedule, currentDate);
+            ScheduleExecution myExecution = new ScheduleExecution(schedule);
 
             Assert.AreEqual(new DateTime(2020, 01, 31, 3, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 01, 31, 4, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 01, 31, 5, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 01, 31, 6, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 02, 29, 3, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 02, 29, 4, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 02, 29, 5, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 02, 29, 6, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
         }
         [TestMethod]
         public void Schedule_Monthy_NextExecute_Day_MonthDay_Error()
@@ -258,9 +254,9 @@ namespace Training.Test
                 DailyFrecuencyType = DailyType.Hour
             };
 
-            DateTime currentDate = new DateTime(2020, 01, 01);
+            schedule.CurrentDate = new DateTime(2020, 01, 01);
 
-            ScheduleExecution myExecution = new ScheduleExecution(schedule, currentDate);
+            ScheduleExecution myExecution = new ScheduleExecution(schedule);
 
             Assert.AreEqual(new DateTime(2020, 01, 31, 0, 0, 0), myExecution.GetDateTime());
         }
@@ -278,9 +274,9 @@ namespace Training.Test
                 DailyFrecuencyType = DailyType.Hour
             };
 
-            DateTime currentDate = new DateTime(2020, 01, 01);
+            schedule.CurrentDate = new DateTime(2020, 01, 01);
 
-            ScheduleExecution myExecution = new ScheduleExecution(schedule, currentDate);
+            ScheduleExecution myExecution = new ScheduleExecution(schedule);
 
             Assert.AreEqual(new DateTime(2020, 01, 1, 3, 0, 0), myExecution.GetDateTime());
         }
@@ -299,41 +295,41 @@ namespace Training.Test
                 DailyFrecuencyType = DailyType.Hour
             };
 
-            DateTime currentDate = new DateTime(2020, 01, 01);
+            schedule.CurrentDate = new DateTime(2020, 01, 01);
 
-            ScheduleExecution myExecution = new ScheduleExecution(schedule, currentDate);
+            ScheduleExecution myExecution = new ScheduleExecution(schedule);
 
             Assert.AreEqual(new DateTime(2020, 01, 2, 3, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 01, 2, 4, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 01, 2, 5, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 01, 2, 6, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 04, 2, 3, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 04, 2, 4, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 04, 2, 5, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(new DateTime(2020, 04, 2, 6, 0, 0), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
         }
         [TestMethod]
         public void Schedule_Monthy_NextExecute_Weekday_Error()
@@ -351,9 +347,9 @@ namespace Training.Test
                 DailyFrecuencyType = DailyType.Hour
             };
 
-            DateTime currentDate = new DateTime(2020, 01, 01);
+            schedule.CurrentDate = new DateTime(2020, 01, 01);
 
-            ScheduleExecution myExecution = new ScheduleExecution(schedule, currentDate);
+            ScheduleExecution myExecution = new ScheduleExecution(schedule);
 
             Assert.AreEqual(new DateTime(2020, 01, 2, 3, 0, 0), myExecution.GetDateTime());
         }
@@ -367,10 +363,10 @@ namespace Training.Test
                 DaysOfWeek = DaysOfWeekType.Monday | DaysOfWeekType.Thursday | DaysOfWeekType.Friday
             };
 
-            DateTime currentDate = new DateTime(2020, 01, 01);
+            schedule.CurrentDate = new DateTime(2020, 01, 01);
             DateTime result = new DateTime(2020, 01, 02);
 
-            Assert.AreEqual(result, new ScheduleExecution(schedule, currentDate).GetDateTime());
+            Assert.AreEqual(result, new ScheduleExecution(schedule).GetDateTime());
         }
         [TestMethod]
         public void Schedule_Weekly_NextExecute_Days_Error()
@@ -381,10 +377,10 @@ namespace Training.Test
                 Every = 2
             };
 
-            DateTime currentDate = new DateTime(2020, 01, 01);
+            schedule.CurrentDate = new DateTime(2020, 01, 01);
             DateTime result = new DateTime(2020, 01, 02);
 
-            Assert.AreEqual(result, new ScheduleExecution(schedule, currentDate).GetDateTime());
+            Assert.AreEqual(result, new ScheduleExecution(schedule).GetDateTime());
         }
         [TestMethod]
         public void Schedule_Weekly_NextExecute_Frecuency_Once()
@@ -399,15 +395,15 @@ namespace Training.Test
                 DailyFrecuencyType = DailyType.Once
             };
 
-            DateTime currentDate = new DateTime(2020, 01, 02);
+            schedule.CurrentDate = new DateTime(2020, 01, 02);
 
-            ScheduleExecution myExecution = new ScheduleExecution(schedule, currentDate);
+            ScheduleExecution myExecution = new ScheduleExecution(schedule);
 
             DateTime result = new DateTime(2020, 01, 2, 4, 0, 0);
 
             Assert.AreEqual(result, myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
         }
         [TestMethod]
         public void Schedule_Weekly_NextExecute_Frecuency_Once_Change_Day()
@@ -421,15 +417,15 @@ namespace Training.Test
                 DailyFrecuencyType = DailyType.Once
             };
 
-            DateTime currentDate = new DateTime(2020, 01, 02);
+            schedule.CurrentDate = new DateTime(2020, 01, 02);
 
-            ScheduleExecution myExecution = new ScheduleExecution(schedule, currentDate);
+            ScheduleExecution myExecution = new ScheduleExecution(schedule);
 
             DateTime result = new DateTime(2020, 01, 2, 4, 0, 0);
 
             Assert.AreEqual(result, myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(result.AddDays(1), myExecution.GetDateTime());
         }
@@ -445,19 +441,19 @@ namespace Training.Test
                 DailyFrecuencyType = DailyType.Once
             };
 
-            DateTime currentDate = new DateTime(2020, 01, 02);
+            schedule.CurrentDate = new DateTime(2020, 01, 02);
 
-            ScheduleExecution myExecution = new ScheduleExecution(schedule, currentDate);
+            ScheduleExecution myExecution = new ScheduleExecution(schedule);
 
             DateTime result = new DateTime(2020, 01, 2, 4, 0, 0);
 
             Assert.AreEqual(result, myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(result.AddDays(1), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             //Monday two Weeks
             Assert.AreEqual(result.AddDays(11), myExecution.GetDateTime());
@@ -475,19 +471,19 @@ namespace Training.Test
                 DailyFrecuencyType = DailyType.Once
             };
 
-            DateTime currentDate = new DateTime(2020, 01, 02);
+            schedule.CurrentDate = new DateTime(2020, 01, 02);
 
-            ScheduleExecution myExecution = new ScheduleExecution(schedule, currentDate);
+            ScheduleExecution myExecution = new ScheduleExecution(schedule);
 
             DateTime result = new DateTime(2020, 01, 2, 4, 0, 0);
 
             Assert.AreEqual(result, myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             Assert.AreEqual(result.AddDays(1), myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
 
             //Monday two Weeks
             Assert.AreEqual(result.AddDays(11), myExecution.GetDateTime());
@@ -504,15 +500,15 @@ namespace Training.Test
                 DailyFrecuencyType = DailyType.Once
             };
 
-            DateTime currentDate = new DateTime(2020, 01, 02);
+            schedule.CurrentDate = new DateTime(2020, 01, 02);
 
-            ScheduleExecution myExecution = new ScheduleExecution(schedule, currentDate);
+            ScheduleExecution myExecution = new ScheduleExecution(schedule);
 
             DateTime result = new DateTime(2020, 01, 2, 4, 0, 0);
 
             Assert.AreEqual(result, myExecution.GetDateTime());
 
-            myExecution.SetCurrentDate(myExecution.GetDateTime().Value);
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
         }
         [TestMethod]
         public void Schedule_Weekly_NextExecute_Frecuency_Recurring()
@@ -528,9 +524,9 @@ namespace Training.Test
                 DailyFrecuencyType = DailyType.Hour
             };
 
-            DateTime currentDate = new DateTime(2020, 01, 02);
+            schedule.CurrentDate = new DateTime(2020, 01, 02);
 
-            ScheduleExecution myExecution = new ScheduleExecution(schedule, currentDate);
+            ScheduleExecution myExecution = new ScheduleExecution(schedule);
 
             DateTime result = new DateTime(2020, 01, 2, 4, 0, 0);
 
@@ -549,9 +545,9 @@ namespace Training.Test
                 DailyFrecuencyType = DailyType.Hour
             };
 
-            DateTime currentDate = new DateTime(2020, 01, 02);
+            schedule.CurrentDate = new DateTime(2020, 01, 02);
 
-            ScheduleExecution myExecution = new ScheduleExecution(schedule, currentDate);
+            ScheduleExecution myExecution = new ScheduleExecution(schedule);
 
             DateTime result = new DateTime(2020, 01, 2, 4, 0, 0);
 
@@ -571,9 +567,9 @@ namespace Training.Test
                 DailyFrecuencyType = DailyType.Hour
             };
 
-            DateTime currentDate = new DateTime(2020, 01, 02);
+            schedule.CurrentDate = new DateTime(2020, 01, 02);
 
-            ScheduleExecution myExecution = new ScheduleExecution(schedule, currentDate);
+            ScheduleExecution myExecution = new ScheduleExecution(schedule);
 
             DateTime result = new DateTime(2020, 01, 2, 4, 0, 0);
 
@@ -592,9 +588,9 @@ namespace Training.Test
                 DailyFrecuencyType = DailyType.Hour
             };
 
-            DateTime currentDate = new DateTime(2020, 01, 02);
+            schedule.CurrentDate = new DateTime(2020, 01, 02);
 
-            ScheduleExecution myExecution = new ScheduleExecution(schedule, currentDate);
+            ScheduleExecution myExecution = new ScheduleExecution(schedule);
 
             DateTime result = new DateTime(2020, 01, 2, 4, 0, 0);
 
@@ -613,9 +609,9 @@ namespace Training.Test
                 DailyFrecuencyType = DailyType.Hour
             };
 
-            DateTime currentDate = new DateTime(2020, 01, 02);
+            schedule.CurrentDate = new DateTime(2020, 01, 02);
 
-            ScheduleExecution myExecution = new ScheduleExecution(schedule, currentDate);
+            ScheduleExecution myExecution = new ScheduleExecution(schedule);
 
             DateTime result = new DateTime(2020, 01, 2, 4, 0, 0);
 

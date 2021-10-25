@@ -6,26 +6,24 @@ namespace Training
 {
     public class ScheduleExecution
     {
-        private DateTime currentDate;
-
-        private DateTime? dateTime;
-
         private readonly Schedule schedule;
 
         private string description;
 
-        public ScheduleExecution(Schedule schedule, DateTime currentDate)
+        public ScheduleExecution(Schedule schedule)
         {
-            this.currentDate = currentDate;
-
             this.schedule = schedule;
         }
 
         public DateTime? GetDateTime()
         {
-            if (this.dateTime.HasValue == false) { this.LoadDateTime(); }
+            ScheduleManager.Validate(this.schedule);
 
-            return this.dateTime;
+            DateTime nextDateTime = this.GetDateTimeExecution();
+
+            return this.schedule.EndDate.HasValue == true && nextDateTime.CompareTo(this.schedule.EndDate.Value) > 0
+                ? null
+                : (DateTime?)nextDateTime;
         }
 
         public string GetDescription()
@@ -55,18 +53,9 @@ namespace Training
             return this.description;
         }
 
-        public void SetCurrentDate(DateTime dateTime)
-        {
-            this.currentDate = dateTime;
-
-            this.dateTime = null;
-
-            this.description = null;
-        }
-
         private DateTime GetDateTimeExecution()
         {
-            DateTime nextExecution = this.currentDate;
+            DateTime nextExecution = this.schedule.CurrentDate;
 
             if (this.schedule.StartDate.HasValue == true &&
                 nextExecution.CompareTo(this.schedule.StartDate.Value) < 0) { nextExecution = this.schedule.StartDate.Value; }
@@ -175,17 +164,6 @@ namespace Training
                     where time > dateTime.TimeOfDay
                     orderby time.Ticks
                     select time);
-        }
-
-        private void LoadDateTime()
-        {
-            ScheduleManager.Validate(this.schedule);
-
-            DateTime nextDateTime = this.GetDateTimeExecution();
-
-            this.dateTime = this.schedule.EndDate.HasValue == true && nextDateTime.CompareTo(this.schedule.EndDate.Value) > 0 
-                ? null 
-                : (DateTime?)nextDateTime;
         }
     }
 }

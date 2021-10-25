@@ -2,49 +2,6 @@
 
 namespace Training
 {
-    public enum DailyType
-    {
-        Once = 0,
-        Hour = 1,
-        Minute = 2,
-        Second = 3
-    }
-
-    [Flags]
-    public enum DaysOfWeekType
-    {
-        None = 0,
-        Monday = 1,
-        Tuesday = 2,
-        Wednesday = 4,
-        Thursday = 8,
-        Friday = 16,
-        Saturday = 32,
-        Sunday = 64,
-        Day = Monday + Tuesday + Wednesday + Thursday + Friday + Saturday + Sunday,
-        Weekday = Monday + Tuesday + Wednesday + Thursday + Friday,
-        Weekenday = Saturday + Sunday
-    }
-
-    public enum MonthyType
-    {
-        None = 0,
-        First = 1,
-        Second = 2,
-        Thrid = 3,
-        Fourth = 4,
-        Last = 5,
-        Day = 6
-    }
-
-    public enum FrecuencyType
-    {
-        Once = 0,
-        Day = 1,
-        Week = 2,
-        Month = 3
-    }
-
     public class ScheduleManager
     {
         public static void Validate(Schedule schedule)
@@ -57,12 +14,14 @@ namespace Training
 
             if (schedule.StartDate.HasValue == true)
             {
+                if (schedule.CurrentDate.CompareTo(schedule.StartDate.Value) < 0) { throw new Exception("Current date must be greater to start date."); }
                 if (schedule.DateTime.HasValue == true &&
                     schedule.DateTime.Value.CompareTo(schedule.StartDate.Value) < 0) { throw new Exception("DateTime must be greater to start date."); }
             }
 
-            if (schedule.EndDate.HasValue == true)
+            if (schedule.StartDate.HasValue == true)
             {
+                if (schedule.CurrentDate.CompareTo(schedule.StartDate.Value) < 0) { throw new Exception("Current date must be greater to start date."); }
                 if (schedule.DateTime.HasValue == true &&
                     schedule.DateTime.Value.CompareTo(schedule.EndDate.Value) > 0) { throw new Exception("End date must be greater to dateTime."); }
             }
@@ -74,20 +33,20 @@ namespace Training
                 schedule.Every <= 0) { throw new Exception("Every must be greater to 0."); }
 
             if (schedule.FrecuencyType == FrecuencyType.Week &&
-                Convert.ToInt32(schedule.DaysOfWeek) == 0) { throw new Exception("Occurs weekly must indicate the days of the week."); }
+                schedule.DaysOfWeek == 0) { throw new Exception("Occurs weekly must indicate the days of the week."); }
 
             if (schedule.FrecuencyType == FrecuencyType.Month)
             {
                 if (schedule.MonthyType == MonthyType.Day)
                 {
-                    if (Convert.ToInt32(schedule.MonthyDay) <= 0) { throw new Exception("Occurs monthy day must indicate the day of the month."); }
-                    if (Convert.ToInt32(schedule.MonthyDay) > 31) { throw new Exception("Occurs monthy day mustn’t be greater to 31."); }
-                    if (Convert.ToInt32(schedule.DaysOfWeek) > 0) { throw new Exception("Occurs monthy mustn’t indicate the days of the week."); }
+                    if (schedule.MonthyDay <= 0) { throw new Exception("Occurs monthy day must indicate the day of the month."); }
+                    if (schedule.MonthyDay > 31) { throw new Exception("Occurs monthy day mustn’t be greater to 31."); }
+                    if (schedule.DaysOfWeek > 0) { throw new Exception("Occurs monthy mustn’t indicate the days of the week."); }
                 }
                 else
                 {
-                    if (Convert.ToInt32(schedule.MonthyDay) != 0) { throw new Exception("Occurs monthy day mustn’t indicate the day of the month."); }
-                    if (Convert.ToInt32(schedule.DaysOfWeek) == 0) { throw new Exception("Occurs monthy must indicate the days of the week."); }
+                    if (schedule.MonthyDay != 0) { throw new Exception("Occurs monthy day mustn’t indicate the day of the month."); }
+                    if (schedule.DaysOfWeek == 0) { throw new Exception("Occurs monthy must indicate the days of the week."); }
                 }
             }
 
