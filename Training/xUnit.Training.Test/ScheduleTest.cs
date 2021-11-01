@@ -240,10 +240,6 @@ namespace xUnit.Training.Test
             Action action = () => new ScheduleExecution(schedule).GetDateTime();
             action.Should().Throw<ScheduleException>().WithMessage("Occurs monthy must indicate the days of the week.");
         }
-
-
-
-
         [Fact]
         public void Schedule_Weekly_Once_Time_Exception()
         {
@@ -365,10 +361,11 @@ namespace xUnit.Training.Test
         }
 
         #endregion
-        
-        /*
+
+        #region Test Day
+
         [Fact]
-        public void Schedule_Once_NextExecute()
+        public void Schedule_Once()
         {
             Schedule schedule = new Schedule(FrecuencyType.Once)
             {
@@ -376,24 +373,217 @@ namespace xUnit.Training.Test
                 DateTime = new DateTime(2020, 1, 2)
             };
 
-            //Action action = () => new ScheduleExecution(schedule).GetDateTime();
+            DateTime expected = new DateTime(2020, 1, 2);
 
-            Assert.AreEqual(schedule.DateTime, new ScheduleExecution(schedule).GetDateTime());
+            new ScheduleExecution(schedule).GetDateTime().Should().Be(expected);
+
+            schedule.CurrentDate = new ScheduleExecution(schedule).GetDateTime().Value;
+
+            new ScheduleExecution(schedule).GetDateTime().Should().Be(expected);
         }
+
         [Fact]
-        public void Schedule_Dayly_NextExecute()
+        public void Schedule_Recurring()
         {
             Schedule schedule = new Schedule(FrecuencyType.Day)
             {
-                StartDate = new DateTime(2020, 1, 1),
-                Every = 1
+                CurrentDate = new DateTime(2020, 01, 04),
+                Every = 1,
+                StartDate = new DateTime(2020, 1, 1)
             };
 
-            schedule.CurrentDate = new DateTime(2020, 01, 04);
-            DateTime result = new DateTime(2020, 01, 05);
+            DateTime expected = new DateTime(2020, 1, 5);
 
-            Assert.AreEqual(result, new ScheduleExecution(schedule).GetDateTime());
+            new ScheduleExecution(schedule).GetDateTime().Should().Be(expected);
+
+            schedule.CurrentDate = new ScheduleExecution(schedule).GetDateTime().Value;
+
+            expected = new DateTime(2020, 1, 6);
+
+            new ScheduleExecution(schedule).GetDateTime().Should().Be(expected);
         }
+
+        #endregion
+
+        #region Test Week
+
+        [Fact]
+        public void Schedule_Weekly_DayOfWeek()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Week)
+            {
+                CurrentDate = new DateTime(2020, 1, 1),
+                DaysOfWeek = DaysOfWeekType.Monday | DaysOfWeekType.Thursday | DaysOfWeekType.Friday,
+                Every = 2
+            };
+
+            DateTime expected = new DateTime(2020, 1, 2);
+
+            new ScheduleExecution(schedule).GetDateTime().Should().Be(expected);
+
+            schedule.CurrentDate = new ScheduleExecution(schedule).GetDateTime().Value;
+
+            expected = new DateTime(2020, 1, 3);
+
+            new ScheduleExecution(schedule).GetDateTime().Should().Be(expected);
+
+            schedule.CurrentDate = new ScheduleExecution(schedule).GetDateTime().Value;
+
+            expected = new DateTime(2020, 1, 13);
+
+            new ScheduleExecution(schedule).GetDateTime().Should().Be(expected);
+        }
+
+        #region Test Daily
+
+        [Fact]
+        public void Schedule_Weekly_Once()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Week)
+            {
+                CurrentDate = new DateTime(2020, 01, 02),
+                DaysOfWeek = DaysOfWeekType.Monday | DaysOfWeekType.Thursday | DaysOfWeekType.Friday,
+                DailyFrecuencyTime = new TimeSpan(4, 0, 0),
+                DailyFrecuencyType = DailyType.Once,
+                Every = 2,
+                StartDate = new DateTime(2020, 1, 1),
+            };
+
+            DateTime expected = new DateTime(2020, 01, 2, 4, 0, 0);
+
+            new ScheduleExecution(schedule).GetDateTime().Should().Be(expected);
+
+            schedule.CurrentDate = new ScheduleExecution(schedule).GetDateTime().Value;
+
+            expected = new DateTime(2020, 01, 3, 4, 0, 0);
+
+            new ScheduleExecution(schedule).GetDateTime().Should().Be(expected);
+
+            schedule.CurrentDate = new ScheduleExecution(schedule).GetDateTime().Value;
+
+            expected = new DateTime(2020, 01, 13, 4, 0, 0);
+
+            new ScheduleExecution(schedule).GetDateTime().Should().Be(expected);
+        }
+
+        #endregion
+
+        /*
+
+        [Fact]
+        public void Schedule_Weekly_NextExecute_Frecuency_Once_Change_Day()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Week)
+            {
+                StartDate = new DateTime(2020, 1, 1),
+                Every = 2,
+                DaysOfWeek = DaysOfWeekType.Monday | DaysOfWeekType.Thursday | DaysOfWeekType.Friday,
+                DailyFrecuencyTime = new TimeSpan(4, 0, 0),
+                DailyFrecuencyType = DailyType.Once
+            };
+
+            schedule.CurrentDate = new DateTime(2020, 01, 02);
+
+            ScheduleExecution myExecution = new ScheduleExecution(schedule);
+
+            DateTime expected = new DateTime(2020, 01, 2, 4, 0, 0);
+
+            Assert.AreEqual(expected, myExecution.GetDateTime());
+
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
+
+            Assert.AreEqual(expected.AddDays(1), myExecution.GetDateTime());
+        }
+        [Fact]
+        public void Schedule_Weekly_NextExecute_Frecuency_Once_Change_Week()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Week)
+            {
+                StartDate = new DateTime(2020, 1, 1),
+                Every = 2,
+                DaysOfWeek = DaysOfWeekType.Monday | DaysOfWeekType.Thursday | DaysOfWeekType.Friday,
+                DailyFrecuencyTime = new TimeSpan(4, 0, 0),
+                DailyFrecuencyType = DailyType.Once
+            };
+
+            schedule.CurrentDate = new DateTime(2020, 01, 02);
+
+            ScheduleExecution myExecution = new ScheduleExecution(schedule);
+
+            DateTime expected = new DateTime(2020, 01, 2, 4, 0, 0);
+
+            Assert.AreEqual(expected, myExecution.GetDateTime());
+
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
+
+            Assert.AreEqual(expected.AddDays(1), myExecution.GetDateTime());
+
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
+
+            //Monday two Weeks
+            Assert.AreEqual(expected.AddDays(11), myExecution.GetDateTime());
+        }
+        [Fact]
+        public void Schedule_Weekly_NextExecute_Frecuency_Once_Change_Week_DailyFrecuencyEvery_No_Effect()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Week)
+            {
+                StartDate = new DateTime(2020, 1, 1),
+                Every = 2,
+                DaysOfWeek = DaysOfWeekType.Monday | DaysOfWeekType.Thursday | DaysOfWeekType.Friday,
+                DailyFrecuencyEvery = 2,
+                DailyFrecuencyTime = new TimeSpan(4, 0, 0),
+                DailyFrecuencyType = DailyType.Once
+            };
+
+            schedule.CurrentDate = new DateTime(2020, 01, 02);
+
+            ScheduleExecution myExecution = new ScheduleExecution(schedule);
+
+            DateTime expected = new DateTime(2020, 01, 2, 4, 0, 0);
+
+            Assert.AreEqual(expected, myExecution.GetDateTime());
+
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
+
+            Assert.AreEqual(expected.AddDays(1), myExecution.GetDateTime());
+
+            schedule.CurrentDate = myExecution.GetDateTime().Value;
+
+            //Monday two Weeks
+            Assert.AreEqual(expected.AddDays(11), myExecution.GetDateTime());
+        }
+        [Fact]
+        public void Schedule_Weekly_NextExecute_Frecuency_Recurring()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Week)
+            {
+                StartDate = new DateTime(2020, 1, 1),
+                Every = 2,
+                DaysOfWeek = DaysOfWeekType.Monday | DaysOfWeekType.Thursday | DaysOfWeekType.Friday,
+                DailyFrecuencyEndTime = new TimeSpan(8, 0, 0),
+                DailyFrecuencyEvery = 2,
+                DailyFrecuencyStartTime = new TimeSpan(4, 0, 0),
+                DailyFrecuencyType = DailyType.Hour
+            };
+
+            schedule.CurrentDate = new DateTime(2020, 01, 02);
+
+            ScheduleExecution myExecution = new ScheduleExecution(schedule);
+
+            DateTime expected = new DateTime(2020, 01, 2, 4, 0, 0);
+
+            Assert.AreEqual(expected, myExecution.GetDateTime());
+        }
+        */
+
+        #endregion
+
+        #region Test Month
+
+        /*
+
+
         [Fact]
         public void Schedule_Monthy_NextExecute_Day()
         {
@@ -611,149 +801,8 @@ namespace xUnit.Training.Test
 
             Assert.AreEqual(new DateTime(2020, 01, 2, 3, 0, 0), myExecution.GetDateTime());
         }
-        [Fact]
-        public void Schedule_Weekly_NextExecute()
-        {
-            Schedule schedule = new Schedule(FrecuencyType.Week)
-            {
-                StartDate = new DateTime(2020, 1, 1),
-                Every = 2,
-                DaysOfWeek = DaysOfWeekType.Monday | DaysOfWeekType.Thursday | DaysOfWeekType.Friday
-            };
-
-            schedule.CurrentDate = new DateTime(2020, 01, 01);
-            DateTime result = new DateTime(2020, 01, 02);
-
-            Assert.AreEqual(result, new ScheduleExecution(schedule).GetDateTime());
-        }
-        [Fact]
-        public void Schedule_Weekly_NextExecute_Frecuency_Once()
-        {
-            Schedule schedule = new Schedule(FrecuencyType.Week)
-            {
-                StartDate = new DateTime(2020, 1, 1),
-                Every = 2,
-                DaysOfWeek = DaysOfWeekType.Monday | DaysOfWeekType.Thursday | DaysOfWeekType.Friday,
-                DailyFrecuencyEvery = 2,
-                DailyFrecuencyTime = new TimeSpan(4, 0, 0),
-                DailyFrecuencyType = DailyType.Once
-            };
-
-            schedule.CurrentDate = new DateTime(2020, 01, 02);
-
-            ScheduleExecution myExecution = new ScheduleExecution(schedule);
-
-            DateTime result = new DateTime(2020, 01, 2, 4, 0, 0);
-
-            Assert.AreEqual(result, myExecution.GetDateTime());
-
-            schedule.CurrentDate = myExecution.GetDateTime().Value;
-        }
-        [Fact]
-        public void Schedule_Weekly_NextExecute_Frecuency_Once_Change_Day()
-        {
-            Schedule schedule = new Schedule(FrecuencyType.Week)
-            {
-                StartDate = new DateTime(2020, 1, 1),
-                Every = 2,
-                DaysOfWeek = DaysOfWeekType.Monday | DaysOfWeekType.Thursday | DaysOfWeekType.Friday,
-                DailyFrecuencyTime = new TimeSpan(4, 0, 0),
-                DailyFrecuencyType = DailyType.Once
-            };
-
-            schedule.CurrentDate = new DateTime(2020, 01, 02);
-
-            ScheduleExecution myExecution = new ScheduleExecution(schedule);
-
-            DateTime result = new DateTime(2020, 01, 2, 4, 0, 0);
-
-            Assert.AreEqual(result, myExecution.GetDateTime());
-
-            schedule.CurrentDate = myExecution.GetDateTime().Value;
-
-            Assert.AreEqual(result.AddDays(1), myExecution.GetDateTime());
-        }
-        [Fact]
-        public void Schedule_Weekly_NextExecute_Frecuency_Once_Change_Week()
-        {
-            Schedule schedule = new Schedule(FrecuencyType.Week)
-            {
-                StartDate = new DateTime(2020, 1, 1),
-                Every = 2,
-                DaysOfWeek = DaysOfWeekType.Monday | DaysOfWeekType.Thursday | DaysOfWeekType.Friday,
-                DailyFrecuencyTime = new TimeSpan(4, 0, 0),
-                DailyFrecuencyType = DailyType.Once
-            };
-
-            schedule.CurrentDate = new DateTime(2020, 01, 02);
-
-            ScheduleExecution myExecution = new ScheduleExecution(schedule);
-
-            DateTime result = new DateTime(2020, 01, 2, 4, 0, 0);
-
-            Assert.AreEqual(result, myExecution.GetDateTime());
-
-            schedule.CurrentDate = myExecution.GetDateTime().Value;
-
-            Assert.AreEqual(result.AddDays(1), myExecution.GetDateTime());
-
-            schedule.CurrentDate = myExecution.GetDateTime().Value;
-
-            //Monday two Weeks
-            Assert.AreEqual(result.AddDays(11), myExecution.GetDateTime());
-        }
-        [Fact]
-        public void Schedule_Weekly_NextExecute_Frecuency_Once_Change_Week_DailyFrecuencyEvery_No_Effect()
-        {
-            Schedule schedule = new Schedule(FrecuencyType.Week)
-            {
-                StartDate = new DateTime(2020, 1, 1),
-                Every = 2,
-                DaysOfWeek = DaysOfWeekType.Monday | DaysOfWeekType.Thursday | DaysOfWeekType.Friday,
-                DailyFrecuencyEvery = 2,
-                DailyFrecuencyTime = new TimeSpan(4, 0, 0),
-                DailyFrecuencyType = DailyType.Once
-            };
-
-            schedule.CurrentDate = new DateTime(2020, 01, 02);
-
-            ScheduleExecution myExecution = new ScheduleExecution(schedule);
-
-            DateTime result = new DateTime(2020, 01, 2, 4, 0, 0);
-
-            Assert.AreEqual(result, myExecution.GetDateTime());
-
-            schedule.CurrentDate = myExecution.GetDateTime().Value;
-
-            Assert.AreEqual(result.AddDays(1), myExecution.GetDateTime());
-
-            schedule.CurrentDate = myExecution.GetDateTime().Value;
-
-            //Monday two Weeks
-            Assert.AreEqual(result.AddDays(11), myExecution.GetDateTime());
-        }
-        [Fact]
-        public void Schedule_Weekly_NextExecute_Frecuency_Recurring()
-        {
-            Schedule schedule = new Schedule(FrecuencyType.Week)
-            {
-                StartDate = new DateTime(2020, 1, 1),
-                Every = 2,
-                DaysOfWeek = DaysOfWeekType.Monday | DaysOfWeekType.Thursday | DaysOfWeekType.Friday,
-                DailyFrecuencyEndTime = new TimeSpan(8, 0, 0),
-                DailyFrecuencyEvery = 2,
-                DailyFrecuencyStartTime = new TimeSpan(4, 0, 0),
-                DailyFrecuencyType = DailyType.Hour
-            };
-
-            schedule.CurrentDate = new DateTime(2020, 01, 02);
-
-            ScheduleExecution myExecution = new ScheduleExecution(schedule);
-
-            DateTime result = new DateTime(2020, 01, 2, 4, 0, 0);
-
-            Assert.AreEqual(result, myExecution.GetDateTime());
-        }
         */
+
+        #endregion
     }
 }
