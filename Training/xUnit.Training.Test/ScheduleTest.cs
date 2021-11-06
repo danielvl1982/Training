@@ -688,6 +688,291 @@ namespace xUnit.Training.Test
 
             ValidateExpected(schedule, expected);
         }
+        [Fact]
+        public void Schedule_Monthy_FirstWeek_Weekday()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Month)
+            {
+                CurrentDate = new DateTime(2020, 1, 1),
+                DaysOfWeek = DaysOfWeekType.Weekday,
+                Every = 3,
+                MonthyType = MonthyType.First,
+                StartDate = new DateTime(2020, 1, 1)
+            };
+
+            List<DateTime> expected = new List<DateTime>()
+            {
+                new DateTime(2020, 1, 2, 0, 0, 0),
+                new DateTime(2020, 1, 3, 0, 0, 0),
+                new DateTime(2020, 4, 1, 0, 0, 0),
+                new DateTime(2020, 4, 2, 0, 0, 0),
+                new DateTime(2020, 4, 3, 0, 0, 0),
+                new DateTime(2020, 4, 4, 0, 0, 0),
+                new DateTime(2020, 4, 5, 0, 0, 0)
+            };
+
+            ValidateExpected(schedule, expected);
+        }
+        [Fact]
+        public void Schedule_Monthy_FirstWeek_Weekenday()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Month)
+            {
+                CurrentDate = new DateTime(2020, 1, 1),
+                DaysOfWeek = DaysOfWeekType.Weekenday,
+                Every = 3,
+                MonthyType = MonthyType.First,
+                StartDate = new DateTime(2020, 1, 1)
+            };
+
+            List<DateTime> expected = new List<DateTime>()
+            {
+                new DateTime(2020, 1, 4, 0, 0, 0),
+                new DateTime(2020, 1, 5, 0, 0, 0),
+                new DateTime(2020, 4, 4, 0, 0, 0),
+                new DateTime(2020, 4, 5, 0, 0, 0)
+            };
+
+            ValidateExpected(schedule, expected);
+        }
+        [Fact]
+        public void Schedule_Monthy_FirstWeek_Weekenday_Recurring_Hour()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Month)
+            {
+                CurrentDate = new DateTime(2020, 1, 1),
+                DaysOfWeek = DaysOfWeekType.Weekenday,
+                DailyFrecuencyEndTime = new TimeSpan(6, 0, 0),
+                DailyFrecuencyEvery = 1,
+                DailyFrecuencyStartTime = new TimeSpan(3, 0, 0),
+                DailyFrecuencyType = DailyType.Hour,
+                Every = 3,
+                MonthyType = MonthyType.First,
+                StartDate = new DateTime(2020, 1, 1)
+            };
+
+            List<DateTime> expected = new List<DateTime>()
+            {
+                new DateTime(2020, 1, 4, 3, 0, 0),
+                new DateTime(2020, 1, 4, 4, 0, 0),
+                new DateTime(2020, 1, 4, 5, 0, 0),
+                new DateTime(2020, 1, 4, 6, 0, 0),
+                new DateTime(2020, 1, 5, 3, 0, 0),
+                new DateTime(2020, 1, 5, 4, 0, 0),
+                new DateTime(2020, 1, 5, 5, 0, 0),
+                new DateTime(2020, 1, 5, 6, 0, 0),
+                new DateTime(2020, 4, 4, 3, 0, 0),
+                new DateTime(2020, 4, 4, 4, 0, 0),
+                new DateTime(2020, 4, 4, 5, 0, 0),
+                new DateTime(2020, 4, 4, 6, 0, 0),
+                new DateTime(2020, 4, 5, 3, 0, 0),
+                new DateTime(2020, 4, 5, 4, 0, 0),
+                new DateTime(2020, 4, 5, 5, 0, 0),
+                new DateTime(2020, 4, 5, 6, 0, 0)
+            };
+
+            ValidateExpected(schedule, expected);
+        }
+        [Fact]
+        public void Schedule_Monthy_SecondWeek()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Month)
+            {
+                CurrentDate = new DateTime(2020, 1, 1),
+                DaysOfWeek = DaysOfWeekType.Thursday,
+                Every = 3,
+                MonthyType = MonthyType.Second,
+                StartDate = new DateTime(2020, 1, 1)
+            };
+
+            List<DateTime> expected = new List<DateTime>()
+            {
+                new DateTime(2020, 1, 9, 0, 0, 0),
+                new DateTime(2020, 4, 9, 0, 0, 0)
+            };
+
+            ValidateExpected(schedule, expected);
+        }
+        [Fact]
+        public void Schedule_Monthy_SecondWeek_Recurring_Hour()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Month)
+            {
+                CurrentDate = new DateTime(2020, 1, 1),
+                DaysOfWeek = DaysOfWeekType.Thursday,
+                DailyFrecuencyEndTime = new TimeSpan(6, 0, 0),
+                DailyFrecuencyEvery = 1,
+                DailyFrecuencyStartTime = new TimeSpan(3, 0, 0),
+                DailyFrecuencyType = DailyType.Hour,
+                Every = 3,
+                MonthyType = MonthyType.Second,
+                StartDate = new DateTime(2020, 1, 1)
+            };
+
+            List<DateTime> expected = new List<DateTime>()
+            {
+                new DateTime(2020, 1, 9, 3, 0, 0),
+                new DateTime(2020, 1, 9, 4, 0, 0),
+                new DateTime(2020, 1, 9, 5, 0, 0),
+                new DateTime(2020, 1, 9, 6, 0, 0),
+                new DateTime(2020, 4, 9, 3, 0, 0),
+                new DateTime(2020, 4, 9, 4, 0, 0),
+                new DateTime(2020, 4, 9, 5, 0, 0),
+                new DateTime(2020, 4, 9, 6, 0, 0)
+            };
+
+            ValidateExpected(schedule, expected);
+        }
+        [Fact]
+        public void Schedule_Monthy_ThridWeek()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Month)
+            {
+                CurrentDate = new DateTime(2020, 1, 1),
+                DaysOfWeek = DaysOfWeekType.Thursday,
+                Every = 3,
+                MonthyType = MonthyType.Thrid,
+                StartDate = new DateTime(2020, 1, 1)
+            };
+
+            List<DateTime> expected = new List<DateTime>()
+            {
+                new DateTime(2020, 1, 16, 0, 0, 0),
+                new DateTime(2020, 4, 16, 0, 0, 0)
+            };
+
+            ValidateExpected(schedule, expected);
+        }
+        [Fact]
+        public void Schedule_Monthy_ThridWeek_Recurring_Hour()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Month)
+            {
+                CurrentDate = new DateTime(2020, 1, 1),
+                DaysOfWeek = DaysOfWeekType.Thursday,
+                DailyFrecuencyEndTime = new TimeSpan(6, 0, 0),
+                DailyFrecuencyEvery = 1,
+                DailyFrecuencyStartTime = new TimeSpan(3, 0, 0),
+                DailyFrecuencyType = DailyType.Hour,
+                Every = 3,
+                MonthyType = MonthyType.Thrid,
+                StartDate = new DateTime(2020, 1, 1)
+            };
+
+            List<DateTime> expected = new List<DateTime>()
+            {
+                new DateTime(2020, 1, 16, 3, 0, 0),
+                new DateTime(2020, 1, 16, 4, 0, 0),
+                new DateTime(2020, 1, 16, 5, 0, 0),
+                new DateTime(2020, 1, 16, 6, 0, 0),
+                new DateTime(2020, 4, 16, 3, 0, 0),
+                new DateTime(2020, 4, 16, 4, 0, 0),
+                new DateTime(2020, 4, 16, 5, 0, 0),
+                new DateTime(2020, 4, 16, 6, 0, 0)
+            };
+
+            ValidateExpected(schedule, expected);
+        }
+        [Fact]
+        public void Schedule_Monthy_FourthWeek()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Month)
+            {
+                CurrentDate = new DateTime(2020, 1, 1),
+                DaysOfWeek = DaysOfWeekType.Thursday,
+                Every = 3,
+                MonthyType = MonthyType.Fourth,
+                StartDate = new DateTime(2020, 1, 1)
+            };
+
+            List<DateTime> expected = new List<DateTime>()
+            {
+                new DateTime(2020, 1, 23, 0, 0, 0),
+                new DateTime(2020, 4, 23, 0, 0, 0)
+            };
+
+            ValidateExpected(schedule, expected);
+        }
+        [Fact]
+        public void Schedule_Monthy_FourthWeek_Recurring_Hour()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Month)
+            {
+                CurrentDate = new DateTime(2020, 1, 1),
+                DaysOfWeek = DaysOfWeekType.Thursday,
+                DailyFrecuencyEndTime = new TimeSpan(6, 0, 0),
+                DailyFrecuencyEvery = 1,
+                DailyFrecuencyStartTime = new TimeSpan(3, 0, 0),
+                DailyFrecuencyType = DailyType.Hour,
+                Every = 3,
+                MonthyType = MonthyType.Fourth,
+                StartDate = new DateTime(2020, 1, 1)
+            };
+
+            List<DateTime> expected = new List<DateTime>()
+            {
+                new DateTime(2020, 1, 23, 3, 0, 0),
+                new DateTime(2020, 1, 23, 4, 0, 0),
+                new DateTime(2020, 1, 23, 5, 0, 0),
+                new DateTime(2020, 1, 23, 6, 0, 0),
+                new DateTime(2020, 4, 23, 3, 0, 0),
+                new DateTime(2020, 4, 23, 4, 0, 0),
+                new DateTime(2020, 4, 23, 5, 0, 0),
+                new DateTime(2020, 4, 23, 6, 0, 0)
+            };
+
+            ValidateExpected(schedule, expected);
+        }
+        [Fact]
+        public void Schedule_Monthy_LastWeek()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Month)
+            {
+                CurrentDate = new DateTime(2020, 1, 1),
+                DaysOfWeek = DaysOfWeekType.Thursday,
+                Every = 3,
+                MonthyType = MonthyType.Last,
+                StartDate = new DateTime(2020, 1, 1)
+            };
+
+            List<DateTime> expected = new List<DateTime>()
+            {
+                new DateTime(2020, 1, 30, 0, 0, 0),
+                new DateTime(2020, 4, 30, 0, 0, 0)
+            };
+
+            ValidateExpected(schedule, expected);
+        }
+        [Fact]
+        public void Schedule_Monthy_LastWeek_Recurring_Hour()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Month)
+            {
+                CurrentDate = new DateTime(2020, 1, 1),
+                DaysOfWeek = DaysOfWeekType.Thursday,
+                DailyFrecuencyEndTime = new TimeSpan(6, 0, 0),
+                DailyFrecuencyEvery = 1,
+                DailyFrecuencyStartTime = new TimeSpan(3, 0, 0),
+                DailyFrecuencyType = DailyType.Hour,
+                Every = 3,
+                MonthyType = MonthyType.Last,
+                StartDate = new DateTime(2020, 1, 1)
+            };
+
+            List<DateTime> expected = new List<DateTime>()
+            {
+                new DateTime(2020, 1, 30, 3, 0, 0),
+                new DateTime(2020, 1, 30, 4, 0, 0),
+                new DateTime(2020, 1, 30, 5, 0, 0),
+                new DateTime(2020, 1, 30, 6, 0, 0),
+                new DateTime(2020, 4, 30, 3, 0, 0),
+                new DateTime(2020, 4, 30, 4, 0, 0),
+                new DateTime(2020, 4, 30, 5, 0, 0),
+                new DateTime(2020, 4, 30, 6, 0, 0)
+            };
+
+            ValidateExpected(schedule, expected);
+        }
 
         #endregion
 

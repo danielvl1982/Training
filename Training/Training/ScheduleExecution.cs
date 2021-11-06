@@ -8,8 +8,6 @@ namespace Training
     {
         private readonly Schedule schedule;
 
-        private string description;
-
         public ScheduleExecution(Schedule schedule)
         {
             this.schedule = schedule;
@@ -26,31 +24,26 @@ namespace Training
                 : (DateTime?)nextDateTime;
         }
 
-        public string GetDescription()
+        public string GetDescription(DateTime timeExecution)
         {
-            if (this.GetDateTime().HasValue == false) { return string.Empty; }
-
-            if (string.IsNullOrEmpty(this.description) == true)
+            string description = this.schedule.FrecuencyType switch
             {
-                this.description = this.schedule.FrecuencyType switch
-                {
-                    FrecuencyType.Day => "Occurs every day.",
-                    FrecuencyType.Month => "Occurs every month.",
-                    FrecuencyType.Once => "Occurs once.",
-                    FrecuencyType.Week => "Occurs every week.",
-                    _ => string.Empty,
-                };
+                FrecuencyType.Day => "Occurs every day.",
+                FrecuencyType.Month => "Occurs every month.",
+                FrecuencyType.Once => "Occurs once.",
+                FrecuencyType.Week => "Occurs every week.",
+                _ => string.Empty,
+            };
 
-                this.description += " Schedule will be used on " + this.GetDateTime().Value.ToString("dd/MM/yyyy HH:mm:ss");
-                this.description += this.schedule.StartDate.HasValue == true
-                    ? " starting on " + this.schedule.StartDate.Value.ToString("dd/MM/yyy HH:mm:ss")
-                    : string.Empty;
-                this.description += this.schedule.EndDate.HasValue == true
-                    ? " until " + this.schedule.EndDate.Value.ToString("dd/MM/yyy HH:mm:ss")
-                    : string.Empty;
-            }
+            description += " Schedule will be used on " + timeExecution.ToString("dd/MM/yyyy HH:mm:ss");
+            description += this.schedule.StartDate.HasValue == true
+                ? " starting on " + this.schedule.StartDate.Value.ToString("dd/MM/yyy HH:mm:ss")
+                : string.Empty;
+            description += this.schedule.EndDate.HasValue == true
+                ? " until " + this.schedule.EndDate.Value.ToString("dd/MM/yyy HH:mm:ss")
+                : string.Empty;
 
-            return this.description;
+            return description;
         }
 
         private DateTime GetDateTimeExecution()
@@ -87,6 +80,41 @@ namespace Training
 
             return dateTime;
         }
+        private DateTime GetNextExecutionByMonth(DateTime dateTime)
+        {
+            if (this.schedule.MonthyType == MonthyType.Day)
+            {
+                DateTime dateMonth = dateTime.AddMonths(0, this.schedule.MonthyDay);
+
+                return dateMonth > dateTime
+                    ? dateMonth
+                    : dateTime.AddMonths(this.schedule.Every, this.schedule.MonthyDay);
+            }
+            else
+            {
+                DayOfWeek? nextDayOfWeek = dateTime.IsWeekValid(this.schedule.MonthyType) == true
+                    ? dateTime.NextDayOfWeek(this.schedule.DaysOfWeek)
+                    : null;
+
+                if (nextDayOfWeek.HasValue == true) { return dateTime.GetDayOfWeek(nextDayOfWeek.Value); }
+                else
+                {
+                    DateTime dateOfMonth = dateTime.AddMonths(this.schedule.MonthyType, this.schedule.DaysOfWeek, 0);
+
+                    return dateOfMonth > dateTime
+                        ? dateOfMonth
+                        : dateTime.AddMonths(this.schedule.MonthyType, this.schedule.DaysOfWeek, this.schedule.Every);
+                }
+            }
+        }
+        private DateTime GetNextExecutionByWeek(DateTime dateTime)
+        {
+            DayOfWeek? nextDayOfWeek = dateTime.NextDayOfWeek(this.schedule.DaysOfWeek);
+
+            return nextDayOfWeek.HasValue == true
+                ? dateTime.GetDayOfWeek(nextDayOfWeek.Value)
+                : dateTime.AddWeeks(this.schedule.Every);
+        }
         private DateTime GetNextExecutionRecurring(DateTime dateTime)
         {
             if (this.schedule.DailyFrecuencyType.HasValue == true &&
@@ -103,41 +131,6 @@ namespace Training
 
             if (this.schedule.DailyFrecuencyType.HasValue == true) { return this.GetNextExecutionRecurring(this.GetDateTimeIncremented(dateTime).Date); }
             else { return this.GetDateTimeIncremented(dateTime); }
-        }
-        private DateTime GetNextExecutionByMonth(DateTime dateTime)
-        {
-            DayOfWeek? nextDayOfWeek = dateTime.IsWeekValid(this.schedule.MonthyType) == true
-                ? dateTime.NextDayOfWeek(this.schedule.DaysOfWeek)
-                : null;
-
-            if (nextDayOfWeek.HasValue == true) { return dateTime.GetDayOfWeek(nextDayOfWeek.Value); }
-            else
-            {
-                if (this.schedule.MonthyType == MonthyType.Day)
-                {
-                    DateTime dateMonth = dateTime.AddMonths(0, this.schedule.MonthyDay);
-
-                    return dateMonth > dateTime
-                        ? dateMonth
-                        : dateTime.AddMonths(this.schedule.Every, this.schedule.MonthyDay);
-                }
-                else
-                {
-                    DateTime dateMonth = dateTime.AddMonths(this.schedule.MonthyType, this.schedule.DaysOfWeek, this.schedule.Every);
-
-                    return dateMonth > dateTime
-                        ? dateMonth
-                        : dateTime.AddMonths(this.schedule.MonthyType, this.schedule.DaysOfWeek, this.schedule.Every);
-                }
-            }
-        }
-        private DateTime GetNextExecutionByWeek(DateTime dateTime)
-        {
-            DayOfWeek? nextDayOfWeek = dateTime.NextDayOfWeek(this.schedule.DaysOfWeek);
-
-            return nextDayOfWeek.HasValue == true
-                ? dateTime.GetDayOfWeek(nextDayOfWeek.Value)
-                : dateTime.AddWeeks(this.schedule.Every);
         }
 
         private DateTime? GetNextExecutionDayOnce(DateTime dateTime)
