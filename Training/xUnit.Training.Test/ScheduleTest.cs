@@ -705,10 +705,10 @@ namespace xUnit.Training.Test
                 new DateTime(2020, 1, 2, 0, 0, 0),
                 new DateTime(2020, 1, 3, 0, 0, 0),
                 new DateTime(2020, 4, 1, 0, 0, 0),
+                new DateTime(2020, 3, 30, 0, 0, 0),
+                new DateTime(2020, 3, 31, 0, 0, 0),
                 new DateTime(2020, 4, 2, 0, 0, 0),
-                new DateTime(2020, 4, 3, 0, 0, 0),
-                new DateTime(2020, 4, 4, 0, 0, 0),
-                new DateTime(2020, 4, 5, 0, 0, 0)
+                new DateTime(2020, 4, 3, 0, 0, 0)
             };
 
             ValidateExpected(schedule, expected);
