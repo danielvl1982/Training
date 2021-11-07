@@ -84,27 +84,19 @@ namespace Training
         {
             if (this.schedule.MonthyType == MonthyType.Day)
             {
-                DateTime dateMonth = dateTime.AddMonths(0, this.schedule.MonthyDay);
+                DateTime? dateOfMonth = dateTime.AddMonths(this.schedule.MonthyDay, 0);
 
-                return dateMonth > dateTime
-                    ? dateMonth
-                    : dateTime.AddMonths(this.schedule.Every, this.schedule.MonthyDay);
+                return dateOfMonth.HasValue == true
+                    ? dateOfMonth.Value
+                    : dateTime.AddMonths(this.schedule.MonthyDay, this.schedule.Every).Value;
             }
             else
             {
-                DayOfWeek? nextDayOfWeek = dateTime.IsWeekValid(this.schedule.MonthyType) == true
-                    ? dateTime.NextDayOfWeek(this.schedule.DaysOfWeek)
-                    : null;
+                DateTime? dateOfMonth = dateTime.AddMonths(this.schedule.MonthyType, this.schedule.DaysOfWeek, 0);
 
-                if (nextDayOfWeek.HasValue == true) { return dateTime.GetDayOfWeek(nextDayOfWeek.Value); }
-                else
-                {
-                    DateTime dateOfMonth = dateTime.AddMonths(this.schedule.MonthyType, this.schedule.DaysOfWeek, 0);
-
-                    return dateOfMonth > dateTime
-                        ? dateOfMonth
-                        : dateTime.AddMonths(this.schedule.MonthyType, this.schedule.DaysOfWeek, this.schedule.Every);
-                }
+                return dateOfMonth.HasValue == true
+                        ? dateOfMonth.Value
+                        : dateTime.AddMonths(this.schedule.MonthyType, this.schedule.DaysOfWeek, this.schedule.Every).Value;
             }
         }
         private DateTime GetNextExecutionByWeek(DateTime dateTime)

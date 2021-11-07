@@ -639,12 +639,12 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void Schedule_Monthy_FirstWeek()
+        public void Schedule_Monthy_First_Monday_Thursday()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
                 CurrentDate = new DateTime(2020, 1, 1),
-                DaysOfWeek = DaysOfWeekType.Thursday,
+                DaysOfWeek = DaysOfWeekType.Monday | DaysOfWeekType.Thursday,
                 Every = 3,
                 MonthyType = MonthyType.First,
                 StartDate = new DateTime(2020, 1, 1)
@@ -653,18 +653,20 @@ namespace xUnit.Training.Test
             List<DateTime> expected = new List<DateTime>()
             {
                 new DateTime(2020, 1, 2, 0, 0, 0),
-                new DateTime(2020, 4, 2, 0, 0, 0)
+                new DateTime(2020, 1, 6, 0, 0, 0),
+                new DateTime(2020, 4, 2, 0, 0, 0),
+                new DateTime(2020, 4, 6, 0, 0, 0)
             };
 
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void Schedule_Monthy_FirstWeek_Recurring_Hour()
+        public void Schedule_Monthy_First__Monday_Thursday_Recurring_Hour()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
                 CurrentDate = new DateTime(2020, 1, 1),
-                DaysOfWeek = DaysOfWeekType.Thursday,
+                DaysOfWeek = DaysOfWeekType.Monday | DaysOfWeekType.Thursday,
                 DailyFrecuencyEndTime = new TimeSpan(6, 0, 0),
                 DailyFrecuencyEvery = 1,
                 DailyFrecuencyStartTime = new TimeSpan(3, 0, 0),
@@ -680,16 +682,24 @@ namespace xUnit.Training.Test
                 new DateTime(2020, 1, 2, 4, 0, 0),
                 new DateTime(2020, 1, 2, 5, 0, 0),
                 new DateTime(2020, 1, 2, 6, 0, 0),
+                new DateTime(2020, 1, 6, 3, 0, 0),
+                new DateTime(2020, 1, 6, 4, 0, 0),
+                new DateTime(2020, 1, 6, 5, 0, 0),
+                new DateTime(2020, 1, 6, 6, 0, 0),
                 new DateTime(2020, 4, 2, 3, 0, 0),
                 new DateTime(2020, 4, 2, 4, 0, 0),
                 new DateTime(2020, 4, 2, 5, 0, 0),
-                new DateTime(2020, 4, 2, 6, 0, 0)
+                new DateTime(2020, 4, 2, 6, 0, 0),
+                new DateTime(2020, 4, 6, 3, 0, 0),
+                new DateTime(2020, 4, 6, 4, 0, 0),
+                new DateTime(2020, 4, 6, 5, 0, 0),
+                new DateTime(2020, 4, 6, 6, 0, 0)
             };
 
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void Schedule_Monthy_FirstWeek_Weekday()
+        public void Schedule_Monthy_First_Weekday()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -704,17 +714,61 @@ namespace xUnit.Training.Test
             {
                 new DateTime(2020, 1, 2, 0, 0, 0),
                 new DateTime(2020, 1, 3, 0, 0, 0),
+                new DateTime(2020, 1, 6, 0, 0, 0),
+                new DateTime(2020, 1, 7, 0, 0, 0),
                 new DateTime(2020, 4, 1, 0, 0, 0),
-                new DateTime(2020, 3, 30, 0, 0, 0),
-                new DateTime(2020, 3, 31, 0, 0, 0),
                 new DateTime(2020, 4, 2, 0, 0, 0),
-                new DateTime(2020, 4, 3, 0, 0, 0)
+                new DateTime(2020, 4, 3, 0, 0, 0),
+                new DateTime(2020, 4, 6, 0, 0, 0),
+                new DateTime(2020, 4, 7, 0, 0, 0)
             };
 
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void Schedule_Monthy_FirstWeek_Weekenday()
+        public void Schedule_Monthy_First_Weekday_Recurring_Hour()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Month)
+            {
+                CurrentDate = new DateTime(2020, 1, 1),
+                DaysOfWeek = DaysOfWeekType.Weekday,
+                DailyFrecuencyEndTime = new TimeSpan(6, 0, 0),
+                DailyFrecuencyEvery = 2,
+                DailyFrecuencyStartTime = new TimeSpan(3, 0, 0),
+                DailyFrecuencyType = DailyType.Hour,
+                Every = 3,
+                MonthyType = MonthyType.First,
+                StartDate = new DateTime(2020, 1, 1)
+            };
+
+            List<DateTime> expected = new List<DateTime>()
+            {
+                new DateTime(2020, 1, 1, 3, 0, 0),
+                new DateTime(2020, 1, 1, 5, 0, 0),
+                new DateTime(2020, 1, 2, 3, 0, 0),
+                new DateTime(2020, 1, 2, 5, 0, 0),
+                new DateTime(2020, 1, 3, 3, 0, 0),
+                new DateTime(2020, 1, 3, 5, 0, 0),
+                new DateTime(2020, 1, 6, 3, 0, 0),
+                new DateTime(2020, 1, 6, 5, 0, 0),
+                new DateTime(2020, 1, 7, 3, 0, 0),
+                new DateTime(2020, 1, 7, 5, 0, 0),
+                new DateTime(2020, 4, 1, 3, 0, 0),
+                new DateTime(2020, 4, 1, 5, 0, 0),
+                new DateTime(2020, 4, 2, 3, 0, 0),
+                new DateTime(2020, 4, 2, 5, 0, 0),
+                new DateTime(2020, 4, 3, 3, 0, 0),
+                new DateTime(2020, 4, 3, 5, 0, 0),
+                new DateTime(2020, 4, 6, 3, 0, 0),
+                new DateTime(2020, 4, 6, 5, 0, 0),
+                new DateTime(2020, 4, 7, 3, 0, 0),
+                new DateTime(2020, 4, 7, 5, 0, 0)
+            };
+
+            ValidateExpected(schedule, expected);
+        }
+        [Fact]
+        public void Schedule_Monthy_First_Weekenday()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -736,7 +790,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void Schedule_Monthy_FirstWeek_Weekenday_Recurring_Hour()
+        public void Schedule_Monthy_First_Weekenday_Recurring_Hour()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -774,7 +828,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void Schedule_Monthy_SecondWeek()
+        public void Schedule_Monthy_Second_Thursday()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -794,7 +848,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void Schedule_Monthy_SecondWeek_Recurring_Hour()
+        public void Schedule_Monthy_Second_Thursday_Recurring_Hour()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -824,7 +878,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void Schedule_Monthy_ThridWeek()
+        public void Schedule_Monthy_Thrid_Thursday()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -844,7 +898,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void Schedule_Monthy_ThridWeek_Recurring_Hour()
+        public void Schedule_Monthy_Thrid__Thursday_Recurring_Hour()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -874,7 +928,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void Schedule_Monthy_FourthWeek()
+        public void Schedule_Monthy_Fourth_Thursday()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -894,7 +948,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void Schedule_Monthy_FourthWeek_Recurring_Hour()
+        public void Schedule_Monthy_Fourth_Thursday_Recurring_Hour()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -924,12 +978,12 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void Schedule_Monthy_LastWeek()
+        public void Schedule_Monthy_Last_Thursday_Sunday()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
                 CurrentDate = new DateTime(2020, 1, 1),
-                DaysOfWeek = DaysOfWeekType.Thursday,
+                DaysOfWeek = DaysOfWeekType.Thursday | DaysOfWeekType.Sunday,
                 Every = 3,
                 MonthyType = MonthyType.Last,
                 StartDate = new DateTime(2020, 1, 1)
@@ -937,19 +991,21 @@ namespace xUnit.Training.Test
 
             List<DateTime> expected = new List<DateTime>()
             {
+                new DateTime(2020, 1, 26, 0, 0, 0),
                 new DateTime(2020, 1, 30, 0, 0, 0),
+                new DateTime(2020, 4, 26, 0, 0, 0),
                 new DateTime(2020, 4, 30, 0, 0, 0)
             };
 
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void Schedule_Monthy_LastWeek_Recurring_Hour()
+        public void Schedule_Monthy_Last_Thursday_Sunday_Recurring_Hour()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
                 CurrentDate = new DateTime(2020, 1, 1),
-                DaysOfWeek = DaysOfWeekType.Thursday,
+                DaysOfWeek = DaysOfWeekType.Thursday | DaysOfWeekType.Sunday,
                 DailyFrecuencyEndTime = new TimeSpan(6, 0, 0),
                 DailyFrecuencyEvery = 1,
                 DailyFrecuencyStartTime = new TimeSpan(3, 0, 0),
@@ -961,10 +1017,18 @@ namespace xUnit.Training.Test
 
             List<DateTime> expected = new List<DateTime>()
             {
+                new DateTime(2020, 1, 26, 3, 0, 0),
+                new DateTime(2020, 1, 26, 4, 0, 0),
+                new DateTime(2020, 1, 26, 5, 0, 0),
+                new DateTime(2020, 1, 26, 6, 0, 0),
                 new DateTime(2020, 1, 30, 3, 0, 0),
                 new DateTime(2020, 1, 30, 4, 0, 0),
                 new DateTime(2020, 1, 30, 5, 0, 0),
                 new DateTime(2020, 1, 30, 6, 0, 0),
+                new DateTime(2020, 4, 26, 3, 0, 0),
+                new DateTime(2020, 4, 26, 4, 0, 0),
+                new DateTime(2020, 4, 26, 5, 0, 0),
+                new DateTime(2020, 4, 26, 6, 0, 0),
                 new DateTime(2020, 4, 30, 3, 0, 0),
                 new DateTime(2020, 4, 30, 4, 0, 0),
                 new DateTime(2020, 4, 30, 5, 0, 0),

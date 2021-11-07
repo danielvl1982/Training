@@ -48,13 +48,18 @@ namespace Training
 
             return dateTime;
         }
-        public static DateTime AddMonths(this DateTime dateTime, int increment, int dayOfMonth)
+
+        public static DateTime? AddMonths(this DateTime dateTime, int dayOfMonth, int increment)
         {
             DateTime dateTimeIncremented = dateTime.AddMonths(increment);
 
-            return new DateTime(dateTimeIncremented.Year, dateTimeIncremented.Month, dateTimeIncremented.GetDayOfMonth(dayOfMonth));
+            DateTime date = new DateTime(dateTimeIncremented.Year, dateTimeIncremented.Month, dateTimeIncremented.GetDayOfMonth(dayOfMonth));
+
+            return date <= dateTime
+                ? null
+                : (DateTime?)date;
         }
-        public static DateTime AddMonths(this DateTime dateTime, MonthyType monthyType, DaysOfWeekType daysOfWeek, int increment)
+        public static DateTime? AddMonths(this DateTime dateTime, MonthyType monthyType, DaysOfWeekType daysOfWeek, int increment)
         {
             List<DayOfWeek> days = DateTimeUtils.GetDaysOfWeek(daysOfWeek);
 
@@ -64,7 +69,13 @@ namespace Training
 
             days.ForEach(d => dates.Add(dateTimeIncremented.GetDayOfMonth(monthyType, d)));
 
-            return dates.AsEnumerable().OrderBy(d => d.Ticks).First();
+            var validDates = (from date in dates
+                              where date > dateTime
+                              select date);
+
+            return validDates.Count() == 0
+                ? null
+                : (DateTime?)validDates.OrderBy(d => d.Ticks).First();
         }
 
         public static DayOfWeek? NextDayOfWeek(this DateTime dateTime, List<DayOfWeek> daysOfWeek)
