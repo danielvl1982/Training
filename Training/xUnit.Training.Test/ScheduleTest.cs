@@ -80,6 +80,18 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("DateTime must be lesser to end date.");
         }
         [Fact]
+        public void Schedule_DateTime_CurrentDate_Exception()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Once)
+            {
+                CurrentDate = new DateTime(2020, 1, 2),
+                DateTime = new DateTime(2020, 1, 1)
+            };
+
+            Action action = () => new ScheduleExecution(schedule).GetDateTime();
+            action.Should().Throw<ScheduleException>().WithMessage("Current date must be lesser to datetime.");
+        }
+        [Fact]
         public void Schedule_Once_Every_Exception()
         {
             Schedule schedule = new Schedule(FrecuencyType.Once)
@@ -371,18 +383,31 @@ namespace xUnit.Training.Test
             Schedule schedule = new Schedule(FrecuencyType.Once)
             {
                 CurrentDate = new DateTime(2020, 1, 1),
-                DateTime = new DateTime(2020, 1, 2)
+                DateTime = new DateTime(2020, 1, 2, 0, 0, 1)
             };
 
             List<DateTime> expected = new List<DateTime>()
             {
-                new DateTime(2020, 1, 2),
-                new DateTime(2020, 1, 2)
+                new DateTime(2020, 1, 2, 0, 0, 1),
+                new DateTime(2020, 1, 2, 0, 0, 1)
             };
 
-            schedule.CurrentDate = new DateTime(2020, 1, 2);
-
             ValidateExpected(schedule, expected);
+        }
+        [Fact]
+        public void Schedule_Once_Description()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Once)
+            {
+                CurrentDate = new DateTime(2020, 1, 1),
+                DateTime = new DateTime(2020, 1, 2, 12, 0, 0),
+                EndDate = new DateTime(2020, 1, 3),
+                StartDate = new DateTime(2020, 1, 1)
+            };
+
+            string expected = @"Occurs once. Schedule will be used on 02/01/2020 12:00:00 starting on 01/01/2020 until 03/01/2020";
+
+            new ScheduleExecution(schedule).GetDescription(new ScheduleExecution(schedule).GetDateTime().Value).Should().Be(expected);
         }
 
         [Fact]
@@ -402,6 +427,22 @@ namespace xUnit.Training.Test
             };
 
             ValidateExpected(schedule, expected);
+        }
+
+        [Fact]
+        public void Schedule_Recurring_Description()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Day)
+            {
+                CurrentDate = new DateTime(2020, 1, 1),
+                EndDate = new DateTime(2020, 1, 3),
+                Every = 1,
+                StartDate = new DateTime(2020, 1, 1)
+            };
+
+            string expected = @"Occurs every day. Schedule will be used on 02/01/2020 starting on 01/01/2020 until 03/01/2020";
+
+            new ScheduleExecution(schedule).GetDescription(new ScheduleExecution(schedule).GetDateTime().Value).Should().Be(expected);
         }
 
         #endregion
@@ -428,6 +469,21 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
 
+        [Fact]
+        public void Schedule_Weekly_DayOfWeek_Change_Day_Chage_Week_Description()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Week)
+            {
+                CurrentDate = new DateTime(2020, 1, 1),
+                DaysOfWeek = DaysOfWeekType.Monday | DaysOfWeekType.Thursday | DaysOfWeekType.Friday,
+                Every = 2
+            };
+
+            string expected = @"Occurs every 2 week on monday, thursday, friday";
+
+            new ScheduleExecution(schedule).GetDescription(new ScheduleExecution(schedule).GetDateTime().Value).Should().Be(expected);
+        }
+
         #region Test Daily
 
         [Fact]
@@ -450,9 +506,23 @@ namespace xUnit.Training.Test
                 new DateTime(2020, 1, 13, 4, 0, 0)
             };
 
-            schedule.CurrentDate = new DateTime(2020, 1, 2);
-
             ValidateExpected(schedule, expected);
+        }
+        [Fact]
+        public void Schedule_Weekly_Once_Change_Day_Change_Week_Description()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Week)
+            {
+                CurrentDate = new DateTime(2020, 1, 2),
+                DaysOfWeek = DaysOfWeekType.Monday | DaysOfWeekType.Thursday | DaysOfWeekType.Friday,
+                DailyFrecuencyTime = new TimeSpan(4, 0, 0),
+                DailyFrecuencyType = DailyType.Once,
+                Every = 2
+            };
+
+            string expected = @"Occurs every 2 week on monday, thursday, friday on 04:00:00";
+
+            new ScheduleExecution(schedule).GetDescription(new ScheduleExecution(schedule).GetDateTime().Value).Should().Be(expected);
         }
         [Fact]
         public void Schedule_Weekly_Recurring_Change_Hour_Days_Week()
@@ -481,6 +551,24 @@ namespace xUnit.Training.Test
             };
 
             ValidateExpected(schedule, expected);
+        }
+        [Fact]
+        public void Schedule_Weekly_Recurring_Change_Hour_Days_Week_Description()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Week)
+            {
+                CurrentDate = new DateTime(2020, 1, 2),
+                DaysOfWeek = DaysOfWeekType.Monday | DaysOfWeekType.Thursday | DaysOfWeekType.Friday,
+                DailyFrecuencyEndTime = new TimeSpan(8, 0, 0),
+                DailyFrecuencyEvery = 2,
+                DailyFrecuencyStartTime = new TimeSpan(4, 0, 0),
+                DailyFrecuencyType = DailyType.Hour,
+                Every = 2
+            };
+
+            string expected = @"Occurs every 2 week on monday, thursday, friday every 2 hour beetween 04:00:00 and 08:00:00";
+            
+            new ScheduleExecution(schedule).GetDescription(new ScheduleExecution(schedule).GetDateTime().Value).Should().Be(expected);
         }
         [Fact]
         public void Schedule_Weekly_Recurring_Change_Minutes()
@@ -586,6 +674,26 @@ namespace xUnit.Training.Test
             };
 
             ValidateExpected(schedule, expected);
+        }
+        [Fact]
+        public void Schedule_Monthy_Day_Recurring_Hour_Description()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Month)
+            {
+                CurrentDate = new DateTime(2020, 1, 1),
+                DailyFrecuencyEndTime = new TimeSpan(6, 0, 0),
+                DailyFrecuencyEvery = 1,
+                DailyFrecuencyStartTime = new TimeSpan(3, 0, 0),
+                DailyFrecuencyType = DailyType.Hour,
+                Every = 3,
+                MonthyDay = 1,
+                MonthyType = MonthyType.Day,
+                StartDate = new DateTime(2020, 1, 1)
+            };
+
+            string expected = @"Occurs every 3 month. Day 1 every 1 hour beetween 03:00:00 and 06:00:00 starting on 01/01/2020";
+
+            new ScheduleExecution(schedule).GetDescription(new ScheduleExecution(schedule).GetDateTime().Value).Should().Be(expected);
         }
         [Fact]
         public void Schedule_Monthy_Day_LastDayOfMonth()
@@ -697,6 +805,28 @@ namespace xUnit.Training.Test
             };
 
             ValidateExpected(schedule, expected);
+        }
+        [Fact]
+        public void Schedule_Monthy_First_Monday_Thursday_Description()
+        {
+            Schedule schedule = new Schedule(FrecuencyType.Month)
+            {
+                CurrentDate = new DateTime(2020, 1, 1),
+                DaysOfWeek = DaysOfWeekType.Monday | DaysOfWeekType.Thursday,
+                DailyFrecuencyEndTime = new TimeSpan(6, 0, 0),
+                DailyFrecuencyEvery = 1,
+                DailyFrecuencyStartTime = new TimeSpan(3, 0, 0),
+                DailyFrecuencyType = DailyType.Hour,
+                Every = 3,
+                MonthyType = MonthyType.First,
+                StartDate = new DateTime(2020, 1, 1)
+            };
+
+            string expected = @"Occurs the first monday, thursday of the very 3 months every 1 hour beetween 03:00:00 and 06:00:00 starting on 01/01/2020";
+
+
+
+            new ScheduleExecution(schedule).GetDescription(new ScheduleExecution(schedule).GetDateTime().Value).Should().Be(expected);
         }
         [Fact]
         public void Schedule_Monthy_First_Weekday()

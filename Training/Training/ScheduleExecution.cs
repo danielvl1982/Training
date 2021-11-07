@@ -28,19 +28,33 @@ namespace Training
         {
             string description = this.schedule.FrecuencyType switch
             {
-                FrecuencyType.Day => "Occurs every day.",
-                FrecuencyType.Month => "Occurs every month.",
-                FrecuencyType.Once => "Occurs once.",
-                FrecuencyType.Week => "Occurs every week.",
+                FrecuencyType.Day => "Occurs every day. Schedule will be used on " + timeExecution.GetDescripcion(),
+                FrecuencyType.Once => "Occurs once. Schedule will be used on " + timeExecution.GetDescripcion(),
+                FrecuencyType.Week => "Occurs every " + this.schedule.Every + " week on " + this.GetDescriptionDaysOfWeek(),
+                FrecuencyType.Month => this.GetDescriptionMonthyType(),
                 _ => string.Empty,
             };
 
-            description += " Schedule will be used on " + timeExecution.ToString("dd/MM/yyyy HH:mm:ss");
+            description += schedule.MonthyDay > 0
+                ? " Day " + schedule.MonthyDay.ToString()
+                : string.Empty;
+
+            description += schedule.DailyFrecuencyTime.HasValue == true
+                ? " on " + schedule.DailyFrecuencyTime.Value.ToString(@"hh\:mm\:ss")
+                : string.Empty;
+
+            description += schedule.DailyFrecuencyType.HasValue == true &&
+                schedule.DailyFrecuencyType != DailyType.Once
+                ? " every " + schedule.DailyFrecuencyEvery.ToString() + " " + schedule.DailyFrecuencyType.ToString().ToLower() +
+                    " beetween " + schedule.DailyFrecuencyStartTime.Value.ToString(@"hh\:mm\:ss") +
+                    " and " + schedule.DailyFrecuencyEndTime.Value.ToString(@"hh\:mm\:ss")
+                : string.Empty;
+
             description += this.schedule.StartDate.HasValue == true
-                ? " starting on " + this.schedule.StartDate.Value.ToString("dd/MM/yyy HH:mm:ss")
+                ? " starting on " + this.schedule.StartDate.Value.GetDescripcion()
                 : string.Empty;
             description += this.schedule.EndDate.HasValue == true
-                ? " until " + this.schedule.EndDate.Value.ToString("dd/MM/yyy HH:mm:ss")
+                ? " until " + this.schedule.EndDate.Value.GetDescripcion()
                 : string.Empty;
 
             return description;
@@ -50,14 +64,11 @@ namespace Training
         {
             DateTime nextExecution = this.schedule.CurrentDate;
 
-            if (this.schedule.StartDate.HasValue == true &&
-                nextExecution.CompareTo(this.schedule.StartDate.Value) < 0) { nextExecution = this.schedule.StartDate.Value; }
-
             if (this.schedule.DateTime.HasValue == true &&
                 nextExecution.CompareTo(this.schedule.DateTime.Value) < 0) { nextExecution = this.schedule.DateTime.Value; }
 
             if (this.schedule.DailyFrecuencyType.HasValue == false &&
-                this.schedule.DateTime.GetTime().Ticks > 0) { nextExecution = nextExecution.Date.Add(this.schedule.DateTime.GetTime()); }            
+                this.schedule.DateTime.GetTime().Ticks > 0) { nextExecution = nextExecution.Date.Add(this.schedule.DateTime.GetTime()); }
 
             return this.schedule.FrecuencyType == FrecuencyType.Once
                 ? nextExecution
@@ -149,6 +160,26 @@ namespace Training
                     where time > dateTime.TimeOfDay
                     orderby time.Ticks
                     select time);
+        }
+
+        private string GetDescriptionDaysOfWeek()
+        {
+            List<string> descriptionDays = new List<string>();
+
+            if (this.schedule.DaysOfWeek.HasFlag(DaysOfWeekType.Monday) == true) { descriptionDays.Add("monday"); }
+            if (this.schedule.DaysOfWeek.HasFlag(DaysOfWeekType.Tuesday) == true) { descriptionDays.Add("tuesday"); }
+            if (this.schedule.DaysOfWeek.HasFlag(DaysOfWeekType.Wednesday) == true) { descriptionDays.Add("wednesday"); }
+            if (this.schedule.DaysOfWeek.HasFlag(DaysOfWeekType.Thursday) == true) { descriptionDays.Add("thursday"); }
+            if (this.schedule.DaysOfWeek.HasFlag(DaysOfWeekType.Friday) == true) { descriptionDays.Add("friday"); }
+            if (this.schedule.DaysOfWeek.HasFlag(DaysOfWeekType.Saturday) == true) { descriptionDays.Add("saturday"); }
+            if (this.schedule.DaysOfWeek.HasFlag(DaysOfWeekType.Sunday) == true) { descriptionDays.Add("sunday"); }
+
+            return string.Join(", ", descriptionDays.ToArray());
+        }
+        private string GetDescriptionMonthyType()
+        {
+            if (this.schedule.MonthyType == MonthyType.Day) { return "Occurs every " + this.schedule.Every.ToString() + " month."; }
+            else { return "Occurs the " + this.schedule.MonthyType.ToString().ToLower() + " " + this.GetDescriptionDaysOfWeek() + " of the very " + this.schedule.Every.ToString() + " months"; }
         }
     }
 }

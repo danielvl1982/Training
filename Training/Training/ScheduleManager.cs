@@ -26,6 +26,9 @@ namespace Training
                     schedule.DateTime.Value.CompareTo(schedule.EndDate.Value) > 0) { throw new ScheduleException("DateTime must be lesser to end date."); }
             }
 
+            if (schedule.DateTime.HasValue == true &&
+                schedule.CurrentDate.CompareTo(schedule.DateTime.Value) > 0) { throw new ScheduleException("Current date must be lesser to datetime."); }
+            
             if (schedule.FrecuencyType == FrecuencyType.Once &&
                 schedule.Every != 0) { throw new ScheduleException("Every must be 0."); }
 
