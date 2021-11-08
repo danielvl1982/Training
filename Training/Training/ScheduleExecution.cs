@@ -122,7 +122,7 @@ namespace Training
         {
             if (this.schedule.DailyFrecuencyType.HasValue == true &&
                 dateTime.IsDayOfWeekValid(this.schedule.DaysOfWeek) == true &&
-                dateTime.IsMonthyDayValid(this.schedule.MonthyType, this.schedule.MonthyDay) == true &&
+                dateTime.IsDayOfMonthValid(this.schedule.MonthyType, this.schedule.MonthyDay) == true &&
                 dateTime.IsWeekValid(this.schedule.MonthyType) == true)
             {
                 DateTime? nextExecutionDay = this.schedule.DailyFrecuencyType == DailyType.Once

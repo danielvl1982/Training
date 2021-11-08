@@ -6,19 +6,23 @@ namespace Training
 {
     public static class DateTimeUtils
     {
+        public static bool IsDayOfMonthValid(this DateTime dateTime, MonthyType monthyType, int day)
+        {
+            return monthyType != MonthyType.Day ||
+                (monthyType == MonthyType.Day && dateTime.GetDayOfMonth(day) == dateTime.Day);
+        }
         public static bool IsDayOfWeekValid(this DateTime dateTime, DaysOfWeekType daysOfWeekType)
         {
             List<DayOfWeek> daysOfWeeek = DateTimeUtils.GetDaysOfWeek(daysOfWeekType);
 
-            return daysOfWeeek.Count == 0 || daysOfWeeek.Exists(d => d == dateTime.DayOfWeek);
-        }
-        public static bool IsMonthyDayValid(this DateTime dateTime, MonthyType monthyType, int day)
-        {
-            return monthyType != MonthyType.Day || (monthyType == MonthyType.Day && dateTime.GetDayOfMonth(day) == dateTime.Day);
+            return daysOfWeeek.Count == 0 ||
+                daysOfWeeek.Exists(d => d == dateTime.DayOfWeek);
         }
         public static bool IsWeekValid(this DateTime dateTime, MonthyType monthyType)
         {
-            return monthyType == MonthyType.None || monthyType == MonthyType.Day || dateTime.GetDayOfMonth(monthyType, dateTime.DayOfWeek) == dateTime.Date;
+            return monthyType == MonthyType.None ||
+                monthyType == MonthyType.Day ||
+                dateTime.GetDayOfMonth(monthyType, dateTime.DayOfWeek) == dateTime.Date;
         }
 
         public static DateTime AddWeeks(this DateTime dateTime, int incrementWeeks)
@@ -43,7 +47,9 @@ namespace Training
         {
             while (dateTime.DayOfWeek != dayOfWeek)
             {
-                dateTime = dateTime.DayOfWeek > dayOfWeek && dayOfWeek != DayOfWeek.Sunday ? dateTime.AddDays(-1) : dateTime.AddDays(+1);
+                dateTime = dateTime.DayOfWeek > dayOfWeek && dayOfWeek != DayOfWeek.Sunday
+                    ? dateTime.AddDays(-1)
+                    : dateTime.AddDays(+1);
             }
 
             return dateTime;
@@ -55,9 +61,7 @@ namespace Training
 
             DateTime date = new DateTime(dateTimeIncremented.Year, dateTimeIncremented.Month, dateTimeIncremented.GetDayOfMonth(dayOfMonth));
 
-            return date <= dateTime
-                ? null
-                : (DateTime?)date;
+            return date <= dateTime ? null : (DateTime?)date;
         }
         public static DateTime? AddMonths(this DateTime dateTime, MonthyType monthyType, DaysOfWeekType daysOfWeek, int increment)
         {
@@ -73,9 +77,7 @@ namespace Training
                               where date > dateTime
                               select date);
 
-            return validDates.Count() == 0
-                ? null
-                : (DateTime?)validDates.OrderBy(d => d.Ticks).First();
+            return validDates.Count() == 0 ? null : (DateTime?)validDates.OrderBy(d => d.Ticks).First();
         }
 
         public static DayOfWeek? NextDayOfWeek(this DateTime dateTime, List<DayOfWeek> daysOfWeek)
@@ -96,14 +98,12 @@ namespace Training
         {
             int daysOfMonth = DateTime.DaysInMonth(dateTime.Year, dateTime.Month);
 
-            return daysOfMonth < dayOfMonth ? dayOfMonth = daysOfMonth : dayOfMonth;
+            return daysOfMonth < dayOfMonth ? daysOfMonth : dayOfMonth;
         }
 
         public static string GetDescripcion(this DateTime dateTime)
         {
-            return dateTime.TimeOfDay.Ticks == 0
-                ? dateTime.ToString("dd/MM/yyyy")
-                : dateTime.ToString("dd/MM/yyyy HH:mm:ss");
+            return dateTime.TimeOfDay.Ticks == 0 ? dateTime.ToString("dd/MM/yyyy") : dateTime.ToString("dd/MM/yyyy HH:mm:ss");
         }
 
         public static TimeSpan GetTime(this DateTime? dateTime) { return dateTime.HasValue == true ? dateTime.Value.TimeOfDay : new TimeSpan(); }
@@ -112,22 +112,9 @@ namespace Training
         {
             List<TimeSpan> times = new List<TimeSpan>();
 
-            int hours = 0;
-            int minutes = 0;
-            int seconds = 0;
-
-            switch (dailyType)
-            {
-                case DailyType.Hour:
-                    hours = gap;
-                    break;
-                case DailyType.Minute:
-                    minutes = gap;
-                    break;
-                case DailyType.Second:
-                    seconds = gap;
-                    break;
-            }
+            int hours = dailyType == DailyType.Hour? gap: 0;
+            int minutes = dailyType == DailyType.Minute ? gap : 0;
+            int seconds = dailyType == DailyType.Second ? gap : 0;
 
             TimeSpan time = startTime;
 
