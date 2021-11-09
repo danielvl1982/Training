@@ -11,13 +11,13 @@ namespace xUnit.Training.Test
         #region Test Exceptions
 
         [Fact]
-        public void ScheduleNullException()
+        public void TestingScheduleNullException()
         {
             Action action = () => new ScheduleExecution(null).GetDateTime();
             action.Should().Throw<ScheduleException>().WithMessage("Must instantiate schedule.");
         }
         [Fact]
-        public void ScheduleEndDateStartDateException()
+        public void TestingScheduleEndDateStartDateException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Once)
             {
@@ -30,7 +30,7 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("End date must be greater to start date.");
         }
         [Fact]
-        public void ScheduleCurrentDateStartDateException()
+        public void TestingScheduleCurrentDateStartDateException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Once)
             {
@@ -42,7 +42,7 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("Current date must be greater to start date.");
         }
         [Fact]
-        public void ScheduleDateTimeStartDateException()
+        public void TestingScheduleDateTimeStartDateException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Once)
             {
@@ -55,7 +55,7 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("DateTime must be greater to start date.");
         }
         [Fact]
-        public void ScheduleCurrentDateEndDateException()
+        public void TestingScheduleCurrentDateEndDateException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Once)
             {
@@ -67,7 +67,7 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("Current date must be lesser to end date.");
         }
         [Fact]
-        public void ScheduleDateTimeEndDateException()
+        public void TestingScheduleDateTimeEndDateException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Once)
             {
@@ -80,7 +80,7 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("DateTime must be lesser to end date.");
         }
         [Fact]
-        public void ScheduleDateTimeCurrentDateException()
+        public void TestingScheduleDateTimeCurrentDateException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Once)
             {
@@ -92,7 +92,7 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("Current date must be lesser to datetime.");
         }
         [Fact]
-        public void ScheduleOnceEveryException()
+        public void TestingScheduleOnceEveryException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Once)
             {
@@ -105,7 +105,7 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("Every must be 0.");
         }
         [Fact]
-        public void ScheduleRecurringEveryException()
+        public void TestingScheduleRecurringEveryException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Day)
             {
@@ -116,7 +116,7 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("Every must be greater to 0.");
         }
         [Fact]
-        public void ScheduleRecurringEveryMinValueException()
+        public void TestingScheduleRecurringEveryMinValueException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Day)
             {
@@ -128,7 +128,7 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("Every must be greater to 0.");
         }
         [Fact]
-        public void ScheduleWeeklyDaysException()
+        public void TestingScheduleWeeklyDaysException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Week)
             {
@@ -140,7 +140,7 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("Occurs weekly must indicate the days of the week.");
         }
         [Fact]
-        public void ScheduleMonthyDayException()
+        public void TestingScheduleMonthyDayException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -158,7 +158,7 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("Occurs monthy day must indicate the day of the month.");
         }
         [Fact]
-        public void ScheduleMonthyDayMinValueException()
+        public void TestingScheduleMonthyDayMinValueException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -177,7 +177,7 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("Occurs monthy day must indicate the day of the month.");
         }
         [Fact]
-        public void ScheduleMonthyDayMaxValueException()
+        public void TestingScheduleMonthyDayMaxValueException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -196,7 +196,7 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("Occurs monthy day mustn’t be greater to 31.");
         }
         [Fact]
-        public void ScheduleMonthyDayDaysOfWeekException()
+        public void TestingScheduleMonthyDayDaysOfWeekException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -216,7 +216,7 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("Occurs monthy mustn’t indicate the days of the week.");
         }
         [Fact]
-        public void ScheduleMonthyWeekDayException()
+        public void TestingScheduleMonthyWeekDayException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -236,7 +236,7 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("Occurs monthy day mustn’t indicate the day of the month.");
         }
         [Fact]
-        public void ScheduleMonthyWeekDaysOfWeekException()
+        public void TestingScheduleMonthyWeekDaysOfWeekException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -254,7 +254,7 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("Occurs monthy must indicate the days of the week.");
         }
         [Fact]
-        public void ScheduleWeeklyOnceTimeException()
+        public void TestingScheduleWeeklyOnceTimeException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Week)
             {
@@ -269,7 +269,7 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("Must indicate Occurs once at time.");
         }
         [Fact]
-        public void ScheduleWeeklyOnceEveryException()
+        public void TestingScheduleWeeklyOnceEveryException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Week)
             {
@@ -286,7 +286,7 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("Occurs every must be 0.");
         }
         [Fact]
-        public void ScheduleWeeklyRecurringStartTimeException()
+        public void TestingScheduleWeeklyRecurringStartTimeException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Week)
             {
@@ -303,7 +303,7 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("Must indicate starting at.");
         }
         [Fact]
-        public void ScheduleWeeklyRecurringEndTimeException()
+        public void TestingScheduleWeeklyRecurringEndTimeException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Week)
             {
@@ -320,7 +320,7 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("Must indicate end at.");
         }
         [Fact]
-        public void ScheduleWeeklyRecurringEndTimeStarTimeException()
+        public void TestingScheduleWeeklyRecurringEndTimeStarTimeException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Week)
             {
@@ -338,7 +338,7 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("End at must be greater to stating at.");
         }
         [Fact]
-        public void ScheduleWeeklyRecurringEveryException()
+        public void TestingScheduleWeeklyRecurringEveryException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Week)
             {
@@ -355,7 +355,7 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("Occurs every must be greater to 0.");
         }
         [Fact]
-        public void ScheduleWeeklyRecurringEveryMinValueException()
+        public void TestingScheduleWeeklyRecurringEveryMinValueException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Week)
             {
@@ -378,7 +378,7 @@ namespace xUnit.Training.Test
         #region Test Day
 
         [Fact]
-        public void ScheduleOnce()
+        public void TestingScheduleOnce()
         {
             Schedule schedule = new Schedule(FrecuencyType.Once)
             {
@@ -395,7 +395,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void ScheduleOnceDescription()
+        public void TestingScheduleOnceDescription()
         {
             Schedule schedule = new Schedule(FrecuencyType.Once)
             {
@@ -411,7 +411,7 @@ namespace xUnit.Training.Test
         }
 
         [Fact]
-        public void ScheduleRecurring()
+        public void TestingScheduleRecurring()
         {
             Schedule schedule = new Schedule(FrecuencyType.Day)
             {
@@ -430,7 +430,7 @@ namespace xUnit.Training.Test
         }
 
         [Fact]
-        public void ScheduleRecurringDescription()
+        public void TestingScheduleRecurringDescription()
         {
             Schedule schedule = new Schedule(FrecuencyType.Day)
             {
@@ -450,7 +450,7 @@ namespace xUnit.Training.Test
         #region Test Week
 
         [Fact]
-        public void ScheduleWeeklyDayOfWeekChangeDayChageWeek()
+        public void TestingScheduleWeeklyDayOfWeekChangeDayChageWeek()
         {
             Schedule schedule = new Schedule(FrecuencyType.Week)
             {
@@ -470,7 +470,7 @@ namespace xUnit.Training.Test
         }
 
         [Fact]
-        public void ScheduleWeeklyDayOfWeekChangeDayChageWeekDescription()
+        public void TestingScheduleWeeklyDayOfWeekChangeDayChageWeekDescription()
         {
             Schedule schedule = new Schedule(FrecuencyType.Week)
             {
@@ -487,7 +487,7 @@ namespace xUnit.Training.Test
         #region Test Daily
 
         [Fact]
-        public void ScheduleWeeklyOnceChangeDayChangeWeek()
+        public void TestingScheduleWeeklyOnceChangeDayChangeWeek()
         {
             Schedule schedule = new Schedule(FrecuencyType.Week)
             {
@@ -509,7 +509,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void ScheduleWeeklyOnceChangeDayChangeWeekDescription()
+        public void TestingScheduleWeeklyOnceChangeDayChangeWeekDescription()
         {
             Schedule schedule = new Schedule(FrecuencyType.Week)
             {
@@ -525,7 +525,7 @@ namespace xUnit.Training.Test
             new ScheduleExecution(schedule).GetDescription(new ScheduleExecution(schedule).GetDateTime().Value).Should().Be(expected);
         }
         [Fact]
-        public void ScheduleWeeklyRecurringChangeHourDaysWeek()
+        public void TestingScheduleWeeklyRecurringChangeHourDaysWeek()
         {
             Schedule schedule = new Schedule(FrecuencyType.Week)
             {
@@ -553,7 +553,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void ScheduleWeeklyRecurringChangeHourDaysWeekDescription()
+        public void TestingScheduleWeeklyRecurringChangeHourDaysWeekDescription()
         {
             Schedule schedule = new Schedule(FrecuencyType.Week)
             {
@@ -571,7 +571,7 @@ namespace xUnit.Training.Test
             new ScheduleExecution(schedule).GetDescription(new ScheduleExecution(schedule).GetDateTime().Value).Should().Be(expected);
         }
         [Fact]
-        public void ScheduleWeeklyRecurringChangeMinutes()
+        public void TestingScheduleWeeklyRecurringChangeMinutes()
         {
             Schedule schedule = new Schedule(FrecuencyType.Week)
             {
@@ -595,7 +595,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void ScheduleWeeklyRecurringChangeSeconds()
+        public void TestingScheduleWeeklyRecurringChangeSeconds()
         {
             Schedule schedule = new Schedule(FrecuencyType.Week)
             {
@@ -626,7 +626,7 @@ namespace xUnit.Training.Test
         #region Test Month
 
         [Fact]
-        public void ScheduleMonthyDay()
+        public void TestingScheduleMonthyDay()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -646,7 +646,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void ScheduleMonthyDayRecurringHour()
+        public void TestingScheduleMonthyDayRecurringHour()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -676,7 +676,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void ScheduleMonthyDayRecurringHourDescription()
+        public void TestingScheduleMonthyDayRecurringHourDescription()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -696,7 +696,7 @@ namespace xUnit.Training.Test
             new ScheduleExecution(schedule).GetDescription(new ScheduleExecution(schedule).GetDateTime().Value).Should().Be(expected);
         }
         [Fact]
-        public void ScheduleMonthyDayLastDayOfMonth()
+        public void TestingScheduleMonthyDayLastDayOfMonth()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -716,7 +716,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void ScheduleMonthyDayLastDayMonthRecurringHour()
+        public void TestingScheduleMonthyDayLastDayMonthRecurringHour()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -747,7 +747,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void ScheduleMonthyFirstMondayThursday()
+        public void TestingScheduleMonthyFirstMondayThursday()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -769,7 +769,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void ScheduleMonthyFirstMondayThursdayRecurringHour()
+        public void TestingScheduleMonthyFirstMondayThursdayRecurringHour()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -807,7 +807,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void ScheduleMonthyFirstMondayThursdayDescription()
+        public void TestingScheduleMonthyFirstMondayThursdayDescription()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -829,7 +829,7 @@ namespace xUnit.Training.Test
             new ScheduleExecution(schedule).GetDescription(new ScheduleExecution(schedule).GetDateTime().Value).Should().Be(expected);
         }
         [Fact]
-        public void ScheduleMonthyFirstWeekday()
+        public void TestingScheduleMonthyFirstWeekday()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -856,7 +856,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void ScheduleMonthyFirstWeekdayRecurringHour()
+        public void TestingScheduleMonthyFirstWeekdayRecurringHour()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -898,7 +898,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void ScheduleMonthyFirstWeekenday()
+        public void TestingScheduleMonthyFirstWeekenday()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -920,7 +920,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void ScheduleMonthyFirstWeekendayRecurringHour()
+        public void TestingScheduleMonthyFirstWeekendayRecurringHour()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -958,7 +958,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void ScheduleMonthySecondThursday()
+        public void TestingScheduleMonthySecondThursday()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -978,7 +978,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void ScheduleMonthySecondThursdayRecurringHour()
+        public void TestingScheduleMonthySecondThursdayRecurringHour()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -1008,7 +1008,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void ScheduleMonthyThridThursday()
+        public void TestingScheduleMonthyThridThursday()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -1028,7 +1028,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void ScheduleMonthyThridThursdayRecurringHour()
+        public void TestingScheduleMonthyThridThursdayRecurringHour()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -1058,7 +1058,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void ScheduleMonthyFourthThursday()
+        public void TestingScheduleMonthyFourthThursday()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -1078,7 +1078,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void ScheduleMonthyFourthThursdayRecurringHour()
+        public void TestingScheduleMonthyFourthThursdayRecurringHour()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -1108,7 +1108,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void ScheduleMonthyLastThursdaySunday()
+        public void TestingScheduleMonthyLastThursdaySunday()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
@@ -1130,7 +1130,7 @@ namespace xUnit.Training.Test
             ValidateExpected(schedule, expected);
         }
         [Fact]
-        public void ScheduleMonthyLastThursdaySundayRecurringHour()
+        public void TestingScheduleMonthyLastThursdaySundayRecurringHour()
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
