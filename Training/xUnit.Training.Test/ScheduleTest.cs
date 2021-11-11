@@ -30,18 +30,6 @@ namespace xUnit.Training.Test
             action.Should().Throw<ScheduleException>().WithMessage("End date must be greater to start date.");
         }
         [Fact]
-        public void TestingScheduleCurrentDateStartDateException()
-        {
-            Schedule schedule = new Schedule(FrecuencyType.Once)
-            {
-                CurrentDate = new DateTime(2020, 1, 1),
-                StartDate = new DateTime(2020, 1, 2)
-            };
-
-            Action action = () => new ScheduleExecution(schedule).GetDateTime();
-            action.Should().Throw<ScheduleException>().WithMessage("Current date must be greater to start date.");
-        }
-        [Fact]
         public void TestingScheduleDateTimeStartDateException()
         {
             Schedule schedule = new Schedule(FrecuencyType.Once)

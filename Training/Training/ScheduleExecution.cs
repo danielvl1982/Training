@@ -28,8 +28,8 @@ namespace Training
         {
             string description = this.schedule.FrecuencyType switch
             {
-                FrecuencyType.Day => "Occurs every day. Schedule will be used on " + timeExecution.GetDescripcion(),
-                FrecuencyType.Once => "Occurs once. Schedule will be used on " + timeExecution.GetDescripcion(),
+                FrecuencyType.Day => "Occurs every day. Schedule will be used on " + timeExecution.GetDescription(),
+                FrecuencyType.Once => "Occurs once. Schedule will be used on " + timeExecution.GetDescription(),
                 FrecuencyType.Week => "Occurs every " + this.schedule.Every + " week on " + this.GetDescriptionDaysOfWeek(),
                 FrecuencyType.Month => this.GetDescriptionMonthyType(),
                 _ => string.Empty,
@@ -51,10 +51,10 @@ namespace Training
                 : string.Empty;
 
             description += this.schedule.StartDate.HasValue == true
-                ? " starting on " + this.schedule.StartDate.Value.GetDescripcion()
+                ? " starting on " + this.schedule.StartDate.Value.GetDescription()
                 : string.Empty;
             description += this.schedule.EndDate.HasValue == true
-                ? " until " + this.schedule.EndDate.Value.GetDescripcion()
+                ? " until " + this.schedule.EndDate.Value.GetDescription()
                 : string.Empty;
 
             return description;
@@ -66,6 +66,9 @@ namespace Training
 
             if (this.schedule.DateTime.HasValue == true &&
                 nextExecution.CompareTo(this.schedule.DateTime.Value) < 0) { nextExecution = this.schedule.DateTime.Value; }
+
+            if (this.schedule.StartDate.HasValue == true &&
+                nextExecution.CompareTo(this.schedule.StartDate.Value) < 0) { nextExecution = this.schedule.StartDate.Value; }
 
             if (this.schedule.DailyFrecuencyType.HasValue == false &&
                 this.schedule.DateTime.GetTime().Ticks > 0) { nextExecution = nextExecution.Date.Add(this.schedule.DateTime.GetTime()); }

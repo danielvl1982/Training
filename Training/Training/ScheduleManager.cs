@@ -12,13 +12,10 @@ namespace Training
                 schedule.EndDate.HasValue == true &&
                 schedule.StartDate.Value.CompareTo(schedule.EndDate.Value) > 0) { throw new ScheduleException("End date must be greater to start date."); }
 
-            if (schedule.StartDate.HasValue == true)
-            {
-                if (schedule.CurrentDate.CompareTo(schedule.StartDate.Value) < 0) { throw new ScheduleException("Current date must be greater to start date."); }
-                if (schedule.DateTime.HasValue == true &&
-                    schedule.DateTime.Value.CompareTo(schedule.StartDate.Value) < 0) { throw new ScheduleException("DateTime must be greater to start date."); }
-            }
-
+            if (schedule.StartDate.HasValue == true &&
+                schedule.DateTime.HasValue == true &&
+                schedule.DateTime.Value.CompareTo(schedule.StartDate.Value) < 0) { throw new ScheduleException("DateTime must be greater to start date."); }
+            
             if (schedule.EndDate.HasValue == true)
             {
                 if (schedule.CurrentDate.CompareTo(schedule.EndDate.Value) > 0) { throw new ScheduleException("Current date must be lesser to end date."); }

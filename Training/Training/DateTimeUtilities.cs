@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Training
 {
-    public static class DateTimeUtils
+    public static class DateTimeutilities
     {
         public static bool IsDayOfMonthValid(this DateTime dateTime, MonthyType monthyType, int day)
         {
@@ -13,7 +13,7 @@ namespace Training
         }
         public static bool IsDayOfWeekValid(this DateTime dateTime, DaysOfWeekType daysOfWeekType)
         {
-            List<DayOfWeek> daysOfWeeek = DateTimeUtils.GetDaysOfWeek(daysOfWeekType);
+            List<DayOfWeek> daysOfWeeek = DateTimeutilities.GetDaysOfWeek(daysOfWeekType);
 
             return daysOfWeeek.Count == 0 ||
                 daysOfWeeek.Exists(d => d == dateTime.DayOfWeek);
@@ -65,7 +65,7 @@ namespace Training
         }
         public static DateTime? AddMonths(this DateTime dateTime, MonthyType monthyType, DaysOfWeekType daysOfWeek, int increment)
         {
-            List<DayOfWeek> days = DateTimeUtils.GetDaysOfWeek(daysOfWeek);
+            List<DayOfWeek> days = DateTimeutilities.GetDaysOfWeek(daysOfWeek);
 
             DateTime dateTimeIncremented = dateTime.AddMonths(increment);
 
@@ -91,7 +91,7 @@ namespace Training
         }
         public static DayOfWeek? NextDayOfWeek(this DateTime dateTime, DaysOfWeekType daysOfWeekType)
         {
-            return dateTime.NextDayOfWeek(DateTimeUtils.GetDaysOfWeek(daysOfWeekType));
+            return dateTime.NextDayOfWeek(DateTimeutilities.GetDaysOfWeek(daysOfWeekType));
         }
 
         public static int GetDayOfMonth(this DateTime dateTime, int dayOfMonth)
@@ -101,7 +101,7 @@ namespace Training
             return daysOfMonth < dayOfMonth ? daysOfMonth : dayOfMonth;
         }
 
-        public static string GetDescripcion(this DateTime dateTime)
+        public static string GetDescription(this DateTime dateTime)
         {
             return dateTime.TimeOfDay.Ticks == 0 ? dateTime.ToString("dd/MM/yyyy") : dateTime.ToString("dd/MM/yyyy HH:mm:ss");
         }
