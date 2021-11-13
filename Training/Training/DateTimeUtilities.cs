@@ -18,7 +18,7 @@ namespace Training
             return daysOfWeeek.Count == 0 ||
                 daysOfWeeek.Exists(d => d == dateTime.DayOfWeek);
         }
-        public static bool IsWeekValid(this DateTime dateTime, MonthyType monthyType)
+        public static bool IsOccurrenceMonthValid(this DateTime dateTime, MonthyType monthyType)
         {
             return monthyType == MonthyType.None ||
                 monthyType == MonthyType.Day ||
@@ -80,18 +80,16 @@ namespace Training
             return validDates.Count() == 0 ? null : (DateTime?)validDates.OrderBy(d => d.Ticks).First();
         }
 
-        public static DayOfWeek? NextDayOfWeek(this DateTime dateTime, List<DayOfWeek> daysOfWeek)
+        public static DayOfWeek? NextDayOfWeek(this DateTime dateTime, DaysOfWeekType daysOfWeekType)
         {
+            List<DayOfWeek> daysOfWeek = DateTimeutilities.GetDaysOfWeek(daysOfWeekType);
+
             IEnumerable<DayOfWeek> nextDaysOfWeek = (from day in daysOfWeek
                                                      where ((int)day + 6) % 7 > ((int)dateTime.DayOfWeek + 6) % 7
                                                      orderby ((int)day + 6) % 7
                                                      select day);
 
             return nextDaysOfWeek.Count() == 0 ? null : (DayOfWeek?)nextDaysOfWeek.First();
-        }
-        public static DayOfWeek? NextDayOfWeek(this DateTime dateTime, DaysOfWeekType daysOfWeekType)
-        {
-            return dateTime.NextDayOfWeek(DateTimeutilities.GetDaysOfWeek(daysOfWeekType));
         }
 
         public static int GetDayOfMonth(this DateTime dateTime, int dayOfMonth)
@@ -105,8 +103,6 @@ namespace Training
         {
             return dateTime.TimeOfDay.Ticks == 0 ? dateTime.ToString("dd/MM/yyyy") : dateTime.ToString("dd/MM/yyyy HH:mm:ss");
         }
-
-        public static TimeSpan GetTime(this DateTime? dateTime) { return dateTime.HasValue == true ? dateTime.Value.TimeOfDay : new TimeSpan(); }
 
         public static List<TimeSpan> GetTimesGap(this TimeSpan startTime, TimeSpan endTime, int gap, DailyType dailyType)
         {

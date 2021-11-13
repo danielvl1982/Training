@@ -25,12 +25,17 @@ namespace Training
 
             if (schedule.DateTime.HasValue == true &&
                 schedule.CurrentDate.CompareTo(schedule.DateTime.Value) > 0) { throw new ScheduleException("Current date must be lesser to datetime."); }
-            
-            if (schedule.FrecuencyType == FrecuencyType.Once &&
-                schedule.Every != 0) { throw new ScheduleException("Every must be 0."); }
 
-            if (schedule.FrecuencyType != FrecuencyType.Once &&
-                schedule.Every <= 0) { throw new ScheduleException("Every must be greater to 0."); }
+            if (schedule.FrecuencyType == FrecuencyType.Once)
+            {
+                if (schedule.DateTime.HasValue == false) { throw new ScheduleException("Occurs once must indicate the datetime."); }
+                if (schedule.Every != 0) { throw new ScheduleException("Every must be 0."); }
+            }
+            else
+            {
+                if (schedule.DateTime.HasValue == true) { throw new ScheduleException("Occurs recurring mustn’t indicate the datetime."); }
+                if (schedule.Every <= 0) { throw new ScheduleException("Every must be greater to 0."); }
+            }
 
             if (schedule.FrecuencyType == FrecuencyType.Week &&
                 schedule.DaysOfWeek == 0) { throw new ScheduleException("Occurs weekly must indicate the days of the week."); }
