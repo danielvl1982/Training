@@ -13,7 +13,7 @@ namespace xUnit.Training.Test
         [Fact]
         public void TestingScheduleNullException()
         {
-            Action action = () => new ScheduleRun(null).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(null);
             action.Should().Throw<ScheduleException>().WithMessage("Must instantiate schedule.");
         }
         [Fact]
@@ -26,7 +26,7 @@ namespace xUnit.Training.Test
                 StartDate = new DateTime(2020, 1, 2)
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("End date must be greater to start date.");
         }
         [Fact]
@@ -39,7 +39,7 @@ namespace xUnit.Training.Test
                 StartDate = new DateTime(2020, 1, 2)
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("DateTime must be greater to start date.");
         }
         [Fact]
@@ -51,7 +51,7 @@ namespace xUnit.Training.Test
                 EndDate = new DateTime(2020, 1, 1)
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("Current date must be lesser to end date.");
         }
         [Fact]
@@ -64,7 +64,7 @@ namespace xUnit.Training.Test
                 EndDate = new DateTime(2020, 1, 1)
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("DateTime must be lesser to end date.");
         }
         [Fact]
@@ -76,7 +76,7 @@ namespace xUnit.Training.Test
                 DateTime = new DateTime(2020, 1, 1)
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("Current date must be lesser to datetime.");
         }
         [Fact]
@@ -87,7 +87,7 @@ namespace xUnit.Training.Test
                 CurrentDate = new DateTime(2020, 1, 1)
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("Occurs once must indicate the datetime.");
         }
         [Fact]
@@ -100,7 +100,7 @@ namespace xUnit.Training.Test
                 Every = 1
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("Every must be 0.");
         }
         [Fact]
@@ -112,7 +112,7 @@ namespace xUnit.Training.Test
                 DateTime = new DateTime(2020, 1, 2)
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("Occurs recurring mustn’t indicate the datetime.");
         }
         [Fact]
@@ -123,7 +123,7 @@ namespace xUnit.Training.Test
                 CurrentDate = new DateTime(2020, 1, 1)
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("Every must be greater to 0.");
         }
         [Fact]
@@ -135,7 +135,7 @@ namespace xUnit.Training.Test
                 Every = int.MinValue
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("Every must be greater to 0.");
         }
         [Fact]
@@ -147,7 +147,7 @@ namespace xUnit.Training.Test
                 Every = 1
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("Occurs weekly must indicate the days of the week.");
         }
         [Fact]
@@ -165,7 +165,7 @@ namespace xUnit.Training.Test
                 StartDate = new DateTime(2020, 1, 1),
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("Occurs monthy day must indicate the day of the month.");
         }
         [Fact]
@@ -184,7 +184,7 @@ namespace xUnit.Training.Test
                 StartDate = new DateTime(2020, 1, 1),
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("Occurs monthy day must indicate the day of the month.");
         }
         [Fact]
@@ -203,7 +203,7 @@ namespace xUnit.Training.Test
                 StartDate = new DateTime(2020, 1, 1)
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("Occurs monthy day mustn’t be greater to 31.");
         }
         [Fact]
@@ -223,7 +223,7 @@ namespace xUnit.Training.Test
                 StartDate = new DateTime(2020, 1, 1)
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("Occurs monthy mustn’t indicate the days of the week.");
         }
         [Fact]
@@ -243,7 +243,7 @@ namespace xUnit.Training.Test
                 StartDate = new DateTime(2020, 1, 1)
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("Occurs monthy day mustn’t indicate the day of the month.");
         }
         [Fact]
@@ -261,7 +261,7 @@ namespace xUnit.Training.Test
                 StartDate = new DateTime(2020, 1, 1)
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("Occurs monthy must indicate the days of the week.");
         }
         [Fact]
@@ -276,7 +276,7 @@ namespace xUnit.Training.Test
                 StartDate = new DateTime(2020, 1, 1)
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("Must indicate Occurs once at time.");
         }
         [Fact]
@@ -293,7 +293,7 @@ namespace xUnit.Training.Test
                 StartDate = new DateTime(2020, 1, 1)
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("Occurs every must be 0.");
         }
         [Fact]
@@ -310,7 +310,7 @@ namespace xUnit.Training.Test
                 StartDate = new DateTime(2020, 1, 1),
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("Must indicate starting at.");
         }
         [Fact]
@@ -327,7 +327,7 @@ namespace xUnit.Training.Test
                 StartDate = new DateTime(2020, 1, 1),
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("Must indicate end at.");
         }
         [Fact]
@@ -345,7 +345,7 @@ namespace xUnit.Training.Test
                 StartDate = new DateTime(2020, 1, 1),
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("End at must be greater to stating at.");
         }
         [Fact]
@@ -362,7 +362,7 @@ namespace xUnit.Training.Test
                 StartDate = new DateTime(2020, 1, 1)
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("Occurs every must be greater to 0.");
         }
         [Fact]
@@ -380,7 +380,7 @@ namespace xUnit.Training.Test
                 StartDate = new DateTime(2020, 1, 1)
             };
 
-            Action action = () => new ScheduleRun(schedule).GetScheduleRun();
+            Action action = () => new ScheduleRun().GetScheduleRun(schedule);
             action.Should().Throw<ScheduleException>().WithMessage("Occurs every must be greater to 0.");
         }
 
@@ -418,7 +418,7 @@ namespace xUnit.Training.Test
 
             string expected = @"Occurs once. Schedule will be used on 02/01/2020 12:00:00 starting on 01/01/2020 until 03/01/2020";
 
-            new ScheduleRun(schedule).GetScheduleRun().Description.Should().Be(expected);
+            new ScheduleRun().GetScheduleRun(schedule).Description.Should().Be(expected);
         }
         [Fact]
         public void TestingScheduleRecurring()
@@ -469,7 +469,7 @@ namespace xUnit.Training.Test
 
             string expected = @"Occurs every day. Schedule will be used on 02/01/2020 starting on 01/01/2020 until 03/01/2020";
 
-            new ScheduleRun(schedule).GetScheduleRun().Description.Should().Be(expected);
+            new ScheduleRun().GetScheduleRun(schedule).Description.Should().Be(expected);
         }
 
         #endregion
@@ -507,7 +507,7 @@ namespace xUnit.Training.Test
 
             string expected = @"Occurs every 2 week on monday, thursday, friday";
 
-            new ScheduleRun(schedule).GetScheduleRun().Description.Should().Be(expected);
+            new ScheduleRun().GetScheduleRun(schedule).Description.Should().Be(expected);
         }
 
         #region Test Daily
@@ -548,7 +548,7 @@ namespace xUnit.Training.Test
 
             string expected = @"Occurs every 2 week on monday, thursday, friday on 04:00:00";
 
-            new ScheduleRun(schedule).GetScheduleRun().Description.Should().Be(expected);
+            new ScheduleRun().GetScheduleRun(schedule).Description.Should().Be(expected);
         }
         [Fact]
         public void TestingScheduleWeeklyRecurringChangeHourDaysWeek()
@@ -594,7 +594,7 @@ namespace xUnit.Training.Test
 
             string expected = @"Occurs every 2 week on monday, thursday, friday every 2 hour beetween 04:00:00 and 08:00:00";
 
-            new ScheduleRun(schedule).GetScheduleRun().Description.Should().Be(expected);
+            new ScheduleRun().GetScheduleRun(schedule).Description.Should().Be(expected);
         }
         [Fact]
         public void TestingScheduleWeeklyRecurringChangeMinutes()
@@ -719,7 +719,7 @@ namespace xUnit.Training.Test
 
             string expected = @"Occurs every 3 month. Day 1 every 1 hour beetween 03:00:00 and 06:00:00 starting on 01/01/2020";
 
-            new ScheduleRun(schedule).GetScheduleRun().Description.Should().Be(expected);
+            new ScheduleRun().GetScheduleRun(schedule).Description.Should().Be(expected);
         }
         [Fact]
         public void TestingScheduleMonthyDayLastDayOfMonth()
@@ -869,7 +869,7 @@ namespace xUnit.Training.Test
 
             string expected = @"Occurs the first monday, thursday of the very 3 months every 1 hour beetween 03:00:00 and 06:00:00 starting on 01/01/2020";
 
-            new ScheduleRun(schedule).GetScheduleRun().Description.Should().Be(expected);
+            new ScheduleRun().GetScheduleRun(schedule).Description.Should().Be(expected);
         }
         [Fact]
         public void TestingScheduleMonthyFirstWeekday()
@@ -1219,12 +1219,12 @@ namespace xUnit.Training.Test
 
             expected.ForEach((Action<DateTime?>)delegate (DateTime? datetime)
             {
-                runDatetime = new global::Training.ScheduleRun(schedule).GetScheduleRun().RunDateTime;
+                runDatetime = new global::Training.ScheduleRun().GetScheduleRun(schedule).RunDateTime;
                 runDatetime.Should().Be((DateTime?)datetime);
 
                 if (runDatetime == null) { return; }
 
-                schedule.CurrentDate = new global::Training.ScheduleRun(schedule).GetScheduleRun().RunDateTime.Value;
+                schedule.CurrentDate = new global::Training.ScheduleRun().GetScheduleRun(schedule).RunDateTime.Value;
             });
         }
     }
