@@ -167,33 +167,33 @@ namespace Training
 
             string description = schedule.FrecuencyType switch
             {
-                FrecuencyType.Day => "Occurs every day. Schedule will be used on " + runDateTime.Value.GetDescription(),
-                FrecuencyType.Once => "Occurs once. Schedule will be used on " + runDateTime.Value.GetDescription(),
-                FrecuencyType.Week => "Occurs every " + schedule.Every + " week on " + ScheduleRun.GetDescriptionDaysOfWeek(schedule),
+                FrecuencyType.Day => Messages.Get("frecuency_day", schedule.Culture).Value + runDateTime.Value.GetDescription(schedule.Culture),
+                FrecuencyType.Once => Messages.Get("frecuency_once", schedule.Culture).Value + runDateTime.Value.GetDescription(schedule.Culture),
+                FrecuencyType.Week => Messages.Get("frecuency_week1", schedule.Culture).Value + schedule.Every.ToString() + Messages.Get("frecuency_week2", schedule.Culture).Value + ScheduleRun.GetDescriptionDaysOfWeek(schedule),
                 FrecuencyType.Month => ScheduleRun.GetDescriptionMonthyType(schedule),
                 _ => string.Empty,
             };
 
             description += schedule.MonthyDay > 0
-                ? " Day " + schedule.MonthyDay.ToString()
+                ? Messages.Get("day", schedule.Culture).Value + schedule.MonthyDay.ToString()
                 : string.Empty;
 
             description += schedule.DailyFrecuencyTime.HasValue == true
-                ? " on " + schedule.DailyFrecuencyTime.Value.ToString(@"hh\:mm\:ss")
+                ? Messages.Get("on", schedule.Culture).Value + schedule.DailyFrecuencyTime.Value.ToString(@"hh\:mm\:ss", schedule.Culture)
                 : string.Empty;
 
             description += schedule.DailyFrecuencyType.HasValue == true &&
                 schedule.DailyFrecuencyType != DailyType.Once
-                ? " every " + schedule.DailyFrecuencyEvery.ToString() + " " + schedule.DailyFrecuencyType.ToString().ToLower() +
-                    " beetween " + schedule.DailyFrecuencyStartTime.Value.ToString(@"hh\:mm\:ss") +
-                    " and " + schedule.DailyFrecuencyEndTime.Value.ToString(@"hh\:mm\:ss")
+                ? Messages.Get("every", schedule.Culture).Value + schedule.DailyFrecuencyEvery.ToString() + " " + schedule.DailyFrecuencyType.ToString().ToLower() +
+                    Messages.Get("beetween", schedule.Culture).Value + schedule.DailyFrecuencyStartTime.Value.ToString(@"hh\:mm\:ss", schedule.Culture) +
+                    Messages.Get("and", schedule.Culture).Value + schedule.DailyFrecuencyEndTime.Value.ToString(@"hh\:mm\:ss", schedule.Culture)
                 : string.Empty;
 
             description += schedule.StartDate.HasValue == true
-                ? " starting on " + schedule.StartDate.Value.GetDescription()
+                ? Messages.Get("starting_on", schedule.Culture).Value + schedule.StartDate.Value.GetDescription(schedule.Culture)
                 : string.Empty;
             description += schedule.EndDate.HasValue == true
-                ? " until " + schedule.EndDate.Value.GetDescription()
+                ? Messages.Get("until", schedule.Culture).Value + schedule.EndDate.Value.GetDescription(schedule.Culture)
                 : string.Empty;
 
             return description;

@@ -101,7 +101,7 @@ namespace xUnit.Training.Test
             };
 
             Action action = () => new ScheduleRun().GetScheduleRun(schedule);
-            action.Should().Throw<ScheduleException>().WithMessage("Every must be 0.");
+            action.Should().Throw<ScheduleException>().WithMessage("Mustn't indicate every.");
         }
         [Fact]
         public void TestingScheduleRecurringDatetimeException()
@@ -124,7 +124,7 @@ namespace xUnit.Training.Test
             };
 
             Action action = () => new ScheduleRun().GetScheduleRun(schedule);
-            action.Should().Throw<ScheduleException>().WithMessage("Every must be greater to 0.");
+            action.Should().Throw<ScheduleException>().WithMessage("Must indicate every.");
         }
         [Fact]
         public void TestingScheduleRecurringEveryMinValueException()
@@ -136,7 +136,7 @@ namespace xUnit.Training.Test
             };
 
             Action action = () => new ScheduleRun().GetScheduleRun(schedule);
-            action.Should().Throw<ScheduleException>().WithMessage("Every must be greater to 0.");
+            action.Should().Throw<ScheduleException>().WithMessage("Must indicate every.");
         }
         [Fact]
         public void TestingScheduleWeeklyDaysException()
@@ -416,7 +416,7 @@ namespace xUnit.Training.Test
                 StartDate = new DateTime(2020, 1, 1)
             };
 
-            string expected = @"Occurs once. Schedule will be used on 02/01/2020 12:00:00 starting on 01/01/2020 until 03/01/2020";
+            string expected = @"Occurs once. Schedule will be used on 1/2/2020 12:00:00 starting on 1/1/2020 until 1/3/2020";
 
             new ScheduleRun().GetScheduleRun(schedule).Description.Should().Be(expected);
         }
@@ -467,7 +467,7 @@ namespace xUnit.Training.Test
                 StartDate = new DateTime(2020, 1, 1)
             };
 
-            string expected = @"Occurs every day. Schedule will be used on 02/01/2020 starting on 01/01/2020 until 03/01/2020";
+            string expected = @"Occurs every day. Schedule will be used on 1/2/2020 starting on 1/1/2020 until 1/3/2020";
 
             new ScheduleRun().GetScheduleRun(schedule).Description.Should().Be(expected);
         }
@@ -717,7 +717,7 @@ namespace xUnit.Training.Test
                 StartDate = new DateTime(2020, 1, 1)
             };
 
-            string expected = @"Occurs every 3 month. Day 1 every 1 hour beetween 03:00:00 and 06:00:00 starting on 01/01/2020";
+            string expected = @"Occurs every 3 month. Day 1 every 1 hour beetween 03:00:00 and 06:00:00 starting on 1/1/2020";
 
             new ScheduleRun().GetScheduleRun(schedule).Description.Should().Be(expected);
         }
@@ -867,7 +867,7 @@ namespace xUnit.Training.Test
                 StartDate = new DateTime(2020, 1, 1)
             };
 
-            string expected = @"Occurs the first monday, thursday of the very 3 months every 1 hour beetween 03:00:00 and 06:00:00 starting on 01/01/2020";
+            string expected = @"Occurs the first monday, thursday of the very 3 months every 1 hour beetween 03:00:00 and 06:00:00 starting on 1/1/2020";
 
             new ScheduleRun().GetScheduleRun(schedule).Description.Should().Be(expected);
         }

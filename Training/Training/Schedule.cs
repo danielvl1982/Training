@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Training
 {
@@ -7,11 +8,15 @@ namespace Training
     {
         public Schedule(FrecuencyType frecuencyType)
         {
-            this.Enabled = true;
             this.FrecuencyType = frecuencyType;
+
+            this.Culture = new CultureInfo("en-US");
+            this.Enabled = true;
         }
 
         public bool Enabled { get; set; }
+
+        public CultureInfo Culture { get; set; }
 
         public DailyType? DailyFrecuencyType { get; set; }
 

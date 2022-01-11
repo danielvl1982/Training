@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace Training
@@ -99,9 +100,9 @@ namespace Training
             return daysOfMonth < dayOfMonth ? daysOfMonth : dayOfMonth;
         }
 
-        public static string GetDescription(this DateTime dateTime)
+        public static string GetDescription(this DateTime dateTime, CultureInfo culture)
         {
-            return dateTime.TimeOfDay.Ticks == 0 ? dateTime.ToString("dd/MM/yyyy") : dateTime.ToString("dd/MM/yyyy HH:mm:ss");
+            return dateTime.TimeOfDay.Ticks == 0 ? dateTime.ToString(culture.DateTimeFormat.ShortDatePattern).Trim() : dateTime.ToString(culture.DateTimeFormat.ShortDatePattern + " " + culture.DateTimeFormat.LongTimePattern).Trim();
         }
 
         public static List<TimeSpan> GetTimesGap(this TimeSpan startTime, TimeSpan endTime, int gap, DailyType dailyType)
