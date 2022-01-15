@@ -25,7 +25,9 @@ namespace Training
                     dateTime = ScheduleRun.GetNextRunByDay(schedule, dateTime);
                     break;
                 case FrecuencyType.Month:
-                    dateTime = ScheduleRun.GetNextRunByMonth(schedule, dateTime);
+                    dateTime = schedule.MonthyType == MonthyType.Day
+                        ? ScheduleRun.GetNextRunByMonthDay(schedule, dateTime)
+                        : ScheduleRun.GetNextRunByMonthRecurring(schedule, dateTime);
                     break;
                 case FrecuencyType.Week:
                     dateTime = ScheduleRun.GetNextRunByWeek(schedule, dateTime);
@@ -40,17 +42,6 @@ namespace Training
                 dateTime.CompareTo(schedule.StartDate.Value) < 0
                 ? schedule.StartDate.Value
                 : dateTime.AddDays(schedule.Every);
-        }
-        private static DateTime GetNextRunByMonth(Schedule schedule, DateTime dateTime)
-        {
-            if (schedule.MonthyType == MonthyType.Day)
-            {
-                return ScheduleRun.GetNextRunByMonthDay(schedule, dateTime);
-            }
-            else
-            {
-                return ScheduleRun.GetNextRunByMonthRecurring(schedule, dateTime);
-            }
         }
         private static DateTime GetNextRunByMonthDay(Schedule schedule, DateTime dateTime)
         {
@@ -145,7 +136,9 @@ namespace Training
         {
             IEnumerable<TimeSpan> nextTimes = ScheduleRun.GetNextRunTimeOfDay(schedule, dateTime);
 
-            return nextTimes.Count() == 0 ? null : (DateTime?)dateTime.Date.Add(nextTimes.First());
+            return nextTimes.Count() == 0
+                ? null
+                : (DateTime?)dateTime.Date.Add(nextTimes.First());
         }
 
         private static IEnumerable<TimeSpan> GetNextRunTimeOfDay(Schedule schedule, DateTime dateTime)
@@ -202,20 +195,21 @@ namespace Training
         {
             List<string> descriptionDays = new List<string>();
 
-            if (schedule.DaysOfWeek.HasFlag(DaysOfWeekType.Monday) == true) { descriptionDays.Add("monday"); }
-            if (schedule.DaysOfWeek.HasFlag(DaysOfWeekType.Tuesday) == true) { descriptionDays.Add("tuesday"); }
-            if (schedule.DaysOfWeek.HasFlag(DaysOfWeekType.Wednesday) == true) { descriptionDays.Add("wednesday"); }
-            if (schedule.DaysOfWeek.HasFlag(DaysOfWeekType.Thursday) == true) { descriptionDays.Add("thursday"); }
-            if (schedule.DaysOfWeek.HasFlag(DaysOfWeekType.Friday) == true) { descriptionDays.Add("friday"); }
-            if (schedule.DaysOfWeek.HasFlag(DaysOfWeekType.Saturday) == true) { descriptionDays.Add("saturday"); }
-            if (schedule.DaysOfWeek.HasFlag(DaysOfWeekType.Sunday) == true) { descriptionDays.Add("sunday"); }
+            if (schedule.DaysOfWeek.HasFlag(DaysOfWeekType.Monday) == true) { descriptionDays.Add(Messages.Get("monday", schedule.Culture).Value); }
+            if (schedule.DaysOfWeek.HasFlag(DaysOfWeekType.Tuesday) == true) { descriptionDays.Add(Messages.Get("tuesday", schedule.Culture).Value); }
+            if (schedule.DaysOfWeek.HasFlag(DaysOfWeekType.Wednesday) == true) { descriptionDays.Add(Messages.Get("wednesday", schedule.Culture).Value); }
+            if (schedule.DaysOfWeek.HasFlag(DaysOfWeekType.Thursday) == true) { descriptionDays.Add(Messages.Get("thursday", schedule.Culture).Value); }
+            if (schedule.DaysOfWeek.HasFlag(DaysOfWeekType.Friday) == true) { descriptionDays.Add(Messages.Get("friday", schedule.Culture).Value); }
+            if (schedule.DaysOfWeek.HasFlag(DaysOfWeekType.Saturday) == true) { descriptionDays.Add(Messages.Get("saturday", schedule.Culture).Value); }
+            if (schedule.DaysOfWeek.HasFlag(DaysOfWeekType.Sunday) == true) { descriptionDays.Add(Messages.Get("sunday", schedule.Culture).Value); }
 
             return string.Join(", ", descriptionDays.ToArray());
         }
         private static string GetDescriptionMonthyType(Schedule schedule)
         {
-            if (schedule.MonthyType == MonthyType.Day) { return "Occurs every " + schedule.Every.ToString() + " month."; }
-            else { return "Occurs the " + schedule.MonthyType.ToString().ToLower() + " " + ScheduleRun.GetDescriptionDaysOfWeek(schedule) + " of the very " + schedule.Every.ToString() + " months"; }
+            return schedule.MonthyType == MonthyType.Day
+                ? Messages.Get("occurs_every", schedule.Culture).Value + schedule.Every.ToString() + Messages.Get("month", schedule.Culture).Value
+                : Messages.Get("occurs_the", schedule.Culture).Value + schedule.MonthyType.ToString().ToLower() + " " + ScheduleRun.GetDescriptionDaysOfWeek(schedule) + Messages.Get("of_the_very", schedule.Culture).Value + schedule.Every.ToString() + Messages.Get("months", schedule.Culture).Value;
         }
     }
 }
