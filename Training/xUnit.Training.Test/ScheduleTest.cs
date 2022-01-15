@@ -1,6 +1,7 @@
 using FluentAssertions;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Training;
 using Xunit;
 
@@ -411,12 +412,14 @@ namespace xUnit.Training.Test
             Schedule schedule = new Schedule(FrecuencyType.Once)
             {
                 CurrentDate = new DateTime(2020, 1, 1),
+                Culture = new CultureInfo("es-ES"),
                 DateTime = new DateTime(2020, 1, 2, 12, 0, 0),
                 EndDate = new DateTime(2020, 1, 3),
                 StartDate = new DateTime(2020, 1, 1)
             };
 
-            string expected = @"Occurs once. Schedule will be used on 1/2/2020 12:00:00 starting on 1/1/2020 until 1/3/2020";
+            string expected = @"Una vez. Planificador sera usado en 02/01/2020 12:00:00 comenzado en 01/01/2020 hasta 03/01/2020";
+
 
             new ScheduleRun().GetScheduleRun(schedule).Description.Should().Be(expected);
         }
@@ -462,12 +465,13 @@ namespace xUnit.Training.Test
             Schedule schedule = new Schedule(FrecuencyType.Day)
             {
                 CurrentDate = new DateTime(2020, 1, 1),
+                Culture = new CultureInfo("en-GB"),
                 EndDate = new DateTime(2020, 1, 3),
                 Every = 1,
                 StartDate = new DateTime(2020, 1, 1)
             };
 
-            string expected = @"Occurs every day. Schedule will be used on 1/2/2020 starting on 1/1/2020 until 1/3/2020";
+            string expected = @"Occurs every day. Schedule will be used on 02/01/2020 starting on 01/01/2020 until 03/01/2020";
 
             new ScheduleRun().GetScheduleRun(schedule).Description.Should().Be(expected);
         }
@@ -540,6 +544,7 @@ namespace xUnit.Training.Test
             Schedule schedule = new Schedule(FrecuencyType.Week)
             {
                 CurrentDate = new DateTime(2020, 1, 2),
+                Culture = new CultureInfo("en-GB"),
                 DaysOfWeek = DaysOfWeekType.Monday | DaysOfWeekType.Thursday | DaysOfWeekType.Friday,
                 DailyFrecuencyTime = new TimeSpan(4, 0, 0),
                 DailyFrecuencyType = DailyType.Once,
@@ -706,7 +711,8 @@ namespace xUnit.Training.Test
         {
             Schedule schedule = new Schedule(FrecuencyType.Month)
             {
-                CurrentDate = new DateTime(2020, 1, 1),
+                CurrentDate = new DateTime(2020, 12, 1),
+                Culture = new CultureInfo("en-GB"),
                 DailyFrecuencyEndTime = new TimeSpan(6, 0, 0),
                 DailyFrecuencyEvery = 1,
                 DailyFrecuencyStartTime = new TimeSpan(3, 0, 0),
@@ -714,10 +720,10 @@ namespace xUnit.Training.Test
                 Every = 3,
                 MonthyDay = 1,
                 MonthyType = MonthyType.Day,
-                StartDate = new DateTime(2020, 1, 1)
+                StartDate = new DateTime(2020, 12, 1)
             };
 
-            string expected = @"Occurs every 3 month. Day 1 every 1 hour beetween 03:00:00 and 06:00:00 starting on 1/1/2020";
+            string expected = @"Occurs every 3 month. Day 1 every 1 hour beetween 03:00:00 and 06:00:00 starting on 01/12/2020";
 
             new ScheduleRun().GetScheduleRun(schedule).Description.Should().Be(expected);
         }
